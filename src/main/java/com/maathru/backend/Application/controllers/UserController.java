@@ -17,19 +17,20 @@ import java.util.Optional;
 @RequestMapping("/api/v1/user")
 @AllArgsConstructor
 public class UserController {
-    private  final UserService userService;
+    private final UserService userService;
 
-//    @GetMapping("/getAll")
-//    public List<UserProfileDto> getAllUsers() {
-//        return userRepository.findAll();
-//    }
+    @GetMapping("/getAll")
+    public ResponseEntity<List<UserProfileDto>> getAllUsers() {
+        return userService.getAllUsers();
+    }
 
     @GetMapping()
-    public ResponseEntity<UserProfileDto> getUser(@RequestParam long id) {return userService.getUser(id);
+    public ResponseEntity<UserProfileDto> getUser(@RequestParam long id) {
+        return userService.getUser(id);
     }
 
     @PostMapping()
-    public ResponseEntity<User> addUser(@RequestBody CreateUserDto createUserDto){
-return userService.addUser(createUserDto);
+    public ResponseEntity<User> addUser(@RequestBody CreateUserDto createUserDto) {
+        return userService.addUser(createUserDto);
     }
 }
