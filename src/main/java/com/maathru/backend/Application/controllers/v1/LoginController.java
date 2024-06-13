@@ -1,4 +1,4 @@
-package com.maathru.backend.Application.controllers;
+package com.maathru.backend.Application.controllers.v1;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
