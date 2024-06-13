@@ -10,13 +10,34 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class UserService {
     private final UserRepository userRepository;
+
+    public ResponseEntity<List<UserProfileDto>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        if(users.isEmpty()) {
+            throw new UserNotFoundException("No users found");
+        }
+
+        List<UserProfileDto> userProfileDtos = users.stream().map(user -> {
+            UserProfileDto userProfileDto = new UserProfileDto();
+            userProfileDto.setUserId(user.getUserId());
+            userProfileDto.setFirstName(user.getFirstName());
+            userProfileDto.setLastName(user.getLastName());
+            userProfileDto.setEmail(user.getEmail());
+            return userProfileDto;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(userProfileDtos);
+    }
 
     public ResponseEntity<UserProfileDto> getUser(long id) {
         UserProfileDto userProfileDto = new UserProfileDto();
