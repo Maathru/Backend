@@ -27,17 +27,18 @@ public class Blog {
     @Column(name = "status_reason")
     private String statusReason;
 
-    @Lob
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "content")
     private String content;
 
-    @Lob
     @Column(name = "image")
     private String image;
 
     @Column(name = "time_stamp")
     @JdbcTypeCode(SqlTypes.TIMESTAMP)
-    private LocalDateTime timeStamp;
+    private LocalDateTime timeStamp = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "author_user_id")

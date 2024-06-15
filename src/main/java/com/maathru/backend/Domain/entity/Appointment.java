@@ -45,6 +45,8 @@ public class Appointment {
     @JoinColumn(name = "admin_employee_id")
     private Employee admin;
 
-    // add parent
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "parent_parent_id")
+    private Parent parent;
 
 }
