@@ -13,21 +13,24 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "answer")
 public class Answer {
-    @Column(name = "time_stamp")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
-    private LocalDateTime timeStamp;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "answer_id", nullable = false)
+    private Long answerId;
 
     @ManyToOne
-    @JoinColumn(name = "author_user_id")
-    private User author;
+    @JoinColumn(name = "question_question_id")
+    private Question question;
 
     @Column(name = "content")
     private String content;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id", nullable = false)
-    private Long questionId;
+    @Column(name = "time_stamp")
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
+    private LocalDateTime timeStamp = LocalDateTime.now();
 
+    @ManyToOne
+    @JoinColumn(name = "author_user_id")
+    private User author;
 
 }

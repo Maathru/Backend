@@ -16,9 +16,6 @@ public class Drug {
     @Column(name = "drug_id", nullable = false)
     private Long drugId;
 
-    @Column(name = "batch_number", nullable = false)
-    private String batch_number;
-
     @Column(name = "composition")
     private String composition;
 
@@ -30,6 +27,9 @@ public class Drug {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @Column(name = "batch_number", nullable = false)
+    private String batchNumber;
 
     @Column(name = "expiry_date")
     private LocalDate expiryDate;

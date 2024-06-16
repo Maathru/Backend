@@ -38,4 +38,30 @@ public class BlogService {
         Iterable<Blog> blogs = blogRepository.findAll();
         return ResponseEntity.status(200).body(blogs);
     }
+
+    public ResponseEntity<Blog> updateBlog(long id, BlogDto blogDto) {
+        Blog blog = blogRepository.findById(id).orElse(null);
+        if(blog == null){
+            return ResponseEntity.status(404).body(null);
+        }
+        blog.setTitle(blogDto.getTitle());
+        blog.setContent(blogDto.getContent());
+        blog.setAuthor(blogDto.getAuthor());
+        blog.setImage(blogDto.getImage());
+        blog.setLocation(blogDto.getLocation());
+        blog.setApprovalStatus(blogDto.getApprovalStatus());
+        blog.setStatusReason(blogDto.getStatusReason());
+
+        blog = blogRepository.save(blog);
+        return ResponseEntity.status(200).body(blog);
+    }
+
+    public ResponseEntity<Blog> deleteBlog(long id) {
+        Blog blog = blogRepository.findById(id).orElse(null);
+        if(blog == null){
+            return ResponseEntity.status(404).body(null);
+        }
+        blogRepository.delete(blog);
+        return ResponseEntity.status(200).body(blog);
+    }
 }

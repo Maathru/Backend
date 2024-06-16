@@ -16,8 +16,11 @@ public class Question {
     @Column(name = "question_id", nullable = false)
     private Long questionId;
 
+    @Column(name = "question" , nullable = false)
+    private String question;
+
     @Column(name = "time_stamp")
-    private LocalDateTime timeStamp;
+    private LocalDateTime timeStamp = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "author_user_id")

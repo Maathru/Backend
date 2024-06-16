@@ -33,6 +33,9 @@ public class Blog {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "category")
+    private String category;
+
     @Column(name = "image")
     private String image;
 

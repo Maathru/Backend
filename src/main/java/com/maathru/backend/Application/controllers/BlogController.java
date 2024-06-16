@@ -18,13 +18,24 @@ public class BlogController {
         return blogService.addBlog(blogDto);
     }
 
+    @GetMapping()
+    public ResponseEntity<Iterable<Blog>> getAllBlogs(){
+        return blogService.getAllBlogs();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Blog> getBlog(@PathVariable long id){
         return blogService.getBlog(id);
     }
 
-    @GetMapping()
-    public ResponseEntity<Iterable<Blog>> getAllBlogs(){
-        return blogService.getAllBlogs();
+    @PutMapping("/{id}")
+    public ResponseEntity<Blog> updateBlog(@PathVariable long id, @RequestBody BlogDto blogDto){
+        return blogService.updateBlog(id, blogDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Blog> deleteBlog(@PathVariable long id){
+        return blogService.deleteBlog(id);
+    }
+
 }
