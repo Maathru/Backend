@@ -14,7 +14,7 @@ services:
       - maathru-network
   spring-boot-app:
     container_name: spring-backend
-    image: maathru-backend
+    build: ./
     ports:
       - "8080:8080"
     networks:
