@@ -23,7 +23,9 @@ public class Blog {
     private String category;
     private String image;
     private String location;
-    private String approvalStatus;
+
+    @Column(columnDefinition = "int default 0")
+    private int approvalStatus;
     private String statusReason;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)

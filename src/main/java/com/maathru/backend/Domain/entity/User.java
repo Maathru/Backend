@@ -23,8 +23,8 @@ public class User {
     private String password;
     private String role;
 
-    @Column(nullable = false)
-    private boolean activeStatus = false;
+    @Column(nullable = false, columnDefinition = "boolean DEFAULT false")
+    private boolean activeStatus;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)
     private LocalDateTime registeredTime;

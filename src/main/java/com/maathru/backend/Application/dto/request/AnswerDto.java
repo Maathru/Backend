@@ -1,12 +1,14 @@
 package com.maathru.backend.Application.dto.request;
 
+import com.maathru.backend.Domain.entity.Question;
+import com.maathru.backend.Domain.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class AnswerDto {
-    private String content;
-    private Long questionId;
-    private Long authorUserId;
+    private String answer;
+    private Question question;
+    private User author;
 }

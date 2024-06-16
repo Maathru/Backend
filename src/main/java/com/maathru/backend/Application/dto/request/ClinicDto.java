@@ -1,5 +1,7 @@
 package com.maathru.backend.Application.dto.request;
 
+import com.maathru.backend.Domain.entity.Employee;
+import com.maathru.backend.Domain.entity.Region;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,12 +11,10 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class ClinicDto {
-    private String clinicName;
+    private String name;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
-    private Long regionId;
-    private Long doctorId;
-    private Long adminId;
-
+    private Region region;
+    private Employee doctor;
 }

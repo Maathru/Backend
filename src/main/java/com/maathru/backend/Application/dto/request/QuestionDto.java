@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 public class QuestionDto {
     private String question;
-    private Long authorUserId;
+    private User author;
 }
