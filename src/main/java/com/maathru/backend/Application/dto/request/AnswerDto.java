@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class AnswerDto {
     private String answer;
-    private Question question;
-    private User author;
+    private long question;
+    private long author;
 }
