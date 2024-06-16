@@ -21,18 +21,17 @@ public class Region {
     private String regionNumber;
 
     @Column(name = "region_name")
-    private String region_name;
+    private String regionName;
 
     @Column(name = "population")
     private Long population;
-
-    @ElementCollection
-    @Column(name = "midwife")
-    @CollectionTable(name = "region_midwives", joinColumns = @JoinColumn(name = "employee_id"))
-    private List<Employee> midwives = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "moh_moh_id")
     private MOH moh;
 
+    @ElementCollection
+    @Column(name = "midwife")
+    @CollectionTable(name = "region_midwives", joinColumns = @JoinColumn(name = "employee_id"))
+    private List<Employee> midwives = new ArrayList<>();
 }
