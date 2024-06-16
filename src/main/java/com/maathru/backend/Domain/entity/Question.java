@@ -1,29 +1,30 @@
 package com.maathru.backend.Domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "question")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id", nullable = false)
     private Long questionId;
-
-    @Column(name = "question" , nullable = false)
     private String question;
 
-    @Column(name = "time_stamp")
-    private LocalDateTime timeStamp = LocalDateTime.now();
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)
+    private LocalDateTime createdTime;
 
-    @ManyToOne
-    @JoinColumn(name = "author_user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
     private User author;
 
 }

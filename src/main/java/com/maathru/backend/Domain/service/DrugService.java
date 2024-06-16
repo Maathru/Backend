@@ -21,7 +21,7 @@ public class DrugService {
         drug.setManufacturedDate(drugDto.getManufacturedDate());
         drug.setQuantity(drugDto.getQuantity());
         drug.setReceivedDate(drugDto.getReceivedDate());
-        drug.setRegisteredDate(drugDto.getRegisteredDate());
+//        drug.setRegisteredDate(drugDto.getRegisteredDate());
         drug.setRecommendedDose(drugDto.getRecommendedDose());
         drug.setStrength(drugDto.getStrength());
         return ResponseEntity.ok(drugRepository.save(drug));
@@ -47,7 +47,7 @@ public class DrugService {
         drug.setManufacturedDate(drugDto.getManufacturedDate());
         drug.setQuantity(drugDto.getQuantity());
         drug.setReceivedDate(drugDto.getReceivedDate());
-        drug.setRegisteredDate(drugDto.getRegisteredDate());
+//        drug.setRegisteredDate(drugDto.getRegisteredDate());
         drug.setRecommendedDose(drugDto.getRecommendedDose());
         drug.setStrength(drugDto.getStrength());
         return ResponseEntity.ok(drugRepository.save(drug));

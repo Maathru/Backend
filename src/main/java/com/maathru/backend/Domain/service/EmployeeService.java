@@ -18,7 +18,7 @@ public class EmployeeService {
         Employee employee = new Employee();
         employee.setPhoneNumber(employeeDto.getPhoneNumber());
         employee.setNic(employeeDto.getNic());
-        employee.setAddress(employeeDto.getAddress());
+//        employee.setAddress(employeeDto.getAddress());
         employee.setGender(employeeDto.getGender());
         employee.setDesignation(employeeDto.getDesignation());
         employee.setQualifications(employeeDto.getQualifications());

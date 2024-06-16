@@ -1,35 +1,37 @@
 package com.maathru.backend.Domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "visit_schedule")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class VisitSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "visit_id", nullable = false)
     private Long visitId;
-
-    @Column(name = "time")
     private LocalTime time;
-
-    @Column(name = "date")
     private LocalDate date;
-
-    @Column(name = "type")
     private String type;
 
-    @ManyToOne
-    @JoinColumn(name = "midwife_employee_id")
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)
+    private LocalDateTime createdTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "midwife_id")
     private Employee midwife;
 
-    // parent
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Parent parent;
 }

@@ -21,14 +21,14 @@ public class AppointmentService {
 
     public ResponseEntity<Appointment> createAppointment(AppointmentDto appointmentDto) {
         Appointment appointment = new Appointment();
-        appointment.setAssignedTime(appointmentDto.getAssignedTime());
-        appointment.setCompletedTime(appointmentDto.getCompletedTime());
-        appointment.setCompletedStatus(appointmentDto.getCompletedStatus());
+//        appointment.setAssignedTime(appointmentDto.getAssignedTime());
+//        appointment.setCompletedTime(appointmentDto.getCompletedTime());
+//        appointment.setCompletedStatus(appointmentDto.getCompletedStatus());
         appointment.setUpdatedBy(employeeRepository.findById(appointmentDto.getUpdatedByEmployeeId()).orElse(null));
         appointment.setDoctor(employeeRepository.findById(appointmentDto.getDoctorEmployeeId()).orElse(null));
-        appointment.setMidwife(employeeRepository.findById(appointmentDto.getMidwifeEmployeeId()).orElse(null));
+//        appointment.setMidwife(employeeRepository.findById(appointmentDto.getMidwifeEmployeeId()).orElse(null));
         appointment.setClinic(clinicRepository.findById(appointmentDto.getClinicClinicId()).orElse(null));
-        appointment.setAdmin(employeeRepository.findById(appointmentDto.getAdminEmployeeId()).orElse(null));
+//        appointment.setAdmin(employeeRepository.findById(appointmentDto.getAdminEmployeeId()).orElse(null));
         appointment.setParent(parentRepository.findById(appointmentDto.getParentParentId()).orElse(null));
         return ResponseEntity.ok(appointmentRepository.save(appointment));
     }
@@ -47,14 +47,14 @@ public class AppointmentService {
         if (appointment == null) {
             return ResponseEntity.notFound().build();
         }
-        appointment.setAssignedTime(appointmentDto.getAssignedTime());
-        appointment.setCompletedTime(appointmentDto.getCompletedTime());
-        appointment.setCompletedStatus(appointmentDto.getCompletedStatus());
+//        appointment.setAssignedTime(appointmentDto.getAssignedTime());
+//        appointment.setCompletedTime(appointmentDto.getCompletedTime());
+//        appointment.setCompletedStatus(appointmentDto.getCompletedStatus());
         appointment.setUpdatedBy(employeeRepository.findById(appointmentDto.getUpdatedByEmployeeId()).orElse(null));
         appointment.setDoctor(employeeRepository.findById(appointmentDto.getDoctorEmployeeId()).orElse(null));
-        appointment.setMidwife(employeeRepository.findById(appointmentDto.getMidwifeEmployeeId()).orElse(null));
+//        appointment.setMidwife(employeeRepository.findById(appointmentDto.getMidwifeEmployeeId()).orElse(null));
         appointment.setClinic(clinicRepository.findById(appointmentDto.getClinicClinicId()).orElse(null));
-        appointment.setAdmin(employeeRepository.findById(appointmentDto.getAdminEmployeeId()).orElse(null));
+//        appointment.setAdmin(employeeRepository.findById(appointmentDto.getAdminEmployeeId()).orElse(null));
         appointment.setParent(parentRepository.findById(appointmentDto.getParentParentId()).orElse(null));
 
         return ResponseEntity.ok(appointmentRepository.save(appointment));

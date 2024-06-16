@@ -1,36 +1,33 @@
 package com.maathru.backend.Domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "answer")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "answer_id", nullable = false)
     private Long answerId;
 
-    @ManyToOne
-    @JoinColumn(name = "question_question_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id")
     private Question question;
+    private String answer;
 
-    @Column(name = "content")
-    private String content;
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)
+    private LocalDateTime answeredTime;
 
-    @Column(name = "time_stamp")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
-    private LocalDateTime timeStamp = LocalDateTime.now();
-
-    @ManyToOne
-    @JoinColumn(name = "author_user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
     private User author;
-
 }

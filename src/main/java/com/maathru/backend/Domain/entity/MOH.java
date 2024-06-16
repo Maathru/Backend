@@ -1,53 +1,44 @@
 package com.maathru.backend.Domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "moh")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class MOH {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "moh_id", nullable = false)
     private Long mohId;
 
-    @Column(name = "division")
-    private String division;
-
-    @Column(name = "moh_registration_number", nullable = false, unique = true)
+    @Column(unique = true)
     private String mohRegistrationNumber;
-
-    @Column(name = "province")
     private String province;
-
-    @Column(name = "district")
     private String district;
-
-    @Column(name = "city")
+    private String division;
+    private String addressLine1;
+    private String street;
     private String city;
 
-    @Column(name = "street")
-    private String street;
-
-    @Column(name = "address_line_1")
-    private String addressLine1;
-
-    @Column(name = "telephone_number")
+    @Column(unique = true)
     private String telephoneNumber;
 
-    @Column(name = "fax_number")
+    @Column(unique = true)
     private String faxNumber;
-
-    @Column(name = "population")
     private Long population;
 
-    @OneToOne(cascade = CascadeType.DETACH, orphanRemoval = true)
-    @JoinColumn(name = "current_head_employee_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH, orphanRemoval = true)
+    @JoinColumn(name = "current_head_id")
     private Employee currentHead;
 
-
-
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)
+    private LocalDateTime registeredTime;
 }

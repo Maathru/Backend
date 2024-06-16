@@ -1,40 +1,37 @@
 package com.maathru.backend.Domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "vaccine_card")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class VaccineCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "vaccine_card_id", nullable = false)
     private Long vaccineCardId;
 
-    @ManyToOne
-    @JoinColumn(name = "moh_moh_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "moh_id")
     private MOH moh;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_parent_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
     private Parent parent;
 
-    @ManyToOne
-    @JoinColumn(name = "region_region_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
     private Region region;
-
-    @Column(name = "gender")
-    private String gender;
-
-    @Column(name = "registration_number")
+    private String childGender;
     private String registrationNumber;
-
-    @Column(name = "special_reasons")
     private String specialReasons;
 
-    // add pregnancy card
-
+    @OneToOne(mappedBy = "vaccineCard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PregnancyCard pregnancyCard;
 }

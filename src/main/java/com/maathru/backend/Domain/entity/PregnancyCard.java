@@ -17,51 +17,36 @@ import java.time.LocalDateTime;
 public class PregnancyCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pregnancy_card_id", nullable = false)
     private Long pregnancyCardId;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
     private Parent parent;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moh_id")
     private MOH moh;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
     private Region region;
-
-    @Column(name = "eligible_list_id")
     private Long eligibleListId;
-
-    @Column(name = "last_updated_at", nullable = false)
     private LocalDateTime lastUpdatedAt;
 
-    @Column(name = "last_updated_by", nullable = false)
-    private String lastUpdatedBy;
-
-    @Column(name = "bmi")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "last_updated_by")
+    private Employee lastUpdatedBy;
     private Double bmi;
-
-    @Column(name = "height")
+    private Double weight;
     private Double height;
-
-    @Column(name = "allergies")
     private String allergies;
-
-    @Column(name = "name_of_the_field_clinic")
     private String nameOfTheFieldClinic;
-
-    @Column(name = "name_of_hospital_clinic")
     private String nameOfHospitalClinic;
-
-    @Column(name = "name_of_the_consultant_obstetrician")
     private String nameOfTheConsultantObstetrician;
-
-    @Column(name = "identified_antenatal_risk_condition")
     private String identifiedAntenatalRiskConditions;
-
-    @Column(name = "morbidities")
     private String morbidities;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "vaccine_card_id")
+    private VaccineCard vaccineCard;
 }

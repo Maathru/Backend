@@ -17,13 +17,13 @@ public class ClinicService {
 
     public Clinic createClinic(ClinicDto clinicDto) {
         Clinic clinic = new Clinic();
-        clinic.setClinicName(clinicDto.getClinicName());
+//        clinic.setClinicName(clinicDto.getClinicName());
         clinic.setDate(clinicDto.getDate());
         clinic.setStartTime(clinicDto.getStartTime());
         clinic.setEndTime(clinicDto.getEndTime());
         clinic.setRegion(regionRepository.findById(clinicDto.getRegionId()).orElseThrow(() -> new RuntimeException("Region not found")));
         clinic.setDoctor(employeeRepository.findById(clinicDto.getDoctorId()).orElseThrow(() -> new RuntimeException("Doctor not found")));
-        clinic.setAdmin(employeeRepository.findById(clinicDto.getAdminId()).orElseThrow(() -> new RuntimeException("Admin not found")));
+//        clinic.setAdmin(employeeRepository.findById(clinicDto.getAdminId()).orElseThrow(() -> new RuntimeException("Admin not found")));
         return clinicRepository.save(clinic);
     }
 
@@ -37,13 +37,13 @@ public class ClinicService {
 
     public Clinic updateClinic(Long clinicId, ClinicDto clinicDto) {
         Clinic clinic = clinicRepository.findById(clinicId).orElseThrow(() -> new RuntimeException("Clinic not found"));
-        clinic.setClinicName(clinicDto.getClinicName());
+//        clinic.setClinicName(clinicDto.getClinicName());
         clinic.setDate(clinicDto.getDate());
         clinic.setStartTime(clinicDto.getStartTime());
         clinic.setEndTime(clinicDto.getEndTime());
         clinic.setRegion(regionRepository.findById(clinicDto.getRegionId()).orElseThrow(() -> new RuntimeException("Region not found")));
         clinic.setDoctor(employeeRepository.findById(clinicDto.getDoctorId()).orElseThrow(() -> new RuntimeException("Doctor not found")));
-        clinic.setAdmin(employeeRepository.findById(clinicDto.getAdminId()).orElseThrow(() -> new RuntimeException("Admin not found")));
+//        clinic.setAdmin(employeeRepository.findById(clinicDto.getAdminId()).orElseThrow(() -> new RuntimeException("Admin not found")));
         return clinicRepository.save(clinic);
     }
 
