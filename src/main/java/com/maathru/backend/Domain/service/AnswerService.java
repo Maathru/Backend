@@ -35,9 +35,11 @@ public class AnswerService {
                 answer.setAnswer(answerDto.getAnswer());
                 answer.setQuestion(optionalQuestion.get());
                 answer.setAuthor(optionalUser.get());
-                return ResponseEntity.ok(answerRepository.save(answer));
+                answerRepository.save(answer);
+
+                return ResponseEntity.status(201).body(answer);
             } else {
-                log.error("user not found");
+                log.error("author not found");
                 throw new UserNotFoundException("Author not found");
             }
         } else {

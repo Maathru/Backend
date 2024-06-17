@@ -1,7 +1,5 @@
 package com.maathru.backend.Application.dto.request;
 
-import com.maathru.backend.Domain.entity.Question;
-import com.maathru.backend.Domain.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
