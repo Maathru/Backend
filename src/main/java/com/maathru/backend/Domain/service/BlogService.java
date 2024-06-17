@@ -33,7 +33,7 @@ public class BlogService {
             blog.setImage(blogDto.getImage());
             blog.setLocation(blogDto.getLocation());
             blog.setAuthor(optionalUser.get());
-            blogRepository.save(blog);
+            blog = blogRepository.save(blog);
 
             return ResponseEntity.status(201).body(blog);
         } else {
@@ -77,7 +77,7 @@ public class BlogService {
                 blog.setImage(blogDto.getImage());
                 blog.setLocation(blogDto.getLocation());
                 blog.setAuthor(optionalUser.get());
-                blogRepository.save(blog);
+                blog = blogRepository.save(blog);
 
                 return ResponseEntity.status(201).body(blog);
             } else {
