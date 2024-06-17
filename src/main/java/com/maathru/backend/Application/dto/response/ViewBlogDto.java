@@ -1,6 +1,5 @@
 package com.maathru.backend.Application.dto.response;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +14,4 @@ public class ViewBlogDto {
     private String location;
     private String approvalStatus;
     private String statusReason;
-
 }

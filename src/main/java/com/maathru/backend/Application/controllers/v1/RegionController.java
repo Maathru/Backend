@@ -1,4 +1,4 @@
-package com.maathru.backend.Application.controllers;
+package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.RegionDto;
 import com.maathru.backend.Domain.entity.Region;
@@ -20,5 +20,4 @@ public class RegionController {
     public ResponseEntity<Region> createRegion(@RequestBody RegionDto regionDto) {
         return regionService.createRegion(regionDto);
     }
-
 }

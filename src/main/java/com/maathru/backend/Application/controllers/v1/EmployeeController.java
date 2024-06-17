@@ -1,4 +1,4 @@
-package com.maathru.backend.Application.controllers;
+package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.EmployeeDto;
 import com.maathru.backend.Domain.entity.Employee;
@@ -20,5 +20,4 @@ public class EmployeeController {
     public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeDto employeeDto) {
         return employeeService.createEmployee(employeeDto);
     }
-
 }

@@ -1,4 +1,4 @@
-package com.maathru.backend.Application.controllers;
+package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.DrugDto;
 import com.maathru.backend.Domain.entity.Drug;
@@ -14,27 +14,27 @@ public class DrugController {
     private final DrugService drugService;
 
     @PostMapping()
-    public ResponseEntity<Drug> addDrug(@RequestBody DrugDto drugDto){
+    public ResponseEntity<Drug> addDrug(@RequestBody DrugDto drugDto) {
         return drugService.addDrug(drugDto);
     }
 
     @GetMapping()
-    public ResponseEntity<Iterable<Drug>> getAllDrugs(){
+    public ResponseEntity<Iterable<Drug>> getAllDrugs() {
         return drugService.getAllDrugs();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Drug> getDrug(@PathVariable long id){
+    public ResponseEntity<Drug> getDrug(@PathVariable long id) {
         return drugService.getDrug(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Drug> updateDrug(@PathVariable long id, @RequestBody DrugDto drugDto){
+    public ResponseEntity<Drug> updateDrug(@PathVariable long id, @RequestBody DrugDto drugDto) {
         return drugService.updateDrug(id, drugDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Drug> deleteDrug(@PathVariable long id){
+    public ResponseEntity<Drug> deleteDrug(@PathVariable long id) {
         return drugService.deleteDrug(id);
     }
 }

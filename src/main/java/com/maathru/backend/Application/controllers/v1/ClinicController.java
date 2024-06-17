@@ -1,4 +1,4 @@
-package com.maathru.backend.Application.controllers;
+package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.ClinicDto;
 import com.maathru.backend.Domain.entity.Clinic;
@@ -14,30 +14,27 @@ public class ClinicController {
     private final ClinicService clinicService;
 
     @PostMapping()
-    public ResponseEntity<Clinic>  createClinic(@RequestBody  ClinicDto clinicDto) {
-        return ResponseEntity.ok(clinicService.createClinic(clinicDto));
+    public ResponseEntity<Clinic> createClinic(@RequestBody ClinicDto clinicDto) {
+        return clinicService.createClinic(clinicDto);
     }
 
     @GetMapping("/{clinicId}")
     public ResponseEntity<Clinic> getClinic(@PathVariable Long clinicId) {
-        return ResponseEntity.ok(clinicService.getClinic(clinicId));
+        return clinicService.getClinic(clinicId);
     }
 
     @GetMapping()
     public ResponseEntity<Iterable<Clinic>> getAllClinics() {
-        return ResponseEntity.ok(clinicService.getAllClinics());
+        return clinicService.getAllClinics();
     }
 
     @PutMapping("/{clinicId}")
     public ResponseEntity<Clinic> updateClinic(@PathVariable Long clinicId, @RequestBody ClinicDto clinicDto) {
-        return ResponseEntity.ok(clinicService.updateClinic(clinicId, clinicDto));
+        return clinicService.updateClinic(clinicId, clinicDto);
     }
 
     @DeleteMapping("/{clinicId}")
-    public ResponseEntity<Void> deleteClinic(@PathVariable Long clinicId) {
-        clinicService.deleteClinic(clinicId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Clinic> deleteClinic(@PathVariable Long clinicId) {
+        return clinicService.deleteClinic(clinicId);
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.maathru.backend.Application.controllers;
+package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.BlogDto;
 import com.maathru.backend.Domain.entity.Blog;
@@ -14,27 +14,27 @@ public class BlogController {
     private final BlogService blogService;
 
     @PostMapping()
-    public ResponseEntity<Blog> addBlog(@RequestBody BlogDto blogDto){
+    public ResponseEntity<Blog> addBlog(@RequestBody BlogDto blogDto) {
         return blogService.addBlog(blogDto);
     }
 
     @GetMapping()
-    public ResponseEntity<Iterable<Blog>> getAllBlogs(){
+    public ResponseEntity<Iterable<Blog>> getAllBlogs() {
         return blogService.getAllBlogs();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Blog> getBlog(@PathVariable long id){
+    public ResponseEntity<Blog> getBlog(@PathVariable long id) {
         return blogService.getBlog(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Blog> updateBlog(@PathVariable long id, @RequestBody BlogDto blogDto){
+    public ResponseEntity<Blog> updateBlog(@PathVariable long id, @RequestBody BlogDto blogDto) {
         return blogService.updateBlog(id, blogDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Blog> deleteBlog(@PathVariable long id){
+    public ResponseEntity<Blog> deleteBlog(@PathVariable long id) {
         return blogService.deleteBlog(id);
     }
 

@@ -1,4 +1,4 @@
-package com.maathru.backend.Application.controllers;
+package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.AppointmentDto;
 import com.maathru.backend.Domain.entity.Appointment;
@@ -23,12 +23,12 @@ public class AppointmentController {
         return appointmentService.getAllAppointments();
     }
 
-    @GetMapping("{appointmentId}")
+    @GetMapping("/{appointmentId}")
     public ResponseEntity<Appointment> getAppointmentById(Long appointmentId) {
         return appointmentService.getAppointmentById(appointmentId);
     }
 
-    @PutMapping("{appointmentId}")
+    @PutMapping("/{appointmentId}")
     public ResponseEntity<Appointment> updateAppointment(Long appointmentId, AppointmentDto appointmentDto) {
         return appointmentService.updateAppointment(appointmentId, appointmentDto);
     }
