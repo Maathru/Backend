@@ -66,7 +66,6 @@ public class ClinicService {
             log.error("Clinics not found");
             throw new ClinicNotFoundException("Clinics not found");
         }
-
         return ResponseEntity.ok(clinics);
     }
 
