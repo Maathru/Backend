@@ -2,65 +2,91 @@ package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.DrugDto;
 import com.maathru.backend.Domain.entity.Drug;
+import com.maathru.backend.Domain.exception.DrugNotFoundException;
 import com.maathru.backend.External.repository.DrugRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
+@Slf4j
 public class DrugService {
     private final DrugRepository drugRepository;
 
-    public ResponseEntity<Drug> addDrug(DrugDto drugDto){
+    public ResponseEntity<Drug> addDrug(DrugDto drugDto) {
         Drug drug = new Drug();
-        drug.setBatchNumber(drugDto.getBatchNumber());
-        drug.setBrandName(drugDto.getBrandName());
         drug.setComposition(drugDto.getComposition());
+        drug.setStrength(drugDto.getStrength());
+        drug.setBrandName(drugDto.getBrandName());
+        drug.setQuantity(drugDto.getQuantity());
+        drug.setBatchNumber(drugDto.getBatchNumber());
+        drug.setRecommendedDose(drugDto.getRecommendedDose());
         drug.setExpiryDate(drugDto.getExpiryDate());
         drug.setManufacturedDate(drugDto.getManufacturedDate());
-        drug.setQuantity(drugDto.getQuantity());
         drug.setReceivedDate(drugDto.getReceivedDate());
-//        drug.setRegisteredDate(drugDto.getRegisteredDate());
-        drug.setRecommendedDose(drugDto.getRecommendedDose());
-        drug.setStrength(drugDto.getStrength());
-        return ResponseEntity.ok(drugRepository.save(drug));
+
+        drug = drugRepository.save(drug);
+        return ResponseEntity.status(201).body(drug);
     }
 
-    public ResponseEntity<Iterable<Drug>> getAllDrugs(){
-        return ResponseEntity.ok(drugRepository.findAll());
-    }
+    public ResponseEntity<Iterable<Drug>> getAllDrugs() {
+        List<Drug> drugs = drugRepository.findAll();
 
-    public ResponseEntity<Drug> getDrug(long id){
-        return ResponseEntity.ok(drugRepository.findById(id).orElse(null));
-    }
-
-    public ResponseEntity<Drug> updateDrug(long id, DrugDto drugDto){
-        Drug drug = drugRepository.findById(id).orElse(null);
-        if(drug == null){
-            return ResponseEntity.notFound().build();
+        if (drugs.isEmpty()) {
+            log.error("Drugs not found");
+            throw new DrugNotFoundException("Drugs not found");
         }
-        drug.setBatchNumber(drugDto.getBatchNumber());
-        drug.setBrandName(drugDto.getBrandName());
-        drug.setComposition(drugDto.getComposition());
-        drug.setExpiryDate(drugDto.getExpiryDate());
-        drug.setManufacturedDate(drugDto.getManufacturedDate());
-        drug.setQuantity(drugDto.getQuantity());
-        drug.setReceivedDate(drugDto.getReceivedDate());
-//        drug.setRegisteredDate(drugDto.getRegisteredDate());
-        drug.setRecommendedDose(drugDto.getRecommendedDose());
-        drug.setStrength(drugDto.getStrength());
-        return ResponseEntity.ok(drugRepository.save(drug));
+        return ResponseEntity.ok(drugs);
     }
 
-    public ResponseEntity<Drug> deleteDrug(long id){
-        Drug drug = drugRepository.findById(id).orElse(null);
-        if(drug == null){
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Drug> getDrug(long id) {
+        Optional<Drug> optionalDrug = drugRepository.findById(id);
+
+        if (optionalDrug.isPresent()) {
+            return ResponseEntity.ok(optionalDrug.get());
+        } else {
+            log.error("Drug not found");
+            throw new DrugNotFoundException("Drug not found");
         }
-        drugRepository.delete(drug);
-        return ResponseEntity.ok(drug);
     }
 
+    public ResponseEntity<Drug> updateDrug(long id, DrugDto drugDto) {
+        Optional<Drug> optionalDrug = drugRepository.findById(id);
 
+        if (optionalDrug.isPresent()) {
+            Drug drug = optionalDrug.get();
+            drug.setComposition(drugDto.getComposition());
+            drug.setStrength(drugDto.getStrength());
+            drug.setBrandName(drugDto.getBrandName());
+            drug.setQuantity(drugDto.getQuantity());
+            drug.setBatchNumber(drugDto.getBatchNumber());
+            drug.setRecommendedDose(drugDto.getRecommendedDose());
+            drug.setExpiryDate(drugDto.getExpiryDate());
+            drug.setManufacturedDate(drugDto.getManufacturedDate());
+            drug.setReceivedDate(drugDto.getReceivedDate());
+
+            drug = drugRepository.save(drug);
+            return ResponseEntity.status(201).body(drug);
+        } else {
+            log.error("Drug not found");
+            throw new DrugNotFoundException("Drug not found");
+        }
+    }
+
+    public ResponseEntity<Drug> deleteDrug(long id) {
+        Optional<Drug> optionalDrug = drugRepository.findById(id);
+
+        if (optionalDrug.isPresent()) {
+            drugRepository.delete(optionalDrug.get());
+            return ResponseEntity.ok(optionalDrug.get());
+        } else {
+            log.error("Drug not found");
+            throw new DrugNotFoundException("Drug not found");
+        }
+    }
 }
