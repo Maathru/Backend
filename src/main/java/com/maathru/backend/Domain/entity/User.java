@@ -3,10 +3,10 @@ package com.maathru.backend.Domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "systemUsers")
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,9 +17,15 @@ public class User {
     private long userId;
     private String firstName;
     private String lastName;
+
+    @Column(unique = true, nullable = false)
     private String email;
     private String password;
     private String role;
+
+    @Column(nullable = false, columnDefinition = "boolean DEFAULT false")
     private boolean activeStatus;
-    private Timestamp registeredDate;
+
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)
+    private LocalDateTime registeredTime;
 }

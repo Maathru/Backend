@@ -23,7 +23,7 @@ public class UserService {
     public ResponseEntity<List<UserProfileDto>> getAllUsers() {
         List<User> users = userRepository.findAll();
 
-        if(users.isEmpty()) {
+        if (users.isEmpty()) {
             throw new UserNotFoundException("No users found");
         }
 
@@ -43,7 +43,7 @@ public class UserService {
         UserProfileDto userProfileDto = new UserProfileDto();
         Optional<User> optionalUser = userRepository.findById(id);
 
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             userProfileDto.setUserId(user.getUserId());
             userProfileDto.setFirstName(user.getFirstName());
@@ -51,7 +51,7 @@ public class UserService {
             userProfileDto.setEmail(user.getEmail());
 
             return ResponseEntity.ok(userProfileDto);
-        }else{
+        } else {
             log.error("user not found");
             throw new UserNotFoundException("User not found");
         }
@@ -69,19 +69,21 @@ public class UserService {
         return ResponseEntity.status(201).body(user);
     }
 
+    //TODO: need to check again
     public ResponseEntity<String> updateUser(long id) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            user.setUserId(id);
             user.setFirstName(user.getFirstName());
             user.setLastName(user.getLastName());
             user.setEmail(user.getEmail());
             user.setPassword(user.getPassword());
 
-            user = userRepository.save(user);
+            userRepository.save(user);
             log.info("User updated");
             return ResponseEntity.ok("User updated successfully");
-        }else{
+        } else {
             log.error("user not found");
             throw new UserNotFoundException("User not found");
         }
