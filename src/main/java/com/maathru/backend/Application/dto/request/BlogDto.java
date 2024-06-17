@@ -1,6 +1,5 @@
 package com.maathru.backend.Application.dto.request;
 
-import com.maathru.backend.Domain.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,5 +11,5 @@ public class BlogDto {
     private String category;
     private String image;
     private String location;
-    private User author;
+    private long author;
 }
