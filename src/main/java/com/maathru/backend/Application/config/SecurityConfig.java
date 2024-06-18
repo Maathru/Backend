@@ -14,25 +14,32 @@ import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
+//@EnableWebSecurity
+//@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthConverter jwtAuthConverter;
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests(authorize -> authorize
+////                        .requestMatchers(HttpMethod.GET,"/api/v1/login").hasRole("client_admin")
+//                        .anyRequest().authenticated())
+//                .oauth2ResourceServer(oauth2 -> oauth2
+//                        .jwt(jwt -> jwt
+//                                .jwtAuthenticationConverter(jwtAuthConverter)))
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(STATELESS));
+//
+//        return http.build();
+//    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers(HttpMethod.GET,"/api/v1/login").hasRole("client_admin")
-                        .anyRequest().authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(jwtAuthConverter)))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(STATELESS));
-
-        return http.build();
+        return http.authorizeHttpRequests(authorize -> {
+            authorize.anyRequest().permitAll();
+        }).csrf(AbstractHttpConfigurer::disable).build();
     }
 }
