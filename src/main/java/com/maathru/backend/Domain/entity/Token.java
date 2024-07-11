@@ -3,6 +3,11 @@ package com.maathru.backend.Domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
+
+import static java.time.LocalDateTime.now;
 
 @Getter
 @Setter
@@ -19,4 +24,12 @@ public class Token {
     @ManyToOne
     @JoinColumn(name = "user_user_id")
     private User user;
+    @CreatedDate
+    @Column(name = "logged_at", nullable = false)
+    private LocalDateTime loggedAt;
+
+    @PrePersist
+    public void beforePersist() {
+        setLoggedAt(now());
+    }
 }

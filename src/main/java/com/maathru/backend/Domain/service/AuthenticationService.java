@@ -1,5 +1,7 @@
 package com.maathru.backend.Domain.service;
 
+import com.maathru.backend.Application.dto.request.SigninDto;
+import com.maathru.backend.Application.dto.request.SignupDto;
 import com.maathru.backend.Application.dto.response.AuthenticationResponse;
 import com.maathru.backend.Domain.entity.Token;
 import com.maathru.backend.Domain.entity.User;
@@ -10,6 +12,7 @@ import com.maathru.backend.enumeration.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,32 +30,28 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
+    private final ModelMapper mapper;
 
-    public AuthenticationResponse register(User request) {
-        User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+    public AuthenticationResponse signup(SignupDto signupDto) {
+        System.out.println(signupDto.toString());
+        User user = mapper.map(signupDto, User.class);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setLoginAttempts(0);
-        user.setRole(Role.USER); // Default Role User
-        user.setAccountNonExpired(false);
-        user.setAccountNonLocked(false);
+
+        if (signupDto.getRole() == null || signupDto.getRole().isEmpty()) {
+            signupDto.setRole(Role.USER.name()); // Set default role to USER
+        }
+
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
         user.setEnabled(true);
 
         user = userRepository.save(user);
 
-        // generate tokens
-        String accessToken = jwtService.generateAccessToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
-
-        // save the generated token
-        saveUserToken(accessToken, refreshToken, user);
-
         return new AuthenticationResponse("User signed up Successfully");
     }
 
-    public AuthenticationResponse authenticate(User request) {
+    public AuthenticationResponse signin(SigninDto request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(), request.getPassword()
