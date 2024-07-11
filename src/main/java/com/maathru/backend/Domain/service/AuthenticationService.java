@@ -3,6 +3,7 @@ package com.maathru.backend.Domain.service;
 import com.maathru.backend.Application.dto.response.AuthenticationResponse;
 import com.maathru.backend.Domain.entity.Token;
 import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.exception.UnauthorizedException;
 import com.maathru.backend.External.repository.TokenRepository;
 import com.maathru.backend.External.repository.UserRepository;
 import com.maathru.backend.enumeration.Role;
@@ -10,8 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.OK;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +49,7 @@ public class AuthenticationService {
         // save the generated token
         saveUserToken(accessToken, refreshToken, user);
 
-        return new AuthenticationResponse(accessToken, refreshToken);
+        return new AuthenticationResponse("User signed up Successfully");
     }
 
     public AuthenticationResponse authenticate(User request) {
@@ -71,7 +68,31 @@ public class AuthenticationService {
         // save the generated token
         saveUserToken(accessToken, refreshToken, user);
 
-        return new AuthenticationResponse(accessToken, refreshToken);
+        return new AuthenticationResponse(user.getUserId(), user.getFirstName(), accessToken, refreshToken, user.getRole(), "User Logged in Successfully");
+    }
+
+    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new UnauthorizedException("Invalid Bearer Token");
+        }
+
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtService.extractEmail(token);
+
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (jwtService.isValidRefreshToken(token, user)) {
+            String accessToken = jwtService.generateAccessToken(user);
+            String refreshToken = jwtService.generateRefreshToken(user);
+
+            revokeAllTokenByUser(user);
+            saveUserToken(accessToken, refreshToken, user);
+
+            return new AuthenticationResponse(accessToken, refreshToken, "Token Refreshed Successfully");
+        }
+        throw new UnauthorizedException("Invalid Jwt Token");
     }
 
     private void revokeAllTokenByUser(User user) {
@@ -91,29 +112,5 @@ public class AuthenticationService {
         token.setLoggedOut(false);
         token.setUser(user);
         tokenRepository.save(token);
-    }
-
-    public ResponseEntity refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-        if (authHeader == null && !authHeader.startsWith("Bearer ")) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        }
-
-        String token = authHeader.replace("Bearer ", "");
-        String email = jwtService.extractEmail(token);
-
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        if (jwtService.isValidRefreshToken(token, user)) {
-            String accessToken = jwtService.generateAccessToken(user);
-            String refreshToken = jwtService.generateRefreshToken(user);
-
-            revokeAllTokenByUser(user);
-            saveUserToken(accessToken, refreshToken, user);
-
-            return new ResponseEntity(new AuthenticationResponse(accessToken, refreshToken), OK);
-        }
-        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 }

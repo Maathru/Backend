@@ -35,7 +35,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/signin/**", "/signup/**", "/refresh/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated()
                 ).userDetailsService(userService)
                 .exceptionHandling(e -> e.accessDeniedHandler(customAccessDeniedHandler)
@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(l -> l.logoutUrl("/logout")
+                .logout(l -> l.logoutUrl("/api/v1/logout")
                         .addLogoutHandler(customLogoutHandler)
                         .addLogoutHandler(((request, response, authentication) -> SecurityContextHolder.clearContext())))
                 .build();

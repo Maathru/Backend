@@ -66,4 +66,10 @@ public class GlobalExceptionHandler {
         log.error("User not found exception occurred");
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<String> handleUserNotFoundException(UnauthorizedException e) {
+        log.error("Unauthorized exception occurred");
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
 }
