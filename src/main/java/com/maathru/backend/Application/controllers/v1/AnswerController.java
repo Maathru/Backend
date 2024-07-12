@@ -4,9 +4,11 @@ import com.maathru.backend.Application.dto.request.AnswerDto;
 import com.maathru.backend.Domain.entity.Answer;
 import com.maathru.backend.Domain.service.AnswerService;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/answer")
 @AllArgsConstructor

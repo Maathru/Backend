@@ -27,7 +27,8 @@ public class QuestionService {
 
         if (optionalUser.isPresent()) {
             Question question = new Question();
-            question.setQuestion(questionDto.getQuestion());
+            question.setTitle(questionDto.getTitle());
+            question.setDescription(questionDto.getDescription());
             question.setAuthor(optionalUser.get());
             question = questionRepository.save(question);
 
