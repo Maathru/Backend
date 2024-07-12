@@ -19,6 +19,7 @@ import static java.time.LocalDateTime.now;
 @Table(name = "users")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,11 +48,9 @@ public class User implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "created_by_user_id")
-//    @NotNull
     private User createdBy;
     @ManyToOne
     @JoinColumn(name = "updated_by_user_id")
-//    @NotNull
     private User updatedBy;
     @NotNull
     @CreatedDate
@@ -75,10 +74,30 @@ public class User implements UserDetails {
     public void beforePersist() {
         setCreatedAt(now());
         setUpdatedAt(now());
+
+        if (createdBy == null) {
+            setCreatedBy(this);
+        }
+
+        if (updatedBy == null) {
+            setUpdatedBy(this);
+        }
     }
 
     @PreUpdate
     public void beforeUpdate() {
         setUpdatedAt(now());
+
+        if (updatedBy == null) {
+            setUpdatedBy(this);
+        }
+    }
+
+    public User(long userId, String email, String firstName, String lastName, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+        this.userId = userId;
     }
 }
