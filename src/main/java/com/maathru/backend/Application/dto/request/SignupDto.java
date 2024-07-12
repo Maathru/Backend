@@ -32,5 +32,5 @@ public class SignupDto {
     private String password;
 
     @ValidRole
-    private String role = Role.USER.name();;
+    private String role;
 }

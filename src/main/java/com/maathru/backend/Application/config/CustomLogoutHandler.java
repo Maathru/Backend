@@ -1,20 +1,22 @@
 package com.maathru.backend.Application.config;
 
 import com.maathru.backend.Domain.entity.Token;
+import com.maathru.backend.Domain.service.JwtService;
 import com.maathru.backend.External.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class CustomLogoutHandler implements LogoutHandler {
     private final TokenRepository tokenRepository;
-
-    public CustomLogoutHandler(TokenRepository tokenRepository) {
-        this.tokenRepository = tokenRepository;
-    }
+    private final JwtService jwtService;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -31,5 +33,7 @@ public class CustomLogoutHandler implements LogoutHandler {
             storedToken.setLoggedOut(true);
             tokenRepository.save(storedToken);
         }
+
+        log.info("User {} signed out successfully", jwtService.extractEmail(token));
     }
 }

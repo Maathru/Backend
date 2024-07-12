@@ -68,13 +68,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
-        log.error("User not found exception occurred");
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<String> handleUserNotFoundException(UnauthorizedException e) {
-        log.error("Unauthorized exception occurred");
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
@@ -84,5 +82,10 @@ public class GlobalExceptionHandler {
                 .map(error -> new ValidationErrorResponse(((FieldError) error).getField(), error.getDefaultMessage()))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 }
