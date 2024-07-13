@@ -42,7 +42,6 @@ public class QuestionService {
         List<Question> questions = questionRepository.findAll();
 
         if (questions.isEmpty()) {
-            log.error("Questions not found");
             throw new QuestionNotFoundException("Questions not found");
         }
         return ResponseEntity.ok(questions);
