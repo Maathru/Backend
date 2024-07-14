@@ -2,6 +2,7 @@ package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.SigninDto;
 import com.maathru.backend.Application.dto.request.SignupDto;
+import com.maathru.backend.Application.dto.request.TokenRequest;
 import com.maathru.backend.Application.dto.response.AuthenticationResponse;
 import com.maathru.backend.Domain.entity.Token;
 import com.maathru.backend.Domain.entity.User;
@@ -124,24 +125,18 @@ public class AuthenticationService {
         return new AuthenticationResponse(user.getUserId(), user.getFirstName(), accessToken, refreshToken, user.getRole(), "User logged in successfully");
     }
 
-    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new UnauthorizedException("Invalid Bearer Token");
-        }
-
-        String token = authHeader.replace("Bearer ", "");
-        String email = jwtService.extractEmail(token);
-
+    public AuthenticationResponse refreshToken(HttpServletRequest request, TokenRequest tokenRequest) {
+        String email = jwtService.extractEmail(tokenRequest.getToken());
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        if (jwtService.isValidRefreshToken(token, user)) {
+        if (jwtService.isValidRefreshToken(tokenRequest.getToken(), user)) {
             String accessToken = jwtService.generateAccessToken(user);
             String refreshToken = jwtService.generateRefreshToken(user);
 
             revokeAllTokenByUser(user);
             saveUserToken(accessToken, refreshToken, user);
+
+            log.info("{}:{} refreshed successfully", user.getRole(), user.getUsername());
 
             return new AuthenticationResponse(accessToken, refreshToken, "Token Refreshed Successfully");
         }

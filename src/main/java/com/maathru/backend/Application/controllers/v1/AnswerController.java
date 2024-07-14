@@ -1,21 +1,28 @@
 package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.AnswerDto;
+import com.maathru.backend.Application.dto.response.AnswerResponse;
 import com.maathru.backend.Domain.entity.Answer;
 import com.maathru.backend.Domain.service.AnswerService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/answer")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Validated
 public class AnswerController {
     private final AnswerService answerService;
 
     @PostMapping()
-    public ResponseEntity<Answer> createAnswer(@RequestBody AnswerDto answerDto) {
-        return answerService.createAnswer(answerDto);
+    public ResponseEntity<String> addAnswer(@RequestBody @Valid AnswerDto answerDto) {
+        return answerService.addAnswer(answerDto);
     }
 
     @GetMapping("/{id}")
@@ -24,7 +31,7 @@ public class AnswerController {
     }
 
     @GetMapping("/question/{id}")
-    public ResponseEntity<Iterable<Answer>> getAnswerByQuestion(@PathVariable Long id) {
+    public ResponseEntity<List<AnswerResponse>> getAnswerByQuestion(@PathVariable Long id) {
         return answerService.getAnswerByQuestion(id);
     }
 

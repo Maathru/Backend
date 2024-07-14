@@ -2,6 +2,7 @@ package com.maathru.backend.Application.config;
 
 import com.maathru.backend.Application.filter.JwtAuthenticationFilter;
 import com.maathru.backend.Domain.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,7 +46,8 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(l -> l.logoutUrl("/api/v1/logout")
                         .addLogoutHandler(customLogoutHandler)
-                        .addLogoutHandler(((request, response, authentication) -> SecurityContextHolder.clearContext())))
+                        .addLogoutHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
+                        .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK)))
                 .build();
     }
 
