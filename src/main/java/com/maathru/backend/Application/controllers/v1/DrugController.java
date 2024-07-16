@@ -1,25 +1,32 @@
 package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.DrugDto;
+import com.maathru.backend.Application.dto.response.DrugResponse;
 import com.maathru.backend.Domain.entity.Drug;
 import com.maathru.backend.Domain.service.DrugService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/drug")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Validated
 public class DrugController {
     private final DrugService drugService;
 
     @PostMapping()
-    public ResponseEntity<Drug> addDrug(@RequestBody DrugDto drugDto) {
+    public ResponseEntity<String> addDrug(@RequestBody @Valid DrugDto drugDto) {
         return drugService.addDrug(drugDto);
     }
 
     @GetMapping()
-    public ResponseEntity<Iterable<Drug>> getAllDrugs() {
+    public ResponseEntity<List<DrugResponse>> getAllDrugs() {
         return drugService.getAllDrugs();
     }
 
