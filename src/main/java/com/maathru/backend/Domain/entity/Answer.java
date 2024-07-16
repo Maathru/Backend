@@ -14,7 +14,7 @@ import static java.time.LocalDateTime.now;
 @Table(name = "answers")
 @Getter
 @Setter
-public class Answer {
+public class Answer extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
@@ -25,29 +25,4 @@ public class Answer {
     private Question question;
     @NotNull
     private String answer;
-
-    @ManyToOne
-    @JoinColumn(name = "created_by_user_id")
-    private User createdBy;
-    @ManyToOne
-    @JoinColumn(name = "updated_by_user_id")
-    private User updatedBy;
-    @NotNull
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-    @CreatedDate
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void beforePersist() {
-        setCreatedAt(now());
-        setUpdatedAt(now());
-    }
-
-    @PreUpdate
-    public void beforeUpdate() {
-        setUpdatedAt(now());
-    }
 }

@@ -19,7 +19,7 @@ import static java.time.LocalDateTime.now;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Question {
+public class Question extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
@@ -29,31 +29,6 @@ public class Question {
     @NotNull
     private String description;
     private String keywords;
-
-    @ManyToOne
-    @JoinColumn(name = "created_by_user_id")
-    private User createdBy;
-    @ManyToOne
-    @JoinColumn(name = "updated_by_user_id")
-    private User updatedBy;
-    @NotNull
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-    @CreatedDate
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void beforePersist() {
-        setCreatedAt(now());
-        setUpdatedAt(now());
-    }
-
-    @PreUpdate
-    public void beforeUpdate() {
-        setUpdatedAt(now());
-    }
 
     // Utility methods to convert between List<String> and comma-separated String
     public List<String> getKeywords() {
