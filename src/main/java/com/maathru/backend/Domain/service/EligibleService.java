@@ -1,12 +1,15 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.BasicInfoDto;
+import com.maathru.backend.Application.dto.request.eligible.FamilyHealthInfoDto;
 import com.maathru.backend.Application.dto.request.eligible.MedicalHistoryDto;
 import com.maathru.backend.Domain.entity.BasicInfo;
 import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.entity.eligible.FamilyHealthInfo;
 import com.maathru.backend.Domain.entity.eligible.MedicalHistory;
 import com.maathru.backend.Domain.exception.UserNotFoundException;
 import com.maathru.backend.External.repository.BasicInfoRepository;
+import com.maathru.backend.External.repository.FamilyHealthInfoRepository;
 import com.maathru.backend.External.repository.MedicalHistoryRepository;
 import com.maathru.backend.enumeration.Gender;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ public class EligibleService {
     private final JwtService jwtService;
     private final BasicInfoRepository basicInfoRepository;
     private final MedicalHistoryRepository medicalHistoryRepository;
+    private final FamilyHealthInfoRepository familyHealthInfoRepository;
 
     public ResponseEntity<String> saveBasicInfo(BasicInfoDto basicInfoDto) {
         User currentUser = jwtService.getCurrentUser();
@@ -133,4 +137,80 @@ public class EligibleService {
 
         return ResponseEntity.status(201).body("Medical history added successfully");
     }
+
+    public ResponseEntity<String> saveFamilyHealthInfo(FamilyHealthInfoDto familyHealthInfoDto) {
+        User currentUser = jwtService.getCurrentUser();
+        if (currentUser.getUserId() == 0) {
+            throw new UserNotFoundException("User not found");
+        }
+
+        // Woman details
+        FamilyHealthInfo familyHealthInfoFemale = new FamilyHealthInfo();
+
+        familyHealthInfoFemale.setUser(currentUser);
+
+        familyHealthInfoFemale.setHighBloodPressure(familyHealthInfoDto.isWomenHighBloodPressure());
+        familyHealthInfoFemale.setHighBloodPressureWho(familyHealthInfoDto.getWomenHighBloodPressureWho());
+
+        familyHealthInfoFemale.setDiabetes(familyHealthInfoDto.isWomenDiabetes());
+        familyHealthInfoFemale.setDiabetesWho(familyHealthInfoDto.getWomenDiabetesWho());
+
+        familyHealthInfoFemale.setHeartDiseases(familyHealthInfoDto.isWomenHeartDiseases());
+        familyHealthInfoFemale.setHeartDiseasesWho(familyHealthInfoDto.getWomenHeartDiseasesWho());
+
+        familyHealthInfoFemale.setNervousDisorders(familyHealthInfoDto.isWomenNervousDisorders());
+        familyHealthInfoFemale.setNervousDisordersWho(familyHealthInfoDto.getWomenNervousDisordersWho());
+
+        familyHealthInfoFemale.setHemophilia(familyHealthInfoDto.isWomenHemophilia());
+        familyHealthInfoFemale.setHemophiliaWho(familyHealthInfoDto.getWomenHemophiliaWho());
+
+        familyHealthInfoFemale.setThalassemia(familyHealthInfoDto.isWomenThalassemia());
+        familyHealthInfoFemale.setThalassemiaWho(familyHealthInfoDto.getWomenThalassemiaWho());
+
+        familyHealthInfoFemale.setMentalIllnessAndSuicide(familyHealthInfoDto.isWomenMentalIllnessAndSuicide());
+        familyHealthInfoFemale.setMentalIllnessAndSuicideWho(familyHealthInfoDto.getWomenMentalIllnessAndSuicideWho());
+
+        familyHealthInfoFemale.setTwins(familyHealthInfoDto.isWomenTwins());
+        familyHealthInfoFemale.setTwinsWho(familyHealthInfoDto.getWomenTwinsWho());
+
+        familyHealthInfoRepository.save(familyHealthInfoFemale);
+
+        log.info("Woman's family health info added successfully by {}:{}", currentUser.getRole(), currentUser.getEmail());
+
+        // Men details
+        FamilyHealthInfo familyHealthInfoMale = new FamilyHealthInfo();
+
+        familyHealthInfoMale.setUser(currentUser);
+
+        familyHealthInfoMale.setHighBloodPressure(familyHealthInfoDto.isMenHighBloodPressure());
+        familyHealthInfoMale.setHighBloodPressureWho(familyHealthInfoDto.getMenHighBloodPressureWho());
+
+        familyHealthInfoMale.setDiabetes(familyHealthInfoDto.isMenDiabetes());
+        familyHealthInfoMale.setDiabetesWho(familyHealthInfoDto.getMenDiabetesWho());
+
+        familyHealthInfoMale.setHeartDiseases(familyHealthInfoDto.isMenHeartDiseases());
+        familyHealthInfoMale.setHeartDiseasesWho(familyHealthInfoDto.getMenHeartDiseasesWho());
+
+        familyHealthInfoMale.setNervousDisorders(familyHealthInfoDto.isMenNervousDisorders());
+        familyHealthInfoMale.setNervousDisordersWho(familyHealthInfoDto.getMenNervousDisordersWho());
+
+        familyHealthInfoMale.setHemophilia(familyHealthInfoDto.isMenHemophilia());
+        familyHealthInfoMale.setHemophiliaWho(familyHealthInfoDto.getMenHemophiliaWho());
+
+        familyHealthInfoMale.setThalassemia(familyHealthInfoDto.isMenThalassemia());
+        familyHealthInfoMale.setThalassemiaWho(familyHealthInfoDto.getMenThalassemiaWho());
+
+        familyHealthInfoMale.setMentalIllnessAndSuicide(familyHealthInfoDto.isMenMentalIllnessAndSuicide());
+        familyHealthInfoMale.setMentalIllnessAndSuicideWho(familyHealthInfoDto.getMenMentalIllnessAndSuicideWho());
+
+        familyHealthInfoMale.setTwins(familyHealthInfoDto.isMenTwins());
+        familyHealthInfoMale.setTwinsWho(familyHealthInfoDto.getMenTwinsWho());
+
+        familyHealthInfoRepository.save(familyHealthInfoMale);
+
+        log.info("Man's family health info added successfully by {}:{}", currentUser.getRole(), currentUser.getEmail());
+
+        return ResponseEntity.status(201).body("Family health info added successfully");
+    }
+
 }

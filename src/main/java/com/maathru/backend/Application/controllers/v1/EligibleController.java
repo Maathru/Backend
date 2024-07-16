@@ -2,6 +2,7 @@ package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.BasicInfoDto;
 import com.maathru.backend.Application.dto.request.eligible.MedicalHistoryDto;
+import com.maathru.backend.Application.dto.request.eligible.FamilyHealthInfoDto;
 import com.maathru.backend.Domain.service.EligibleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,10 @@ public class EligibleController {
     @PostMapping("/medical")
     public ResponseEntity<String> saveMedicalHistory(@Valid @RequestBody MedicalHistoryDto medicalHistoryDto) {
         return eligibleService.saveMedicalHistory(medicalHistoryDto);
+    }
+
+    @PostMapping("/family")
+    public ResponseEntity<String> saveFamilyHealthInfo(@Valid @RequestBody FamilyHealthInfoDto familyHealthInfoDto) {
+        return eligibleService.saveFamilyHealthInfo(familyHealthInfoDto);
     }
 }
