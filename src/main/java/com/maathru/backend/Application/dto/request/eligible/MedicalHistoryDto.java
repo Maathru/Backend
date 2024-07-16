@@ -15,9 +15,6 @@ public class MedicalHistoryDto {
     @NotNull(message = "User is required")
     private User user;
 
-    @NotNull(message = "Gender is required")
-    private String gender;
-
     private boolean womenAnemia;
     private boolean womanHeartDisease;
     private boolean womanDiabetes;

@@ -1,6 +1,7 @@
 package com.maathru.backend.Domain.entity.eligible;
 
 import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.enumeration.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class MedicalHistory {
     private User user;
 
     @NotNull
-    private String gender;
+    private Gender gender;
 
     private boolean anemia;
     private boolean heartDisease;
