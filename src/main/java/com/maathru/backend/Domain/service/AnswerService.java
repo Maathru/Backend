@@ -30,12 +30,12 @@ import java.util.Optional;
 @Slf4j
 public class AnswerService {
     private final AnswerRepository answerRepository;
-    private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
+    private final JwtService jwtService;
 
     public ResponseEntity<String> addAnswer(AnswerDto answerDto) {
 
-        User currentUser = getCurrentUser();
+        User currentUser = jwtService.getCurrentUser();
         if (currentUser.getUserId() == 0) {
             throw new UserNotFoundException("Author not found");
         }
@@ -97,14 +97,5 @@ public class AnswerService {
             log.error("Answer not found");
             throw new AnswerNotFoundException("Answer not found");
         }
-    }
-
-    private User getCurrentUser() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (email != null) {
-            Optional<User> optionalUser = userRepository.findByEmail(email);
-            return optionalUser.orElseGet(User::new);
-        }
-        return new User();
     }
 }

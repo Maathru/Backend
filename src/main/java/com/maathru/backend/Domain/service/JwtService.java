@@ -1,18 +1,22 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.exception.UnauthorizedException;
 import com.maathru.backend.External.repository.TokenRepository;
+import com.maathru.backend.External.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -27,6 +31,7 @@ public class JwtService {
     private long refreshTokenExpire;
 
     private final TokenRepository tokenRepository;
+    private final UserRepository userRepository;
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -44,8 +49,12 @@ public class JwtService {
         return email.equals(user.getUsername()) && isTokenExpired(refreshToken) && isValidRefreshToken;
     }
 
-    private boolean isTokenExpired(String token) {
-        return !extractExpiration(token).before(new Date());
+    public boolean isTokenExpired(String token) {
+        try {
+            return !extractExpiration(token).before(new Date()); // Token is not expired
+        } catch (ExpiredJwtException e) {
+            return true; // Token is expired
+        }
     }
 
     private Date extractExpiration(String token) {
@@ -74,6 +83,9 @@ public class JwtService {
             log.error("Malformed JWT: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
             log.error("Illegal argument: {}", e.getMessage());
+        } catch (JwtException e) {
+            log.error("JWT error: {}", e.getMessage());
+            throw new UnauthorizedException("Invalid Jwt Token");
         }
         return null;
     }
@@ -99,5 +111,14 @@ public class JwtService {
     private SecretKey getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public User getCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (email != null) {
+            Optional<User> optionalUser = userRepository.findByEmail(email);
+            return optionalUser.orElseGet(User::new);
+        }
+        return new User();
     }
 }

@@ -126,8 +126,24 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse refreshToken(HttpServletRequest request, TokenRequest tokenRequest) {
-        String email = jwtService.extractEmail(tokenRequest.getToken());
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new UnauthorizedException("Invalid Jwt Token");
+        }
+
+        String token = authHeader.substring(7);
+        String accessEmail = jwtService.extractEmail(token);
+        String refreshEmail = jwtService.extractEmail(tokenRequest.getToken());
+
+        if (!accessEmail.equals(refreshEmail)) {
+            throw new UnauthorizedException("Invalid access/refresh token");
+        }
+
+        User user = userRepository.findByEmail(refreshEmail).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (!jwtService.isTokenExpired(token)) {
+            return new AuthenticationResponse(token, tokenRequest.getToken(), "Access Token is still valid");
+        }
 
         if (jwtService.isValidRefreshToken(tokenRequest.getToken(), user)) {
             String accessToken = jwtService.generateAccessToken(user);

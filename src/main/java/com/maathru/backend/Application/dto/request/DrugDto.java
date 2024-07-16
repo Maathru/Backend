@@ -1,5 +1,7 @@
 package com.maathru.backend.Application.dto.request;
 
+import com.maathru.backend.Domain.validation.FutureDate;
+import com.maathru.backend.Domain.validation.PastDate;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -29,9 +31,11 @@ public class DrugDto {
 
     private String recommendedDose;
 
-    @NotEmpty(message = "Expiry date cannot be empty")
+    @NotNull(message = "Expiry date cannot be empty")
+    @FutureDate(message = "Expiry date must be in the future")
     private LocalDate expiryDate;
 
-    @NotEmpty(message = "Manufactured date cannot be empty")
+    @NotNull(message = "Manufactured date cannot be empty")
+    @PastDate(message = "Manufactured date must be in the past")
     private LocalDate manufacturedDate;
 }
