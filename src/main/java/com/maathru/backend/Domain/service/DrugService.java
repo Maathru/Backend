@@ -25,11 +25,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DrugService {
     private final DrugRepository drugRepository;
-    private final UserRepository userRepository;
+    private final JwtService jwtService;
     private final ModelMapper mapper;
 
     public ResponseEntity<String> addDrug(DrugDto drugDto) {
-        User currentUser = getCurrentUser();
+        User currentUser = jwtService.getCurrentUser();
         if (currentUser.getUserId() == 0) {
             throw new UserNotFoundException("Author not found");
         }
@@ -49,6 +49,7 @@ public class DrugService {
         if (drugs.isEmpty()) {
             throw new DrugNotFoundException("Drugs not found");
         }
+
         return ResponseEntity.ok(drugs.stream().map(drug -> mapper.map(drug, DrugResponse.class)).collect(Collectors.toList()));
     }
 
@@ -95,14 +96,5 @@ public class DrugService {
             log.error("Drug not found");
             throw new DrugNotFoundException("Drug not found");
         }
-    }
-
-    private User getCurrentUser() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (email != null) {
-            Optional<User> optionalUser = userRepository.findByEmail(email);
-            return optionalUser.orElseGet(User::new);
-        }
-        return new User();
     }
 }

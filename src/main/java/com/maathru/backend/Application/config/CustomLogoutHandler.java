@@ -29,7 +29,7 @@ public class CustomLogoutHandler implements LogoutHandler {
         String token = authHeader.substring(7);
 
         // get stored token from database
-        Token storedToken = tokenRepository.findByAccessToken(token).orElse(null);
+        Token storedToken = tokenRepository.findByAccessTokenAndLoggedOutFalse(token).orElse(null);
         if (storedToken != null) {
             storedToken.setLoggedOut(true);
             tokenRepository.save(storedToken);
