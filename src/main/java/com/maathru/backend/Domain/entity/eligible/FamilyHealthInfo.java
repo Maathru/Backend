@@ -1,7 +1,6 @@
 package com.maathru.backend.Domain.entity.eligible;
 
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.enumeration.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,37 +14,52 @@ public class FamilyHealthInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
-    private long familyHealthInfoId;
+    private long id;
 
     @NotNull
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private boolean manHighBloodPressure;
+    @NotNull
+    private boolean manDiabetes;
+    @NotNull
+    private boolean manHeartDiseases;
+    @NotNull
+    private boolean manNervousDisorders;
+    @NotNull
+    private boolean manHemophilia;
+    @NotNull
+    private boolean manThalassemia;
+    @NotNull
+    private boolean manMentalIllnessAndSuicide;
+    @NotNull
+    private boolean manTwins;
 
     @NotNull
-    private Gender gender;
+    private boolean womanHighBloodPressure;
+    @NotNull
+    private boolean womanDiabetes;
+    @NotNull
+    private boolean womanHeartDiseases;
+    @NotNull
+    private boolean womanNervousDisorders;
+    @NotNull
+    private boolean womanHemophilia;
+    @NotNull
+    private boolean womanThalassemia;
+    @NotNull
+    private boolean womanMentalIllnessAndSuicide;
+    @NotNull
+    private boolean womanTwins;
 
-    private boolean highBloodPressure;
     private String highBloodPressureWho;
-
-    private boolean diabetes;
     private String diabetesWho;
-
-    private boolean heartDiseases;
     private String heartDiseasesWho;
-
-    private boolean nervousDisorders;
     private String nervousDisordersWho;
-
-    private boolean hemophilia;
     private String hemophiliaWho;
-
-    private boolean thalassemia;
     private String thalassemiaWho;
-
-    private boolean mentalIllnessAndSuicide;
     private String mentalIllnessAndSuicideWho;
-
-    private boolean twins;
     private String twinsWho;
+
+    @OneToOne
+    @JoinColumn(name = "user_user_id", updatable = false, nullable = false, unique = true)
+    private User user;
 }

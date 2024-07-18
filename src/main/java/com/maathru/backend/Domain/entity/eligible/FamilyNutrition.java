@@ -1,7 +1,6 @@
 package com.maathru.backend.Domain.entity.eligible;
 
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.enumeration.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,40 +14,57 @@ public class FamilyNutrition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
-    private long familyNutritionId;
+    private long id;
 
     @NotNull
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private boolean manThreeMeals;
+    @NotNull
+    private boolean manAnimalProtein;
+    @NotNull
+    private boolean manPlantProtein;
+    @NotNull
+    private boolean manVegetable;
+    @NotNull
+    private boolean manFruit;
+    @NotNull
+    private boolean manFamilyMeal;
+    @NotNull
+    private boolean manGardenDiet;
+    @NotNull
+    private boolean manMuchSugar;
+    @NotNull
+    private boolean manMuchFat;
 
     @NotNull
-    private Gender gender;
+    private boolean womenThreeMeals;
+    @NotNull
+    private boolean womanAnimalProtein;
+    @NotNull
+    private boolean womanPlantProtein;
+    @NotNull
+    private boolean womanVegetable;
+    @NotNull
+    private boolean womanFruit;
+    @NotNull
+    private boolean womanFamilyMeal;
+    @NotNull
+    private boolean womanGardenDiet;
+    @NotNull
+    private boolean womanMuchSugar;
+    @NotNull
+    private boolean womanMuchFat;
 
-    private boolean mainMeals;
-    private String mainMealsDetails;
-
-    private boolean animalProtein;
+    private String threeMealsDetails;
     private String animalProteinDetails;
-
-    private boolean plantProtein;
     private String plantProteinDetails;
+    private String vegetableDetails;
+    private String fruitDetails;
+    private String familyMealDetails;
+    private String gardenDietDetails;
+    private String muchSugarDetails;
+    private String muchFatDetails;
 
-    private boolean twoTypesVegetables;
-    private String twoTypesVegetablesDetails;
-
-    private boolean oneTypeFruit;
-    private String oneTypeFruitDetails;
-
-    private boolean sitDownFamilyMeal;
-    private String sitDownFamilyMealDetails;
-
-    private boolean dietFromGarden;
-    private String dietFromGardenDetails;
-
-    private boolean tooMuchSugar;
-    private String tooMuchSugarDetails;
-
-    private boolean eatingTooMuchFat;
-    private String eatingTooMuchFatDetails;
+    @OneToOne
+    @JoinColumn(name = "user_user_id", updatable = false, nullable = false, unique = true)
+    private User user;
 }

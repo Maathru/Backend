@@ -1,6 +1,7 @@
-package com.maathru.backend.Domain.entity;
+package com.maathru.backend.Domain.entity.eligible;
 
-import com.maathru.backend.enumeration.Gender;
+import com.maathru.backend.Domain.entity.Auditable;
+import com.maathru.backend.Domain.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -18,13 +19,18 @@ public class BasicInfo extends Auditable {
     @Column(updatable = false, unique = true, nullable = false)
     private long id;
     @NotNull
-    private int age;
+    private int womanAge;
     @NotNull
-    private String educationLevel;
+    private int manAge;
     @NotNull
-    private String occupation;
+    private String womanEducationLevel;
+    @NotNull
+    private String manEducationLevel;
+    private String womanOccupation;
+    private String manOccupation;
     @NotNull
     private LocalDate marriedDate;
-    @Enumerated(value = EnumType.STRING)
-    private Gender gender;
+    @OneToOne
+    @JoinColumn(name = "user_user_id", updatable = false, nullable = false, unique = true)
+    private User user;
 }

@@ -1,4 +1,4 @@
-package com.maathru.backend.Application.dto.request;
+package com.maathru.backend.Application.dto.eligible;
 
 import com.maathru.backend.Domain.validation.PastDate;
 import jakarta.validation.constraints.Max;

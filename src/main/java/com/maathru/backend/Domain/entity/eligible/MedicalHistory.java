@@ -1,7 +1,6 @@
 package com.maathru.backend.Domain.entity.eligible;
 
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.enumeration.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,29 +14,62 @@ public class MedicalHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
-    private long medicalHistoryId;
+    private long id;
 
     @NotNull
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private boolean womenAnemia;
+    @NotNull
+    private boolean womanHeartDisease;
+    @NotNull
+    private boolean womanDiabetes;
+    @NotNull
+    private boolean womanHighBloodPressure;
+    @NotNull
+    private boolean womanHighCholesterol;
+    @NotNull
+    private boolean womanChestTightnessWheezing;
+    @NotNull
+    private boolean womanThyroid;
+    @NotNull
+    private boolean womanDental;
+    @NotNull
+    private boolean womanMentalIllness;
+    @NotNull
+    private boolean womanLongTermDiseases;
+    @NotNull
+    private boolean womanFoodPoisoning;
+    @NotNull
+    private boolean womanLongTermMedication;
+    @NotNull
+    private boolean womanSurgery;
 
     @NotNull
-    private Gender gender;
+    private boolean manAnemia;
+    @NotNull
+    private boolean manHeartDisease;
+    @NotNull
+    private boolean manDiabetes;
+    @NotNull
+    private boolean manHighBloodPressure;
+    @NotNull
+    private boolean manHighCholesterol;
+    @NotNull
+    private boolean manChestTightnessWheezing;
+    @NotNull
+    private boolean manThyroid;
+    @NotNull
+    private boolean manDental;
+    @NotNull
+    private boolean manMentalIllness;
+    @NotNull
+    private boolean manLongTermDiseases;
+    @NotNull
+    private boolean manFoodPoisoning;
+    @NotNull
+    private boolean manLongTermMedication;
+    @NotNull
+    private boolean manSurgery;
 
-    private boolean anemia;
-    private boolean heartDisease;
-    private boolean diabetes;
-    private boolean highBloodPressure;
-    private boolean highCholesterol;
-    private boolean chestTightnessWheezing;
-    private boolean thyroid;
-    private boolean dental;
-    private boolean mentalIllness;
-    private boolean foodPoisoning;
-    private boolean longTermMedication;
-    private boolean surgery;
-    private boolean other;
 
     private String anemiaDetails;
     private String heartDiseaseDetails;
@@ -48,9 +80,13 @@ public class MedicalHistory {
     private String thyroidDetails;
     private String dentalDetails;
     private String mentalIllnessDetails;
+    private String longTermDiseases;
     private String foodPoisoningDetails;
     private String longTermMedicationDetails;
     private String surgeryDetails;
     private String otherDetails;
 
+    @OneToOne
+    @JoinColumn(name = "user_user_id", updatable = false, nullable = false, unique = true)
+    private User user;
 }
