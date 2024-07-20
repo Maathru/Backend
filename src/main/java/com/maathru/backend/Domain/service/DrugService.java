@@ -4,16 +4,12 @@ import com.maathru.backend.Application.dto.request.DrugDto;
 import com.maathru.backend.Application.dto.response.DrugResponse;
 import com.maathru.backend.Domain.entity.Drug;
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.Domain.exception.DrugNotFoundException;
-import com.maathru.backend.Domain.exception.UserNotFoundException;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.External.repository.DrugRepository;
-import com.maathru.backend.External.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +27,7 @@ public class DrugService {
     public ResponseEntity<String> addDrug(DrugDto drugDto) {
         User currentUser = jwtService.getCurrentUser();
         if (currentUser.getUserId() == 0) {
-            throw new UserNotFoundException("Author not found");
+            throw new NotFoundException("Author not found");
         }
 
         Drug drug = mapper.map(drugDto, Drug.class);
@@ -47,7 +43,7 @@ public class DrugService {
         List<Drug> drugs = drugRepository.findAll();
 
         if (drugs.isEmpty()) {
-            throw new DrugNotFoundException("Drugs not found");
+            throw new NotFoundException("Drugs not found");
         }
 
         return ResponseEntity.ok(drugs.stream().map(drug -> mapper.map(drug, DrugResponse.class)).collect(Collectors.toList()));
@@ -60,7 +56,7 @@ public class DrugService {
             return ResponseEntity.ok(optionalDrug.get());
         } else {
             log.error("Drug not found");
-            throw new DrugNotFoundException("Drug not found");
+            throw new NotFoundException("Drug not found");
         }
     }
 
@@ -82,7 +78,7 @@ public class DrugService {
             return ResponseEntity.status(201).body(drug);
         } else {
             log.error("Drug not found");
-            throw new DrugNotFoundException("Drug not found");
+            throw new NotFoundException("Drug not found");
         }
     }
 
@@ -94,7 +90,7 @@ public class DrugService {
             return ResponseEntity.ok(optionalDrug.get());
         } else {
             log.error("Drug not found");
-            throw new DrugNotFoundException("Drug not found");
+            throw new NotFoundException("Drug not found");
         }
     }
 }

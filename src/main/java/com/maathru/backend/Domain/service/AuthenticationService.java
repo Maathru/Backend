@@ -6,14 +6,12 @@ import com.maathru.backend.Application.dto.request.TokenRequest;
 import com.maathru.backend.Application.dto.response.AuthenticationResponse;
 import com.maathru.backend.Domain.entity.Token;
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.Domain.exception.AuthenticationException;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.Domain.exception.UnauthorizedException;
-import com.maathru.backend.Domain.exception.UserNotFoundException;
 import com.maathru.backend.External.repository.TokenRepository;
 import com.maathru.backend.External.repository.UserRepository;
 import com.maathru.backend.enumeration.Role;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -72,10 +70,10 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse signin(SigninDto request) {
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new NotFoundException("User not found"));
 
         if (user.getLoginAttempts() != null && user.getLoginAttempts() >= 5) {
-            throw new AuthenticationException("Account is locked due to too many failed login attempts");
+            throw new UnauthorizedException("Account is locked due to too many failed login attempts");
         }
 
         try {
@@ -99,9 +97,9 @@ public class AuthenticationService {
 
             userRepository.save(user);
 
-            throw new AuthenticationException("Invalid email or password");
+            throw new UnauthorizedException("Invalid email or password");
         } catch (DisabledException e) {
-            throw new AuthenticationException("Account is locked");
+            throw new UnauthorizedException("Account is locked");
         }
 
         // Reset login attempts on successful login
@@ -139,7 +137,7 @@ public class AuthenticationService {
             throw new UnauthorizedException("Invalid access/refresh token");
         }
 
-        User user = userRepository.findByEmail(refreshEmail).orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userRepository.findByEmail(refreshEmail).orElseThrow(() -> new NotFoundException("User not found"));
 
         if (!jwtService.isTokenExpired(token)) {
             return new AuthenticationResponse(token, tokenRequest.getToken(), "Access Token is still valid");

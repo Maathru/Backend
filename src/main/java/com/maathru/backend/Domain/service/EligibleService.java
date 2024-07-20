@@ -1,10 +1,9 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.eligible.*;
-import com.maathru.backend.Application.dto.request.eligible.*;
 import com.maathru.backend.Domain.entity.eligible.*;
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.Domain.exception.UserNotFoundException;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.External.repository.eligible.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class EligibleService {
     public ResponseEntity<String> saveEligible(EligibleDto eligibleDto) {
         User currentUser = jwtService.getCurrentUser();
         if (currentUser.getUserId() == 0) {
-            throw new UserNotFoundException("User not found");
+            throw new NotFoundException("User not found");
         }
 
         BasicInfo basicInfo = basicInfoRepository.findByUser(currentUser).orElse(new BasicInfo());
@@ -73,7 +72,7 @@ public class EligibleService {
     public ResponseEntity<EligibleDto> getEligibleData() {
         User currentUser = jwtService.getCurrentUser();
         if (currentUser.getUserId() == 0) {
-            throw new UserNotFoundException("User not found");
+            throw new NotFoundException("User not found");
         }
 
         BasicInfo basicInfo = basicInfoRepository.findByUser(currentUser)

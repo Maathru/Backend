@@ -40,11 +40,11 @@ public class ClinicService {
                 return ResponseEntity.status(201).body(clinic);
             } else {
                 log.error("Doctor not found");
-                throw new EmployeeNotFoundException("Doctor not found");
+                throw new NotFoundException("Doctor not found");
             }
         } else {
             log.error("Region not found");
-            throw new RegionNotFoundException("Region not found");
+            throw new NotFoundException("Region not found");
         }
     }
 
@@ -55,7 +55,7 @@ public class ClinicService {
             return ResponseEntity.ok(optionalClinic.get());
         } else {
             log.error("Clinic not found");
-            throw new ClinicNotFoundException("Clinic not found");
+            throw new NotFoundException("Clinic not found");
         }
     }
 
@@ -64,7 +64,7 @@ public class ClinicService {
 
         if (clinics.isEmpty()) {
             log.error("Clinics not found");
-            throw new ClinicNotFoundException("Clinics not found");
+            throw new NotFoundException("Clinics not found");
         }
         return ResponseEntity.ok(clinics);
     }
@@ -89,15 +89,15 @@ public class ClinicService {
                     return ResponseEntity.status(201).body(clinic);
                 } else {
                     log.error("Doctor not found");
-                    throw new EmployeeNotFoundException("Doctor not found");
+                    throw new NotFoundException("Doctor not found");
                 }
             } else {
                 log.error("Region not found");
-                throw new RegionNotFoundException("Region not found");
+                throw new NotFoundException("Region not found");
             }
         } else {
             log.error("Clinic not found");
-            throw new ClinicNotFoundException("Clinic not found");
+            throw new NotFoundException("Clinic not found");
         }
     }
 
@@ -109,7 +109,7 @@ public class ClinicService {
             return ResponseEntity.ok().body(optionalClinic.get());
         } else {
             log.error("Clinic not found");
-            throw new ClinicNotFoundException("Clinic not found");
+            throw new NotFoundException("Clinic not found");
         }
     }
 }

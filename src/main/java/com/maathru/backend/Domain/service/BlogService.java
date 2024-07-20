@@ -3,8 +3,7 @@ package com.maathru.backend.Domain.service;
 import com.maathru.backend.Application.dto.request.BlogDto;
 import com.maathru.backend.Domain.entity.Blog;
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.Domain.exception.BlogNotFoundException;
-import com.maathru.backend.Domain.exception.UserNotFoundException;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.External.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +37,7 @@ public class BlogService {
             return ResponseEntity.status(201).body(blog);
         } else {
             log.error("Author not found");
-            throw new UserNotFoundException("Author not found");
+            throw new NotFoundException("Author not found");
         }
     }
 
@@ -49,7 +48,7 @@ public class BlogService {
             return ResponseEntity.ok(optionalBlog.get());
         } else {
             log.error("Blog not found");
-            throw new BlogNotFoundException("Blog not found");
+            throw new NotFoundException("Blog not found");
         }
     }
 
@@ -58,7 +57,7 @@ public class BlogService {
 
         if (blogs.isEmpty()) {
             log.error("Blogs not found");
-            throw new BlogNotFoundException("Blogs not found");
+            throw new NotFoundException("Blogs not found");
         }
 
         return ResponseEntity.ok(blogs);
@@ -82,11 +81,11 @@ public class BlogService {
                 return ResponseEntity.status(201).body(blog);
             } else {
                 log.error("Author not found");
-                throw new UserNotFoundException("Author not found");
+                throw new NotFoundException("Author not found");
             }
         } else {
             log.error("Blogs not found");
-            throw new BlogNotFoundException("Blogs not found");
+            throw new NotFoundException("Blogs not found");
         }
     }
 
@@ -98,7 +97,7 @@ public class BlogService {
             return ResponseEntity.ok().body(optionalBlog.get());
         } else {
             log.error("Blog not found");
-            throw new BlogNotFoundException("Blog not found");
+            throw new NotFoundException("Blog not found");
         }
     }
 }
