@@ -3,9 +3,9 @@ package com.maathru.backend.Domain.service;
 import com.maathru.backend.Application.dto.request.CreateUserDto;
 import com.maathru.backend.Application.dto.response.UserProfileDto;
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.Domain.exception.UserNotFoundException;
+import com.maathru.backend.Domain.exception.NotFoundException;
+import com.maathru.backend.Domain.exception.UnauthorizedException;
 import com.maathru.backend.External.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class UserService implements UserDetailsService {
         List<User> users = userRepository.findAll();
 
         if (users.isEmpty()) {
-            throw new UserNotFoundException("No users found");
+            throw new NotFoundException("No users found");
         }
 
         List<UserProfileDto> userProfileDtos = users.stream().map(user -> {
@@ -57,7 +57,7 @@ public class UserService implements UserDetailsService {
             return ResponseEntity.ok(userProfileDto);
         } else {
             log.error("user not found");
-            throw new UserNotFoundException("User not found");
+            throw new NotFoundException("User not found");
         }
     }
 
@@ -89,13 +89,13 @@ public class UserService implements UserDetailsService {
             return ResponseEntity.ok("User updated successfully");
         } else {
             log.error("user not found");
-            throw new UserNotFoundException("User not found");
+            throw new NotFoundException("User not found");
         }
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         return userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UnauthorizedException("Invalid username"));
     }
 }

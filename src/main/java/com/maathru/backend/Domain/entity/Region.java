@@ -10,14 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "region")
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "regions")
 @Getter
 @Setter
-public class Region {
+public class Region extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, unique = true, nullable = false)
     private Long regionId;
 
     @Column(unique = true)
@@ -25,10 +24,19 @@ public class Region {
     private String regionName;
     private Long population;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @ManyToOne
     @JoinColumn(name = "moh_id")
     private MOH moh;
 
-    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Employee> midwives = new ArrayList<>();
+    public Region(Long regionId, String regionNumber, String regionName, Long population, MOH moh) {
+        this.regionId = regionId;
+        this.regionNumber = regionNumber;
+        this.regionName = regionName;
+        this.population = population;
+        this.moh = moh;
+    }
+
+    public Region() {
+
+    }
 }
