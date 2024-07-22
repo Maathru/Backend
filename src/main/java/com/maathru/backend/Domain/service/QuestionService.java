@@ -87,4 +87,14 @@ public class QuestionService {
             throw new QuestionNotFoundException("Question not found");
         }
     }
+
+    public ResponseEntity<List<QuestionResponse>> searchQuestionsByKeyword(String keyword) {
+        List<Question> questions = questionRepository.findByKeywordsContainingIgnoreCase(keyword);
+        if (questions.isEmpty()) {
+            throw new QuestionNotFoundException("Questions not found");
+        }
+
+        List<QuestionResponse> questionResponses = QuestionMapper.toQuestionResponseList(questions);
+        return ResponseEntity.ok(questionResponses);
+    }
 }

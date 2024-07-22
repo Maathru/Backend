@@ -55,4 +55,9 @@ public class QuestionController {
         return questionService.deleteQuestion(id);
     }
 
+    @GetMapping("/search/keyword/{keyword}")
+    public ResponseEntity<List<QuestionResponse>> searchQuestion(@PathVariable String keyword) {
+        return questionService.searchQuestionsByKeyword(keyword);
+    }
+
 }
