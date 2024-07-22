@@ -26,6 +26,8 @@ public class Question {
     private Long questionId;
     @NotNull
     private String title;
+
+    @Column(length = 2048)
     @NotNull
     private String description;
     private String keywords;

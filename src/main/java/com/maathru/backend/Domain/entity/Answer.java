@@ -23,6 +23,8 @@ public class Answer {
     @ManyToOne
     @JoinColumn(name = "question_question_id")
     private Question question;
+
+    @Column(length = 2048)
     @NotNull
     private String answer;
 
