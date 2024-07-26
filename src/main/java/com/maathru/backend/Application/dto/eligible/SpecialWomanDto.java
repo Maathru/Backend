@@ -1,5 +1,6 @@
 package com.maathru.backend.Application.dto.eligible;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ public class SpecialWomanDto {
     private boolean consanguineous;
     @NotNull(message = "Are your periods monthly? filed value cannot be empty")
     private boolean periodsPattern;
-    @NotNull(message = "Orderly/Irregular filed value cannot be empty")
+    @NotEmpty(message = "Orderly/Irregular filed value cannot be empty")
     private String period;
     @NotNull(message = "Do you bleed heavily when you have your period? filed value cannot be empty")
     private boolean heavyBleed;

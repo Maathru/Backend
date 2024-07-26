@@ -4,11 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDateTime;
-
-import static java.time.LocalDateTime.now;
 
 @Entity
 @Table(name = "answers")

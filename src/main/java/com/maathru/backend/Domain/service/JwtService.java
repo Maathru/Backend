@@ -1,6 +1,7 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.Domain.exception.UnauthorizedException;
 import com.maathru.backend.External.repository.TokenRepository;
 import com.maathru.backend.External.repository.UserRepository;
@@ -39,13 +40,13 @@ public class JwtService {
 
     public boolean isAccessTokenValid(String accessToken, UserDetails user) {
         String email = extractEmail(accessToken);
-        boolean isValidAccessToken = tokenRepository.findByAccessToken(accessToken).map(t -> !t.isLoggedOut()).orElse(false);
+        boolean isValidAccessToken = tokenRepository.findByAccessTokenAndLoggedOutFalse(accessToken).map(t -> !t.isLoggedOut()).orElse(false);
         return email.equals(user.getUsername()) && isTokenExpired(accessToken) && isValidAccessToken;
     }
 
     public boolean isValidRefreshToken(String refreshToken, User user) {
         String email = extractEmail(refreshToken);
-        boolean isValidRefreshToken = tokenRepository.findByRefreshToken(refreshToken).map(t -> !t.isLoggedOut()).orElse(false);
+        boolean isValidRefreshToken = tokenRepository.findByRefreshTokenAndLoggedOutFalse(refreshToken).map(t -> !t.isLoggedOut()).orElse(false);
         return email.equals(user.getUsername()) && isTokenExpired(refreshToken) && isValidRefreshToken;
     }
 
@@ -116,9 +117,8 @@ public class JwtService {
     public User getCurrentUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         if (email != null) {
-            Optional<User> optionalUser = userRepository.findByEmail(email);
-            return optionalUser.orElseGet(User::new);
+            return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
         }
-        return new User();
+        throw new UnauthorizedException("Email not found");
     }
 }
