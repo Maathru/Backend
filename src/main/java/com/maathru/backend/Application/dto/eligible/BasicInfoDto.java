@@ -35,4 +35,12 @@ public class BasicInfoDto {
     @NotNull(message = "Married date cannot be empty")
     @PastDate(message = "Married date must be in the past")
     private LocalDate marriedDate;
+
+    private String womanName;
+    private String manName;
+    private String address;
+    private long userId;
+    private LocalDate createdDate;
+    private String region;
+    private Object moh;
 }

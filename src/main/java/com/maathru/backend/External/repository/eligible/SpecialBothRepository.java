@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface SpecialBothRepository extends JpaRepository<SpecialBoth, Integer> {
+public interface SpecialBothRepository extends JpaRepository<SpecialBoth, Long> {
     Optional<SpecialBoth> findByUser(User currentUser);
 }

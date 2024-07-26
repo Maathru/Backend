@@ -1,5 +1,6 @@
 package com.maathru.backend.Domain.entity.eligible;
 
+import com.maathru.backend.Domain.entity.Auditable;
 import com.maathru.backend.Domain.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "medical_history")
-public class MedicalHistory {
+public class MedicalHistory extends Auditable implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
