@@ -10,5 +10,4 @@ import java.time.LocalDate;
 public class FamilyPlanningMethodDTO {
     private LocalDate date;
     private String method;
-
 }

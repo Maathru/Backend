@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.validation.annotation.Validated;
 
 @Getter
@@ -29,5 +28,12 @@ public class EligibleDto {
     @Valid
     @NotNull(message = "Family nutrition object cannot be empty")
     private FamilyNutritionDto familyNutritionDto;
+    @Valid
+    @NotNull(message = "Parent habit object cannot be empty")
+    private ParentHabitDto parentHabitDto;
+    @Valid
+    @NotNull(message = "Home environment object cannot be empty")
+    private HomeEnvironmentDto homeEnvironmentDto;
+
     private MidwifeAssessmentDto midwifeAssessmentDto;
 }

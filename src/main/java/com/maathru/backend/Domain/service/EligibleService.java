@@ -38,6 +38,8 @@ public class EligibleService {
     private final FamilyNutritionRepository familyNutritionRepository;
     private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
+    private final ParentHabitRepository parentHabitRepository;
+    private final HomeEnvironmentRepository homeEnvironmentRepository;
 
     @Transactional
     public ResponseEntity<String> saveOrUpdateEligible(EligibleDto eligibleDto) {
@@ -86,6 +88,20 @@ public class EligibleService {
                     eligibleDto.getFamilyNutritionDto()
             );
 
+            ParentHabit parentHabit = setDataForEntity(
+                    parentHabitRepository.findByUser(currentUser).orElseGet(ParentHabit::new),
+                    currentUser,
+                    new ParentHabitMapper(),
+                    eligibleDto.getParentHabitDto()
+            );
+
+            HomeEnvironment homeEnvironment = setDataForEntity(
+                    homeEnvironmentRepository.findByUser(currentUser).orElseGet(HomeEnvironment::new),
+                    currentUser,
+                    new HomeEnvironmentMapper(),
+                    eligibleDto.getHomeEnvironmentDto()
+            );
+
             // Save entities
             basicInfoRepository.save(basicInfo);
             medicalHistoryRepository.save(medicalHistory);
@@ -93,6 +109,8 @@ public class EligibleService {
             specialBothRepository.save(specialBoth);
             familyHealthInfoRepository.save(familyHealthInfo);
             familyNutritionRepository.save(familyNutrition);
+            parentHabitRepository.save(parentHabit);
+            homeEnvironmentRepository.save(homeEnvironment);
 
             log.info("Eligible data added or updated successfully by {}", currentUser.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body("Eligible data added or updated successfully");
@@ -124,19 +142,20 @@ public class EligibleService {
             SpecialBoth specialBoth = specialBothRepository.findByUser(currentUser).orElseGet(SpecialBoth::new);
             FamilyHealthInfo familyHealthInfo = familyHealthInfoRepository.findByUser(currentUser).orElseGet(FamilyHealthInfo::new);
             FamilyNutrition familyNutrition = familyNutritionRepository.findByUser(currentUser).orElseGet(FamilyNutrition::new);
+            ParentHabit parentHabit = parentHabitRepository.findByUser(currentUser).orElseGet(ParentHabit::new);
+            HomeEnvironment homeEnvironment = homeEnvironmentRepository.findByUser(currentUser).orElseGet(HomeEnvironment::new);
             MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(currentUser).orElseGet(MidwifeAssessment::new);
 
             BasicInfoDto basicInfoDto = mapper.map(basicInfo, BasicInfoDto.class);
             basicInfoDto.setUserId(basicInfo.getUser().getUserId());
             basicInfoDto.setCreatedDate(basicInfo.getCreatedAt().toLocalDate());
 
+            // get region by midwife
             String region = getRegionNameByUser(basicInfo.getCreatedBy());
             Object[] obj = getMOHDetailsByUser(basicInfo.getCreatedBy());
-//            log.info("Region: {}", region);
-//            log.info("Area {}",obj);
+
             basicInfoDto.setRegion(region);
             basicInfoDto.setMoh(obj[0]);
-
 
 
             EligibleDto eligibleDto = new EligibleDto();
@@ -146,6 +165,8 @@ public class EligibleService {
             eligibleDto.setSpecialBothDto(mapper.map(specialBoth, SpecialBothDto.class));
             eligibleDto.setFamilyHealthInfoDto(mapper.map(familyHealthInfo, FamilyHealthInfoDto.class));
             eligibleDto.setFamilyNutritionDto(mapper.map(familyNutrition, FamilyNutritionDto.class));
+            eligibleDto.setParentHabitDto(mapper.map(parentHabit, ParentHabitDto.class));
+            eligibleDto.setHomeEnvironmentDto(mapper.map(homeEnvironment, HomeEnvironmentDto.class));
             eligibleDto.setMidwifeAssessmentDto(mapper.map(midwifeAssessment, MidwifeAssessmentDto.class));
 
             return ResponseEntity.status(HttpStatus.OK).body(eligibleDto);
@@ -294,6 +315,5 @@ public class EligibleService {
 
     public Object[] getMOHDetailsByUser(User user) {
         return employeeRepository.getAreaAndDistrict(user);
-//        return new MOHDetailsDTO((Area) result[0], (District) result[1]);
     }
 }
