@@ -1,5 +1,6 @@
 package com.maathru.backend.Domain.mapper;
 
+import com.maathru.backend.Application.dto.eligible.EligibleCoupleDTO;
 import com.maathru.backend.Application.dto.response.EligibleCoupleResponse;
 import com.maathru.backend.Domain.entity.eligible.BasicInfo;
 import com.maathru.backend.Application.dto.eligible.BasicInfoDto;
@@ -49,6 +50,29 @@ public class BasicInfoMapper implements Mapper<BasicInfo, BasicInfoDto> {
         return basicInfo;
     }
 
+    public static BasicInfo toEntityByMidwife(BasicInfo basicInfo, EligibleCoupleDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        basicInfo.setWomanName(dto.getWomanName());
+        basicInfo.setManName(dto.getManName());
+        basicInfo.setAddress(dto.getAddress());
+        basicInfo.setWomanPhone(dto.getWomanPhone());
+        basicInfo.setManPhone(dto.getManPhone());
+        basicInfo.setWomanDob(dto.getWomanDob());
+        basicInfo.setManDob(dto.getManDob());
+        basicInfo.setWomanAgeMarried(dto.getWomanAgeMarried());
+        basicInfo.setManAgeMarried(dto.getManAgeMarried());
+        basicInfo.setWomanEducationLevel(dto.getWomanEducationLevel());
+        basicInfo.setManEducationLevel(dto.getManEducationLevel());
+        basicInfo.setWomanOccupation(dto.getWomanOccupation());
+        basicInfo.setManOccupation(dto.getManOccupation());
+        basicInfo.setChildren(dto.getChildren());
+
+        return basicInfo;
+    }
+
     public static EligibleCoupleResponse toEligibleCoupleResponse(BasicInfo basicInfo) {
         EligibleCoupleResponse eligibleCoupleResponse = new EligibleCoupleResponse();
 
@@ -62,6 +86,7 @@ public class BasicInfoMapper implements Mapper<BasicInfo, BasicInfoDto> {
         eligibleCoupleResponse.setManDob(basicInfo.getManDob());
         eligibleCoupleResponse.setChildren(basicInfo.getChildren());
         eligibleCoupleResponse.setRole(basicInfo.getUser().getRole());
+        eligibleCoupleResponse.setUserId(basicInfo.getUser().getUserId());
 
         return eligibleCoupleResponse;
     }

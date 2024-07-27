@@ -1,7 +1,6 @@
 package com.maathru.backend.Application.dto.eligible;
 
 import com.maathru.backend.Domain.validation.PastDate;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -13,9 +12,8 @@ import java.util.List;
 @Getter
 @Setter
 public class EligibleCoupleDTO {
-    @NotEmpty(message = "Email cannot be empty")
-    @Email(message = "Invalid email address")
-    private String email;
+    @NotNull(message = "User id cannot be empty")
+    private long userId;
 
     @NotEmpty(message = "Woman's name cannot be empty")
     private String womanName;
