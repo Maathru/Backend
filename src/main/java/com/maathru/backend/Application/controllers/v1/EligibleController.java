@@ -30,9 +30,9 @@ public class EligibleController {
         return eligibleService.saveOrUpdateEligible(eligibleDto);
     }
 
-    @GetMapping("/midwife/get/{email}")
-    public ResponseEntity<EligibleCoupleDTO> getEligibleDataForMidwife(@PathVariable String email) {
-        return eligibleService.getEligibleForMidwife(email);
+    @GetMapping("/midwife/get/{userId}")
+    public ResponseEntity<EligibleCoupleDTO> getEligibleDataForMidwife(@PathVariable long userId) {
+        return eligibleService.getEligibleForMidwife(userId);
     }
 
     @GetMapping("/midwife/get")

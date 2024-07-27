@@ -6,14 +6,17 @@ import com.maathru.backend.Domain.entity.FamilyPlanningMethod;
 import com.maathru.backend.Domain.entity.PastPregnancy;
 import com.maathru.backend.Domain.entity.eligible.*;
 import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.exception.InvalidException;
 import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.Domain.mapper.*;
 import com.maathru.backend.External.repository.EmployeeRepository;
 import com.maathru.backend.External.repository.UserRepository;
 import com.maathru.backend.External.repository.eligible.*;
 import com.maathru.backend.enumeration.Gender;
+import com.maathru.backend.enumeration.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -181,7 +185,11 @@ public class EligibleService {
     public ResponseEntity<String> createOrUpdateEligibleCouple(EligibleCoupleDTO eligibleCoupleDTO) {
         try {
             User currentUser = jwtService.getCurrentUser();
-            User eligibleUser = userRepository.findByEmail(eligibleCoupleDTO.getEmail()).orElseThrow(() -> new NotFoundException("User not found"));
+            User eligibleUser = userRepository.findById(eligibleCoupleDTO.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
+
+            if (eligibleUser.getRole() == Role.ADMIN || eligibleUser.getRole() == Role.DOCTOR || eligibleUser.getRole() == Role.MIDWIFE) {
+                throw new InvalidException("This user cannot handle eligible user profile");
+            }
 
             BasicInfo basicInfo = basicInfoRepository.findByUser(eligibleUser).orElseGet(BasicInfo::new);
             mapBasicInfo(eligibleCoupleDTO, basicInfo, currentUser, eligibleUser);
@@ -192,13 +200,18 @@ public class EligibleService {
             basicInfoRepository.save(basicInfo);
             midwifeAssessmentRepository.save(midwifeAssessment);
 
+            if (eligibleUser.getRole() == Role.USER) {
+                eligibleUser.setRole(Role.ELIGIBLE);
+                userRepository.save(eligibleUser);
+            }
+
             log.info("New eligible couple created/updated successfully for user: {} by:{}", eligibleUser.getEmail(), currentUser.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body("Eligible couple created or updated successfully");
         } catch (NotFoundException e) {
             log.error("Not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            log.error("Error creating/updating eligible couple for user: {}", eligibleCoupleDTO.getEmail(), e);
+            log.error("Error creating/updating eligible couple for user: {}", eligibleCoupleDTO.getUserId(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating/updating eligible couple");
         }
     }
@@ -207,7 +220,7 @@ public class EligibleService {
         if (basicInfo.getId() == 0) {
             basicInfo.setCreatedBy(byUser);
         }
-        mapper.map(dto, basicInfo);
+        basicInfo = BasicInfoMapper.toEntityByMidwife(basicInfo, dto);
         basicInfo.setUser(eligibleUser);
         basicInfo.setUpdatedBy(byUser);
         basicInfo.setPastPregnancies(mapPastPregnancies(dto.getPastPregnancies(), basicInfo, byUser));
@@ -215,43 +228,68 @@ public class EligibleService {
     }
 
     private List<PastPregnancy> mapPastPregnancies(List<PastPregnancyDTO> dtos, BasicInfo basicInfo, User byUser) {
-        return dtos.stream().map(dto -> {
-            PastPregnancy pp = new PastPregnancy();
-            pp.setGender(Gender.valueOf(dto.getGender()));
-            pp.setResult(dto.getResult());
-            pp.setBasicInfo(basicInfo);
-            pp.setCreatedBy(byUser);
-            pp.setUpdatedBy(byUser);
-            return pp;
-        }).collect(Collectors.toList());
+        return dtos.stream()
+                .filter(dto -> dto.getGender() != null && !dto.getGender().isEmpty())
+                .map(dto -> {
+                    try {
+                        PastPregnancy pp = new PastPregnancy();
+                        pp.setGender(Gender.valueOf(dto.getGender()));
+                        pp.setResult(dto.getResult());
+                        pp.setBasicInfo(basicInfo);
+                        pp.setCreatedBy(byUser);
+                        pp.setUpdatedBy(byUser);
+                        return pp;
+                    } catch (IllegalArgumentException e) {
+                        log.error("Invalid gender value: {} {}", dto.getGender(), e.getMessage());
+                        throw new InvalidException("Invalid gender value");
+                    } catch (Exception e) {
+                        log.error("Error mapping DTO: {}", e.getMessage());
+                        throw new InvalidException("Error mapping DTO");
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
+
     private List<FamilyPlanningMethod> mapFamilyPlanningMethods(List<FamilyPlanningMethodDTO> dtos, BasicInfo basicInfo, User byUser) {
-        return dtos.stream().map(dto -> {
-            FamilyPlanningMethod fpm = new FamilyPlanningMethod();
-            fpm.setDate(dto.getDate());
-            fpm.setMethod(dto.getMethod());
-            fpm.setBasicInfo(basicInfo);
-            fpm.setCreatedBy(byUser);
-            fpm.setUpdatedBy(byUser);
-            return fpm;
-        }).collect(Collectors.toList());
+        return dtos.stream()
+                .filter(dto -> dto.getMethod() != null && !dto.getMethod().isEmpty())
+                .map(dto -> {
+                    try {
+                        FamilyPlanningMethod fpm = new FamilyPlanningMethod();
+                        fpm.setDate(dto.getDate());
+                        fpm.setMethod(dto.getMethod());
+                        fpm.setBasicInfo(basicInfo);
+                        fpm.setCreatedBy(byUser);
+                        fpm.setUpdatedBy(byUser);
+                        return fpm;
+                    } catch (IllegalArgumentException e) {
+                        log.error("Invalid date value: {} {}", dto.getDate(), e.getMessage());
+                        throw new InvalidException("Invalid date value");
+                    } catch (Exception e) {
+                        log.error("Error mapping DTO: {}", e.getMessage());
+                        throw new InvalidException("Error mapping DTO");
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private void mapMidwifeAssessment(EligibleCoupleDTO dto, MidwifeAssessment midwifeAssessment, User byUser, User eligibleUser) {
         if (midwifeAssessment.getId() == 0) {
             midwifeAssessment.setCreatedBy(byUser);
         }
-        mapper.map(dto, midwifeAssessment);
+        midwifeAssessment = MidwifeAssessmentMapper.toEntityByMidwife(midwifeAssessment, dto);
         midwifeAssessment.setUser(eligibleUser);
         midwifeAssessment.setUpdatedBy(byUser);
     }
 
     // get eligible data for Midwife
     @Transactional(readOnly = true)
-    public ResponseEntity<EligibleCoupleDTO> getEligibleForMidwife(String email) {
+    public ResponseEntity<EligibleCoupleDTO> getEligibleForMidwife(long userId) {
         try {
-            User currentUser = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
+            User currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
 
             BasicInfo basicInfo = basicInfoRepository.findByUser(currentUser).orElseGet(BasicInfo::new);
             MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(currentUser).orElseGet(MidwifeAssessment::new);
@@ -275,7 +313,7 @@ public class EligibleService {
             log.error("Not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            log.error("Error retrieving eligible couple data for user: {} {}", email, e.getMessage());
+            log.error("Error retrieving eligible couple data for user: {} {}", userId, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

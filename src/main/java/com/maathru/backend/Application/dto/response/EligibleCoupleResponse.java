@@ -19,4 +19,5 @@ public class EligibleCoupleResponse {
     private LocalDate manDob;
     private int children;
     private Role role;
+    private long userId;
 }
