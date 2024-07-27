@@ -8,10 +8,10 @@ import com.maathru.backend.Domain.exception.UnauthorizedException;
 import com.maathru.backend.External.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,22 +25,29 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
     public ResponseEntity<List<UserProfileDto>> getAllUsers() {
-        List<User> users = userRepository.findAll();
+        try {
+            List<User> users = userRepository.findAll();
 
-        if (users.isEmpty()) {
-            throw new NotFoundException("No users found");
+            if (users.isEmpty()) {
+                throw new NotFoundException("No users found");
+            }
+
+            List<UserProfileDto> userProfileDtos = users.stream().map(user -> {
+                UserProfileDto userProfileDto = new UserProfileDto();
+
+                userProfileDto.setId(user.getUserId());
+                userProfileDto.setName(user.getFirstName() + " " + user.getLastName());
+                userProfileDto.setEmail(user.getEmail());
+                userProfileDto.setRole(user.getRole());
+                userProfileDto.setLastLogin(user.getLastLogin());
+                return userProfileDto;
+            }).collect(Collectors.toList());
+
+            return ResponseEntity.ok(userProfileDtos);
+        } catch (Exception e) {
+            log.error("Error retrieving all users {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
-        List<UserProfileDto> userProfileDtos = users.stream().map(user -> {
-            UserProfileDto userProfileDto = new UserProfileDto();
-            userProfileDto.setUserId(user.getUserId());
-            userProfileDto.setFirstName(user.getFirstName());
-            userProfileDto.setLastName(user.getLastName());
-            userProfileDto.setEmail(user.getEmail());
-            return userProfileDto;
-        }).collect(Collectors.toList());
-
-        return ResponseEntity.ok(userProfileDtos);
     }
 
     public ResponseEntity<UserProfileDto> getUser(long id) {
@@ -49,10 +56,11 @@ public class UserService implements UserDetailsService {
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            userProfileDto.setUserId(user.getUserId());
-            userProfileDto.setFirstName(user.getFirstName());
-            userProfileDto.setLastName(user.getLastName());
+            userProfileDto.setId(user.getUserId());
+            userProfileDto.setName(user.getFirstName() + " " + user.getLastName());
             userProfileDto.setEmail(user.getEmail());
+            userProfileDto.setRole(user.getRole());
+            userProfileDto.setLastLogin(user.getLastLogin());
 
             return ResponseEntity.ok(userProfileDto);
         } else {

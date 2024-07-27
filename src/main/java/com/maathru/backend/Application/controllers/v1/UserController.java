@@ -4,16 +4,13 @@ import com.maathru.backend.Application.dto.request.CreateUserDto;
 import com.maathru.backend.Application.dto.response.MidwifeResponse;
 import com.maathru.backend.Application.dto.response.RegionResponse;
 import com.maathru.backend.Application.dto.response.UserProfileDto;
-import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.service.EmployeeService;
 import com.maathru.backend.Domain.service.RegionService;
 import com.maathru.backend.Domain.service.UserService;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -38,16 +35,8 @@ public class UserController {
 
     @Operation(
             description = "Get Single User",
-            summary = "Get user by specific id",
-            responses = {
-                    @ApiResponse(
-                            description = "Success",
-                            responseCode = "200"
-                    ),
-                    @ApiResponse(
-                            description = "Unauthorized / Invalid Token",
-                            responseCode = "403")
-            })
+            summary = "Get user by specific id"
+    )
     @GetMapping()
     public ResponseEntity<UserProfileDto> getUser(@RequestParam long id) {
         return userService.getUser(id);
@@ -55,16 +44,8 @@ public class UserController {
 
     @Operation(
             description = "Create User",
-            summary = "Post method to create new",
-            responses = {
-                    @ApiResponse(
-                            description = "Success",
-                            responseCode = "200"
-                    ),
-                    @ApiResponse(
-                            description = "Unauthorized / Invalid Token",
-                            responseCode = "403")
-            })
+            summary = "Post method to create new"
+    )
     @PostMapping()
     public ResponseEntity<User> addUser(@RequestBody CreateUserDto createUserDto) {
         return userService.addUser(createUserDto);
