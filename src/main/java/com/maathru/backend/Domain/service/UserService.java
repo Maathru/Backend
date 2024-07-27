@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,10 +32,12 @@ public class UserService implements UserDetailsService {
 
         List<UserProfileDto> userProfileDtos = users.stream().map(user -> {
             UserProfileDto userProfileDto = new UserProfileDto();
-            userProfileDto.setUserId(user.getUserId());
-            userProfileDto.setFirstName(user.getFirstName());
-            userProfileDto.setLastName(user.getLastName());
+
+            userProfileDto.setId(user.getUserId());
+            userProfileDto.setName(user.getFirstName()+" "+user.getLastName());
             userProfileDto.setEmail(user.getEmail());
+            userProfileDto.setRole(user.getRole());
+            userProfileDto.setLastLogin(user.getLastLogin());
             return userProfileDto;
         }).collect(Collectors.toList());
 
@@ -49,10 +50,11 @@ public class UserService implements UserDetailsService {
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            userProfileDto.setUserId(user.getUserId());
-            userProfileDto.setFirstName(user.getFirstName());
-            userProfileDto.setLastName(user.getLastName());
+            userProfileDto.setId(user.getUserId());
+            userProfileDto.setName(user.getFirstName()+" "+user.getLastName());
             userProfileDto.setEmail(user.getEmail());
+            userProfileDto.setRole(user.getRole());
+            userProfileDto.setLastLogin(user.getLastLogin());
 
             return ResponseEntity.ok(userProfileDto);
         } else {
