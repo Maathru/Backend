@@ -1,11 +1,11 @@
 package com.maathru.backend.Domain.service;
 
-import com.maathru.backend.Application.dto.request.CreateUserDto;
 import com.maathru.backend.Application.dto.response.UserProfileDto;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.Domain.exception.UnauthorizedException;
 import com.maathru.backend.External.repository.UserRepository;
+import com.maathru.backend.enumeration.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -69,41 +69,19 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<User> addUser(CreateUserDto createUserDto) {
-        User user = new User();
-        user.setFirstName(createUserDto.getFirstName());
-        user.setLastName(createUserDto.getLastName());
-        user.setEmail(createUserDto.getEmail());
-        user.setPassword(createUserDto.getPassword());
-
-        user = userRepository.save(user);
-        log.info("user added");
-        return ResponseEntity.status(201).body(user);
-    }
-
-    //TODO: need to check again
-    public ResponseEntity<String> updateUser(long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.setUserId(id);
-            user.setFirstName(user.getFirstName());
-            user.setLastName(user.getLastName());
-            user.setEmail(user.getEmail());
-            user.setPassword(user.getPassword());
-
-            userRepository.save(user);
-            log.info("User updated");
-            return ResponseEntity.ok("User updated successfully");
-        } else {
-            log.error("user not found");
-            throw new NotFoundException("User not found");
-        }
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) {
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UnauthorizedException("Invalid username"));
+    }
+
+    // For midwife
+    public ResponseEntity<Long> getUserIdByEmailForMidwife(String email) {
+        if (email == null || email.isEmpty()) {
+            throw new NotFoundException("Email is null or empty");
+        }
+
+        long userId = userRepository.findUserIdByEmailAndRole(email, Role.USER).orElseThrow(() -> new NotFoundException("User not found"));
+        return ResponseEntity.ok(userId);
     }
 }
