@@ -16,7 +16,6 @@ import com.maathru.backend.enumeration.Gender;
 import com.maathru.backend.enumeration.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -124,17 +123,6 @@ public class EligibleService {
         }
     }
 
-    private <T extends BaseEntity, D> T setDataForEntity(T entity, User currentUser, Mapper<T, D> mapper, D dto) {
-        if (entity.getId() == 0) {
-            entity.setCreatedBy(currentUser);
-        }
-        mapper.toEntity(entity, dto);
-        entity.setUser(currentUser);
-        entity.setUpdatedBy(currentUser);
-        return entity;
-    }
-
-
     @Transactional(readOnly = true)
     public ResponseEntity<EligibleDto> getEligibleData() {
         try {
@@ -197,7 +185,7 @@ public class EligibleService {
             MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(eligibleUser).orElseGet(MidwifeAssessment::new);
             mapMidwifeAssessment(eligibleCoupleDTO, midwifeAssessment, currentUser, eligibleUser);
 
-            basicInfoRepository.save(basicInfo);
+            basicInfo = basicInfoRepository.save(basicInfo);
             midwifeAssessmentRepository.save(midwifeAssessment);
 
             if (eligibleUser.getRole() == Role.USER) {
@@ -206,7 +194,7 @@ public class EligibleService {
             }
 
             log.info("New eligible couple created/updated successfully for user: {} by:{}", eligibleUser.getEmail(), currentUser.getEmail());
-            return ResponseEntity.status(HttpStatus.CREATED).body("Eligible couple created or updated successfully");
+            return ResponseEntity.status(HttpStatus.CREATED).body(basicInfo.getId() + "/Eligible couple created or updated successfully");
         } catch (NotFoundException e) {
             log.error("Not found: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -214,6 +202,65 @@ public class EligibleService {
             log.error("Error creating/updating eligible couple for user: {}", eligibleCoupleDTO.getUserId(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating/updating eligible couple");
         }
+    }
+
+    // get eligible data for Midwife
+    @Transactional(readOnly = true)
+    public ResponseEntity<EligibleCoupleDTO> getEligibleForMidwife(long userId) {
+        try {
+            User currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+
+            BasicInfo basicInfo = basicInfoRepository.findByUser(currentUser).orElseGet(BasicInfo::new);
+            MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(currentUser).orElseGet(MidwifeAssessment::new);
+
+            List<PastPregnancyDTO> pastPregnancyDTOs = basicInfo.getPastPregnancies().stream()
+                    .map(this::convertToPastPregnancyDTO)
+                    .collect(Collectors.toList());
+
+            List<FamilyPlanningMethodDTO> familyPlanningMethodDTOs = basicInfo.getFamilyPlanningMethods().stream()
+                    .map(this::convertToFamilyPlanningMethodDTO)
+                    .collect(Collectors.toList());
+
+            EligibleCoupleDTO eligibleCoupleDTO = new EligibleCoupleDTO();
+            mapper.map(basicInfo, eligibleCoupleDTO);
+            mapper.map(midwifeAssessment, eligibleCoupleDTO);
+            eligibleCoupleDTO.setPastPregnancies(pastPregnancyDTOs);
+            eligibleCoupleDTO.setFamilyPlanningMethods(familyPlanningMethodDTOs);
+
+            return ResponseEntity.status(HttpStatus.OK).body(eligibleCoupleDTO);
+        } catch (NotFoundException e) {
+            log.error("Not found: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            log.error("Error retrieving eligible couple data for user: {} {}", userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    // get all eligible users for midwife
+    public ResponseEntity<List<EligibleCoupleResponse>> getEligibleListForMidwife() {
+        try {
+            List<BasicInfo> basicInfoList = basicInfoRepository.findAll();
+            if (basicInfoList.isEmpty()) {
+                throw new NotFoundException("Eligible users not found");
+            }
+
+            List<EligibleCoupleResponse> eligibleCoupleResponseList = BasicInfoMapper.toEligibleCoupleResponseList(basicInfoList);
+            return ResponseEntity.ok(eligibleCoupleResponseList);
+        } catch (Exception e) {
+            log.error("Error retrieving eligible couples data {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    private <T extends BaseEntity, D> T setDataForEntity(T entity, User currentUser, Mapper<T, D> mapper, D dto) {
+        if (entity.getId() == 0) {
+            entity.setCreatedBy(currentUser);
+        }
+        mapper.toEntity(entity, dto);
+        entity.setUser(currentUser);
+        entity.setUpdatedBy(currentUser);
+        return entity;
     }
 
     private void mapBasicInfo(EligibleCoupleDTO dto, BasicInfo basicInfo, User byUser, User eligibleUser) {
@@ -285,39 +332,6 @@ public class EligibleService {
         midwifeAssessment.setUpdatedBy(byUser);
     }
 
-    // get eligible data for Midwife
-    @Transactional(readOnly = true)
-    public ResponseEntity<EligibleCoupleDTO> getEligibleForMidwife(long userId) {
-        try {
-            User currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
-
-            BasicInfo basicInfo = basicInfoRepository.findByUser(currentUser).orElseGet(BasicInfo::new);
-            MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(currentUser).orElseGet(MidwifeAssessment::new);
-
-            List<PastPregnancyDTO> pastPregnancyDTOs = basicInfo.getPastPregnancies().stream()
-                    .map(this::convertToPastPregnancyDTO)
-                    .collect(Collectors.toList());
-
-            List<FamilyPlanningMethodDTO> familyPlanningMethodDTOs = basicInfo.getFamilyPlanningMethods().stream()
-                    .map(this::convertToFamilyPlanningMethodDTO)
-                    .collect(Collectors.toList());
-
-            EligibleCoupleDTO eligibleCoupleDTO = new EligibleCoupleDTO();
-            mapper.map(basicInfo, eligibleCoupleDTO);
-            mapper.map(midwifeAssessment, eligibleCoupleDTO);
-            eligibleCoupleDTO.setPastPregnancies(pastPregnancyDTOs);
-            eligibleCoupleDTO.setFamilyPlanningMethods(familyPlanningMethodDTOs);
-
-            return ResponseEntity.status(HttpStatus.OK).body(eligibleCoupleDTO);
-        } catch (NotFoundException e) {
-            log.error("Not found: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (Exception e) {
-            log.error("Error retrieving eligible couple data for user: {} {}", userId, e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
     private PastPregnancyDTO convertToPastPregnancyDTO(PastPregnancy pastPregnancy) {
         PastPregnancyDTO pastPregnancyDTO = new PastPregnancyDTO();
         pastPregnancyDTO.setGender(String.valueOf(pastPregnancy.getGender()));
@@ -332,21 +346,6 @@ public class EligibleService {
         return familyPlanningMethodDTO;
     }
 
-    public ResponseEntity<List<EligibleCoupleResponse>> getEligibleListForMidwife() {
-        try {
-            List<BasicInfo> basicInfoList = basicInfoRepository.findAll();
-            if (basicInfoList.isEmpty()) {
-                throw new NotFoundException("Eligible users not found");
-            }
-
-            List<EligibleCoupleResponse> eligibleCoupleResponseList = BasicInfoMapper.toEligibleCoupleResponseList(basicInfoList);
-            return ResponseEntity.ok(eligibleCoupleResponseList);
-        } catch (Exception e) {
-            log.error("Error retrieving eligible couples data {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
     public String getRegionNameByUser(User user) {
         return employeeRepository.getRegionName(user);
     }
@@ -354,4 +353,5 @@ public class EligibleService {
     public Object[] getMOHDetailsByUser(User user) {
         return employeeRepository.getAreaAndDistrict(user);
     }
+
 }
