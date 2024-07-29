@@ -21,6 +21,7 @@ public class QuestionMapper {
         response.setDescription(question.getDescription());
         response.setKeywords(question.getKeywords());
         response.setAuthorName((question.getCreatedBy() != null) ? question.getCreatedBy().getFirstName() + " " + question.getCreatedBy().getLastName() : null);
+        response.setAuthorId((question.getCreatedBy() != null) ? question.getCreatedBy().getUserId() : null);
         response.setCreatedAt(question.getCreatedAt().format(formatter));
         return response;
     }

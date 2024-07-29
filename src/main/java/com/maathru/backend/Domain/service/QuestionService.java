@@ -81,6 +81,9 @@ public class QuestionService {
         Optional<Question> optionalQuestion = questionRepository.findById(id);
 
         if (optionalQuestion.isPresent()) {
+            if(jwtService.getCurrentUser().getUserId() != optionalQuestion.get().getCreatedBy().getUserId()){
+                throw new QuestionNotFoundException("You are not authorized to edit this question");
+            }
             questionRepository.delete(optionalQuestion.get());
             return ResponseEntity.ok().body(optionalQuestion.get());
         } else {
@@ -96,5 +99,27 @@ public class QuestionService {
 
         List<QuestionResponse> questionResponses = QuestionMapper.toQuestionResponseList(questions);
         return ResponseEntity.ok(questionResponses);
+    }
+
+    public ResponseEntity<String> editQuestion(long id, QuestionDto questionDto) {
+        Optional<Question> optionalQuestion = questionRepository.findById(id);
+
+        if (optionalQuestion.isPresent()) {
+            if(jwtService.getCurrentUser().getUserId() != optionalQuestion.get().getCreatedBy().getUserId()){
+                throw new QuestionNotFoundException("You are not authorized to edit this question");
+            }
+            Question question = optionalQuestion.get();
+            question.setTitle(questionDto.getTitle());
+            question.setDescription(questionDto.getDescription());
+            question.setKeywords(questionDto.getKeywords());
+            question.setUpdatedBy(jwtService.getCurrentUser());
+
+            question = questionRepository.save(question);
+            log.info("Question:{} updated successfully by {}", question.getQuestionId(), jwtService.getCurrentUser().getEmail());
+
+            return ResponseEntity.status(201).body("Question updated successfully");
+        } else {
+            throw new QuestionNotFoundException("Question not found");
+        }
     }
 }
