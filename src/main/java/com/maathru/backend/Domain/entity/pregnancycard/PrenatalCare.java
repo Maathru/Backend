@@ -1,6 +1,7 @@
 package com.maathru.backend.Domain.entity.pregnancycard;
 
 import com.maathru.backend.Domain.entity.Parent;
+import com.maathru.backend.Domain.entity.PregnancyCard;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +19,8 @@ public class PrenatalCare {
     private long prenatalCareId;
 
     @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "parent_id")
-    private Parent parent;
+    @JoinColumn(name = "pregnancy_card_id")
+    private PregnancyCard pregnancyCard;
 
     private LocalDate dateOfArrival;
     private long weeksIntoPregnancy;

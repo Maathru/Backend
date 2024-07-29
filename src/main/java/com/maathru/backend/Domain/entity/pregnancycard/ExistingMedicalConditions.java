@@ -1,6 +1,7 @@
 package com.maathru.backend.Domain.entity.pregnancycard;
 
 import com.maathru.backend.Domain.entity.Parent;
+import com.maathru.backend.Domain.entity.PregnancyCard;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -17,8 +18,8 @@ public class ExistingMedicalConditions {
     private long existingMedicalConditionsId;
 
     @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "parent_id")
-    private Parent parent;
+    @JoinColumn(name = "pregnancy_card_id")
+    private PregnancyCard pregnancyCard;
 
     private Boolean bloodRelatives;
     private Boolean rubella;
