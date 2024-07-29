@@ -129,9 +129,9 @@ public class InitialDataLoader {
 
             // Create and save Employees
             List<Employee> employees = List.of(
-                    new Employee(1L, "071234567", "200121503122", Gender.MALE, LocalDate.parse("2001-08-02", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/16", "Wijerama Road", "Udahamulla", "System Admin", "Bsc in CS", adminUser),
-                    new Employee(2L, "072234567", "200121503123", Gender.MALE, LocalDate.parse("2001-08-03", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/17", "Wijerama Road", "Udahamulla", "MOH Doctor", "MBbs", doctor),
-                    new Employee(3L, "074234567", "200121503124", Gender.FEMALE, LocalDate.parse("2001-08-04", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/18", "Wijerama Road", "Udahamulla", "Midwife", "Dip in Zoology", midwife)
+                    new Employee(1L, "071234567", "200121503122", Gender.MALE, LocalDate.parse("2001-08-02", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/16", "Wijerama Road", "Udahamulla", "System Admin", "Bsc in CS", adminUser,moh),
+                    new Employee(2L, "072234567", "200121503123", Gender.MALE, LocalDate.parse("2001-08-03", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/17", "Wijerama Road", "Udahamulla", "MOH Doctor", "MBbs", doctor,moh),
+                    new Employee(3L, "074234567", "200121503124", Gender.FEMALE, LocalDate.parse("2001-08-04", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/18", "Wijerama Road", "Udahamulla", "Midwife", "Dip in Zoology", midwife,moh)
             );
 
             for (Employee employee : employees) {

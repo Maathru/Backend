@@ -1,14 +1,15 @@
 package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.EmployeeDto;
+import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/employee")
@@ -19,5 +20,13 @@ public class EmployeeController {
     @PostMapping()
     public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeDto employeeDto) {
         return employeeService.createEmployee(employeeDto);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+    @GetMapping("/doctor/{district}/{area}")
+    public ResponseEntity<List<DoctorsResponse>> getDoctorsByMohAreaAndDistrict(
+            @PathVariable String district,
+            @PathVariable String area) {
+        return employeeService.getDoctorsByMohAreaAndDistrict(district,area);
     }
 }
