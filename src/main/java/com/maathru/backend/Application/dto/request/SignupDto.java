@@ -1,12 +1,11 @@
 package com.maathru.backend.Application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.maathru.backend.Domain.validation.ValidPassword;
 import com.maathru.backend.Domain.validation.ValidRole;
 import com.maathru.backend.enumeration.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -26,9 +25,7 @@ public class SignupDto {
     @Email(message = "Invalid email address")
     private String email;
 
-    @Size(min = 6, message = "Password must be at least 6 characters")
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d).+$", message = "Password must contain both letters and digits")
-    @NotEmpty(message = "Password cannot be empty")
+    @ValidPassword
     private String password;
 
     @ValidRole

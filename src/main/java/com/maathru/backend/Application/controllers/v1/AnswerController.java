@@ -5,7 +5,6 @@ import com.maathru.backend.Application.dto.response.AnswerResponse;
 import com.maathru.backend.Domain.entity.Answer;
 import com.maathru.backend.Domain.service.AnswerService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

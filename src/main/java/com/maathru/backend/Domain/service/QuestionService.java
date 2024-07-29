@@ -4,17 +4,14 @@ import com.maathru.backend.Application.dto.request.QuestionDto;
 import com.maathru.backend.Application.dto.response.QuestionResponse;
 import com.maathru.backend.Domain.entity.Question;
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.Domain.exception.QuestionNotFoundException;
-import com.maathru.backend.Domain.exception.UserNotFoundException;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.Domain.mapper.QuestionMapper;
 import com.maathru.backend.External.repository.QuestionRepository;
-import com.maathru.backend.External.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +28,7 @@ public class QuestionService {
 
         User currentUser = jwtService.getCurrentUser();
         if (currentUser.getUserId() == 0) {
-            throw new UserNotFoundException("Author not found");
+            throw new NotFoundException("Author not found");
         }
 
         Question question = new Question();
@@ -50,17 +47,17 @@ public class QuestionService {
     public ResponseEntity<List<QuestionResponse>> getAllQuestions() {
         List<Question> questions = questionRepository.findAll();
         if (questions.isEmpty()) {
-            throw new QuestionNotFoundException("Questions not found");
+            throw new NotFoundException("Questions not found");
         }
 
         List<QuestionResponse> questionResponses = QuestionMapper.toQuestionResponseList(questions);
         return ResponseEntity.ok(questionResponses);
     }
 
-    public ResponseEntity<Page<QuestionResponse>> getAllQuestionsWithPagination(int offset , int pageSize) {
-        Page<Question> questions = questionRepository.findAll(PageRequest.of(offset,pageSize));
+    public ResponseEntity<Page<QuestionResponse>> getAllQuestionsWithPagination(int offset, int pageSize) {
+        Page<Question> questions = questionRepository.findAll(PageRequest.of(offset, pageSize));
         if (questions.isEmpty()) {
-            throw new QuestionNotFoundException("Questions not found");
+            throw new NotFoundException("Questions not found");
         }
 
         Page<QuestionResponse> questionResponses = QuestionMapper.toQuestionResponsePage(questions);
@@ -73,7 +70,7 @@ public class QuestionService {
         if (optionalQuestion.isPresent()) {
             return ResponseEntity.ok(QuestionMapper.toQuestionResponse(optionalQuestion.get()));
         } else {
-            throw new QuestionNotFoundException("Question not found");
+            throw new NotFoundException("Question not found");
         }
     }
 
@@ -87,7 +84,7 @@ public class QuestionService {
             questionRepository.delete(optionalQuestion.get());
             return ResponseEntity.ok().body(optionalQuestion.get());
         } else {
-            throw new QuestionNotFoundException("Question not found");
+            throw new NotFoundException("Question not found");
         }
     }
 

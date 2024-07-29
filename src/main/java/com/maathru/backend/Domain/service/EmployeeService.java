@@ -1,11 +1,13 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.EmployeeDto;
+import com.maathru.backend.Application.dto.response.MidwifeResponse;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.Domain.exception.UserNotFoundException;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.External.repository.EmployeeRepository;
 import com.maathru.backend.External.repository.UserRepository;
+import com.maathru.backend.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +40,21 @@ public class EmployeeService {
             return ResponseEntity.status(201).body(employee);
         } else {
             log.error("User not found");
-            throw new UserNotFoundException("User not found");
+            throw new NotFoundException("User not found");
         }
 
+    }
+
+    public ResponseEntity<MidwifeResponse> getMidwifeByRegionId(long regionId) {
+        Employee employee = employeeRepository.findByUserRoleAndRegionId(Role.MIDWIFE, regionId).orElseThrow(() -> new NotFoundException("Midwife not found in this region"));
+
+        MidwifeResponse midwifeResponse = new MidwifeResponse();
+        midwifeResponse.setId(employee.getUser().getUserId());
+        midwifeResponse.setName(employee.getUser().getFirstName() + " " + employee.getUser().getLastName());
+        midwifeResponse.setEmail(employee.getUser().getEmail());
+        midwifeResponse.setPhone(employee.getPhoneNumber());
+        midwifeResponse.setAddress(employee.getAddressLine1() + ", " + employee.getStreet() + ", " + employee.getCity());
+
+        return ResponseEntity.status(200).body(midwifeResponse);
     }
 }

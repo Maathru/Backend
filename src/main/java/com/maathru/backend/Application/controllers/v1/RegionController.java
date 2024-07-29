@@ -14,10 +14,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/region")
 @AllArgsConstructor
 public class RegionController {
-    private final RegionService regionService;
-
-    @PostMapping()
-    public ResponseEntity<Region> createRegion(@RequestBody RegionDto regionDto) {
-        return regionService.createRegion(regionDto);
-    }
 }
