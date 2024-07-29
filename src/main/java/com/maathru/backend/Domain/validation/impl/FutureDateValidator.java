@@ -17,6 +17,7 @@ public class FutureDateValidator implements ConstraintValidator<FutureDate, Loca
         if (date == null) {
             return true; // NotEmpty will handle the null case
         }
+        date = date.plusDays(1);
         return date.isAfter(LocalDate.now());
     }
 }

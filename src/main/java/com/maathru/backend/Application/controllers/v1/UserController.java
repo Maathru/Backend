@@ -8,6 +8,7 @@ import com.maathru.backend.Domain.service.RegionService;
 import com.maathru.backend.Domain.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 @Tag(name = "User Controller")
+@Slf4j
 public class UserController {
     private final UserService userService;
     private final EmployeeService employeeService;
@@ -35,7 +37,7 @@ public class UserController {
         return userService.getUserIdByEmailForMidwife(email);
     }
 
-    @PreAuthorize("hasAnyRole('USER,ELIGIBLE,PARENT')")
+    @PreAuthorize("hasAnyRole('USER','ELIGIBLE','PARENT','DOCTOR','ADMIN')")
     @GetMapping("/{province}/{district}/{area}")
     public ResponseEntity<List<RegionResponse>> findRegions(
             @PathVariable String province,
@@ -44,7 +46,7 @@ public class UserController {
         return regionService.getRegionNamesByMOHAttributes(province, district, area);
     }
 
-    @PreAuthorize("hasAnyRole('USER,ELIGIBLE,PARENT')")
+    @PreAuthorize("hasAnyRole('USER','ELIGIBLE','PARENT')")
     @GetMapping("/midwife/{regionId}")
     public ResponseEntity<MidwifeResponse> findMidwifeByRegionId(@PathVariable long regionId) {
         return employeeService.getMidwifeByRegionId(regionId);

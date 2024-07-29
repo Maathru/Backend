@@ -367,7 +367,7 @@ public class LocationValidator {
                 Area.VAVUNIYA_SOUTH));
     }
 
-    public static boolean isValidRegion(String provinceStr, String districtStr, String areaStr) {
+    public static boolean isValidRegionByProvinceAndDistrict(String provinceStr, String districtStr, String areaStr) {
         Province province;
         District district;
         Area area;
@@ -384,6 +384,23 @@ public class LocationValidator {
 
         Set<District> districts = provinceToDistricts.get(province);
         if (districts == null || !districts.contains(district)) {
+            return false;
+        }
+
+        Set<Area> regions = districtToRegions.get(district);
+        return regions != null && regions.contains(area);
+    }
+
+    public static boolean isValidRegionByDistrict(String districtStr, String areaStr) {
+        District district;
+        Area area;
+
+        try {
+            district = District.valueOf(districtStr.toUpperCase());
+            area = Area.valueOf(areaStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            // Invalid enum value
+            log.info("Invalid enum value");
             return false;
         }
 

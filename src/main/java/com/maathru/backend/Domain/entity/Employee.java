@@ -39,10 +39,14 @@ public class Employee extends Auditable {
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "moh_moh_id")
+    private MOH moh;
+
+    @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
 
-    public Employee(Long employeeId, String phoneNumber, String nic, Gender gender, LocalDate dob, String addressLine1, String street, String city, String designation, String qualifications, User user) {
+    public Employee(Long employeeId, String phoneNumber, String nic, Gender gender, LocalDate dob, String addressLine1, String street, String city, String designation, String qualifications, User user, MOH moh) {
         this.employeeId = employeeId;
         this.phoneNumber = phoneNumber;
         this.nic = nic;
@@ -54,6 +58,7 @@ public class Employee extends Auditable {
         this.designation = designation;
         this.qualifications = qualifications;
         this.user = user;
+        this.moh = moh;
     }
 
     public Employee() {
