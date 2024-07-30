@@ -11,6 +11,6 @@ public class AnswerResponse {
     private long id;
     private String answer;
     private String authorName;
-
+    private long authorId;
     private String createdAt;
 }

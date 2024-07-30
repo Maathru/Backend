@@ -15,7 +15,7 @@ public class Answer extends Auditable {
     @Column(updatable = false, unique = true, nullable = false)
     private Long answerId;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "question_question_id")
     private Question question;
 

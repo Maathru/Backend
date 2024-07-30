@@ -78,12 +78,12 @@ public class AnswerService {
         return ResponseEntity.ok(answerResponses);
     }
 
-    public ResponseEntity<Answer> deleteAnswer(Long id) {
+    public ResponseEntity<String> deleteAnswer(Long id) {
         Optional<Answer> optionalAnswer = answerRepository.findById(id);
 
         if (optionalAnswer.isPresent()) {
             answerRepository.delete(optionalAnswer.get());
-            return ResponseEntity.ok(optionalAnswer.get());
+            return ResponseEntity.ok().body("Answer deleted successfully");
         } else {
             log.error("Answer not found");
             throw new NotFoundException("Answer not found");
