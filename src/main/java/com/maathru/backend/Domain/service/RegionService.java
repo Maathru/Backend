@@ -15,7 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +26,7 @@ public class RegionService {
     private final ModelMapper mapper;
 
     public ResponseEntity<List<RegionResponse>> getRegionNamesByMOHAttributes(String province, String district, String area) {
-        if (!LocationValidator.isValidRegion(province, district, area)) {
+        if (!LocationValidator.isValidRegionByProvinceAndDistrict(province, district, area)) {
             throw new InvalidException("Invalid province, district, or area.");
         }
 

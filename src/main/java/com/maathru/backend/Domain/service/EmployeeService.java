@@ -1,18 +1,24 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.EmployeeDto;
+import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Application.dto.response.MidwifeResponse;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.exception.InvalidException;
 import com.maathru.backend.Domain.exception.NotFoundException;
+import com.maathru.backend.Domain.validation.impl.LocationValidator;
 import com.maathru.backend.External.repository.EmployeeRepository;
 import com.maathru.backend.External.repository.UserRepository;
+import com.maathru.backend.enumeration.Area;
+import com.maathru.backend.enumeration.District;
 import com.maathru.backend.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,15 +52,30 @@ public class EmployeeService {
     }
 
     public ResponseEntity<MidwifeResponse> getMidwifeByRegionId(long regionId) {
-        Employee employee = employeeRepository.findByUserRoleAndRegionId(Role.MIDWIFE, regionId).orElseThrow(() -> new NotFoundException("Midwife not found in this region"));
+        return null;
+    }
 
-        MidwifeResponse midwifeResponse = new MidwifeResponse();
-        midwifeResponse.setId(employee.getUser().getUserId());
-        midwifeResponse.setName(employee.getUser().getFirstName() + " " + employee.getUser().getLastName());
-        midwifeResponse.setEmail(employee.getUser().getEmail());
-        midwifeResponse.setPhone(employee.getPhoneNumber());
-        midwifeResponse.setAddress(employee.getAddressLine1() + ", " + employee.getStreet() + ", " + employee.getCity());
+    public ResponseEntity<List<DoctorsResponse>> getDoctorsByMohAreaAndDistrict(String district, String area) {
+        if (!LocationValidator.isValidRegionByDistrict(district, area)) {
+            throw new InvalidException("Invalid district, or area.");
+        }
 
-        return ResponseEntity.status(200).body(midwifeResponse);
+        District districtEnum;
+        Area areaEnum;
+
+        try {
+            districtEnum = District.valueOf(district.toUpperCase());
+            areaEnum = Area.valueOf(area.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidException("Invalid enum value for district, or area.");
+        }
+
+        List<DoctorsResponse> doctorsResponses = employeeRepository.findEmployeesByDistrictAndRegion(districtEnum, areaEnum, Role.DOCTOR);
+
+        if (doctorsResponses.isEmpty()) {
+            throw new NotFoundException("No doctor found for these details");
+        }
+
+        return ResponseEntity.status(201).body(doctorsResponses);
     }
 }
