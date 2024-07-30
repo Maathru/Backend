@@ -1,8 +1,10 @@
 package com.maathru.backend.Domain.mapper;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.maathru.backend.Domain.entity.Answer;
 import com.maathru.backend.Domain.entity.Question;
 import com.maathru.backend.Application.dto.response.QuestionResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class QuestionMapper {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -20,6 +23,7 @@ public class QuestionMapper {
         response.setTitle(question.getTitle());
         response.setDescription(question.getDescription());
         response.setKeywords(question.getKeywords());
+        response.setNoOfAnswers(question.getAnswers().isEmpty() ?   0  : question.getAnswers().size());
         response.setAuthorName((question.getCreatedBy() != null) ? question.getCreatedBy().getFirstName() + " " + question.getCreatedBy().getLastName() : null);
         response.setAuthorId((question.getCreatedBy() != null) ? question.getCreatedBy().getUserId() : null);
         response.setCreatedAt(question.getCreatedAt().format(formatter));

@@ -30,7 +30,7 @@ public class Question extends Auditable {
 
     private String keywords;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Answer> answers;
 
     // Utility methods to convert between List<String> and comma-separated String

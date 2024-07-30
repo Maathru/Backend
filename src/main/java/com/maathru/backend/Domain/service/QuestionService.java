@@ -66,13 +66,10 @@ public class QuestionService {
     }
 
     public ResponseEntity<QuestionResponse> getQuestion(long id) {
-        Optional<Question> optionalQuestion = questionRepository.findById(id);
+        Question question = questionRepository.findById(id).orElseThrow(()-> new NotFoundException("Question not found"));
 
-        if (optionalQuestion.isPresent()) {
-            return ResponseEntity.ok(QuestionMapper.toQuestionResponse(optionalQuestion.get()));
-        } else {
-            throw new NotFoundException("Question not found");
-        }
+            return ResponseEntity.ok(QuestionMapper.toQuestionResponse(question));
+
     }
 
     public ResponseEntity<String> deleteQuestion(long id) {

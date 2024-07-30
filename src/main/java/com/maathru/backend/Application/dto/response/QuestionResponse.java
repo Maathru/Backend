@@ -15,4 +15,5 @@ public class QuestionResponse {
     private String authorName;
     private Long authorId;
     private String createdAt;
+    private int noOfAnswers;
 }
