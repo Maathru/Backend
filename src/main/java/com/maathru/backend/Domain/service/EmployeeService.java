@@ -52,7 +52,16 @@ public class EmployeeService {
     }
 
     public ResponseEntity<MidwifeResponse> getMidwifeByRegionId(long regionId) {
-        return null;
+        Employee employee = employeeRepository.findByUserRoleAndRegionId(Role.MIDWIFE, regionId).orElseThrow(() -> new NotFoundException("Midwife not found in this region"));
+
+        MidwifeResponse midwifeResponse = new MidwifeResponse();
+        midwifeResponse.setId(employee.getUser().getUserId());
+        midwifeResponse.setName(employee.getUser().getFirstName() + " " + employee.getUser().getLastName());
+        midwifeResponse.setEmail(employee.getUser().getEmail());
+        midwifeResponse.setPhone(employee.getPhoneNumber());
+        midwifeResponse.setAddress(employee.getAddressLine1() + ", " + employee.getStreet() + ", " + employee.getCity());
+
+        return ResponseEntity.status(200).body(midwifeResponse);
     }
 
     public ResponseEntity<List<DoctorsResponse>> getDoctorsByMohAreaAndDistrict(String district, String area) {
