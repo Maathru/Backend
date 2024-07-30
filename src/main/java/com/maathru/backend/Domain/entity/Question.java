@@ -5,14 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import static java.time.LocalDateTime.now;
+import java.util.Collections;
 
 @Entity
 @Table(name = "questions")
@@ -24,13 +20,18 @@ public class Question extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
     private Long questionId;
+
     @NotNull
     private String title;
 
     @Column(length = 2048)
     @NotNull
     private String description;
+
     private String keywords;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Answer> answers;
 
     // Utility methods to convert between List<String> and comma-separated String
     public List<String> getKeywords() {

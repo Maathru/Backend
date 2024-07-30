@@ -50,7 +50,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Question> deleteQuestion(@PathVariable long id) {
+    public ResponseEntity<String> deleteQuestion(@PathVariable long id) {
         return questionService.deleteQuestion(id);
     }
 
