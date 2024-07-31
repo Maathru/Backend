@@ -4,6 +4,7 @@ import com.maathru.backend.Application.dto.eligible.EligibleCoupleDTO;
 import com.maathru.backend.Application.dto.response.EligibleCoupleResponse;
 import com.maathru.backend.Domain.entity.eligible.BasicInfo;
 import com.maathru.backend.Application.dto.eligible.BasicInfoDto;
+import com.maathru.backend.enumeration.Role;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,6 +32,21 @@ public class BasicInfoMapper implements Mapper<BasicInfo, BasicInfoDto> {
         dto.setCreatedDate(LocalDate.from(basicInfo.getCreatedAt()));
 
         return dto;
+    }
+
+    public static List<EligibleCoupleResponse> toParentResponseList(List<BasicInfo> basicInfoList) {
+        List<EligibleCoupleResponse> eligibleCoupleResponseList = new ArrayList<>();
+
+        for (BasicInfo basicInfo : basicInfoList) {
+            // Skip entries with role ELIGIBLE
+            if (basicInfo.getUser().getRole() == Role.ELIGIBLE) {
+                continue;
+            }
+            EligibleCoupleResponse response = toEligibleCoupleResponse(basicInfo);
+            eligibleCoupleResponseList.add(response);
+        }
+
+        return eligibleCoupleResponseList;
     }
 
     public BasicInfo toEntity(BasicInfo basicInfo, BasicInfoDto dto) {

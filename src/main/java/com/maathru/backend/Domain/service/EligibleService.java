@@ -239,18 +239,13 @@ public class EligibleService {
 
     // get all eligible users for midwife
     public ResponseEntity<List<EligibleCoupleResponse>> getEligibleListForMidwife() {
-        try {
-            List<BasicInfo> basicInfoList = basicInfoRepository.findAll();
-            if (basicInfoList.isEmpty()) {
-                throw new NotFoundException("Eligible users not found");
-            }
-
-            List<EligibleCoupleResponse> eligibleCoupleResponseList = BasicInfoMapper.toEligibleCoupleResponseList(basicInfoList);
-            return ResponseEntity.ok(eligibleCoupleResponseList);
-        } catch (Exception e) {
-            log.error("Error retrieving eligible couples data {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        List<BasicInfo> basicInfoList = basicInfoRepository.findAll();
+        if (basicInfoList.isEmpty()) {
+            throw new NotFoundException("Eligible users not found");
         }
+
+        List<EligibleCoupleResponse> eligibleCoupleResponseList = BasicInfoMapper.toEligibleCoupleResponseList(basicInfoList);
+        return ResponseEntity.ok(eligibleCoupleResponseList);
     }
 
     private <T extends BaseEntity, D> T setDataForEntity(T entity, User currentUser, Mapper<T, D> mapper, D dto) {
@@ -354,4 +349,24 @@ public class EligibleService {
         return employeeRepository.getAreaAndDistrict(user);
     }
 
+    public ResponseEntity<List<EligibleCoupleResponse>> getParentListForMidwife() {
+        List<BasicInfo> basicInfoList = basicInfoRepository.findAll();
+        if (basicInfoList.isEmpty()) {
+            throw new NotFoundException("Parent users not found");
+        }
+
+        List<EligibleCoupleResponse> eligibleCoupleResponseList = BasicInfoMapper.toParentResponseList(basicInfoList);
+        return ResponseEntity.ok(eligibleCoupleResponseList);
+    }
+
+    public ResponseEntity<String> updateEligibleToParent(long userId, long eligibleId) {
+        User user = userRepository.findByUserIdAndBasicInfoIdAndRole(userId, eligibleId, Role.ELIGIBLE)
+                .orElseThrow(() -> new NotFoundException("Eligible user not found"));
+
+        user.setRole(Role.PARENT);
+        userRepository.save(user);
+
+        log.info("Eligible user {} updated to parent", user.getEmail());
+        return ResponseEntity.ok("Eligible user updated to parent");
+    }
 }
