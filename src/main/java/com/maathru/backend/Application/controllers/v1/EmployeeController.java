@@ -2,6 +2,7 @@ package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.EmployeeDto;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
+import com.maathru.backend.Application.dto.response.MidwifeListResponse;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -22,11 +23,8 @@ public class EmployeeController {
         return employeeService.createEmployee(employeeDto);
     }
 
-//    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
-//    @GetMapping("/doctor/{district}/{area}")
-//    public ResponseEntity<List<DoctorsResponse>> getDoctorsByMohAreaAndDistrict(
-//            @PathVariable String district,
-//            @PathVariable String area) {
-//        return employeeService.getDoctorsByMohAreaAndDistrict(district,area);
-//    }
+    @GetMapping("/midwife")
+    public ResponseEntity<List<MidwifeListResponse>> getMidwifesInCurrentMoh() {
+        return employeeService.getMidwifesInCurrentMoh();
+    }
 }

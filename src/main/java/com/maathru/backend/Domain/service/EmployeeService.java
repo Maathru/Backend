@@ -2,6 +2,7 @@ package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.EmployeeDto;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
+import com.maathru.backend.Application.dto.response.MidwifeListResponse;
 import com.maathru.backend.Application.dto.response.MidwifeResponse;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.entity.User;
@@ -27,6 +28,7 @@ import java.util.Optional;
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
     public ResponseEntity<Employee> createEmployee(EmployeeDto employeeDto) {
         Optional<User> optionalUser = userRepository.findById(employeeDto.getUser());
@@ -62,5 +64,18 @@ public class EmployeeService {
         midwifeResponse.setAddress(employee.getAddressLine1() + ", " + employee.getStreet() + ", " + employee.getCity());
 
         return ResponseEntity.status(200).body(midwifeResponse);
+    }
+
+    public ResponseEntity<List<MidwifeListResponse>> getMidwifesInCurrentMoh() {
+        User user = jwtService.getCurrentUser();
+
+        List<MidwifeListResponse> midwifeListResponses = employeeRepository.findMidwifesByUserAndRole(user, Role.MIDWIFE);
+
+        if (midwifeListResponses.isEmpty()) {
+            log.error("MIDWIFE list is empty in this region");
+            throw new NotFoundException("MIDWIFE list is empty in this region");
+        }
+
+        return ResponseEntity.status(200).body(midwifeListResponses);
     }
 }

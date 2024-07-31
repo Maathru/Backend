@@ -1,6 +1,7 @@
 package com.maathru.backend.External.repository;
 
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
+import com.maathru.backend.Application.dto.response.MidwifeListResponse;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.entity.MOH;
 import com.maathru.backend.Domain.entity.Region;
@@ -33,11 +34,19 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Optional<Employee> findByUser(User user);
 
-    @Query("SELECT new com.maathru.backend.Application.dto.response.DoctorsResponse(e2.employeeId, e2.user.firstName || ' ' || e2.user.lastName) " +
+    @Query("SELECT new com.maathru.backend.Application.dto.response.DoctorsResponse(e2.user.userId, e2.user.firstName || ' ' || e2.user.lastName) " +
             "FROM Employee e " +
             "JOIN e.moh m " +
             "JOIN Employee e2 ON e2.moh = m " +
             "JOIN e2.user u " +
             "WHERE e.user = :user AND u.role = :role")
     List<DoctorsResponse> findEmployeesByUserAndRole(@Param("user") User user, @Param("role") Role role);
+
+    @Query("SELECT new com.maathru.backend.Application.dto.response.MidwifeListResponse(e2.user.userId, e2.user.firstName || ' ' || e2.user.lastName,e2.user.email,e2.phoneNumber,e2.addressLine1 || ',' || e2.street || ',' || e2.city,e2.region.regionName) " +
+            "FROM Employee e " +
+            "JOIN e.moh m " +
+            "JOIN Employee e2 ON e2.moh = m " +
+            "JOIN e2.user u " +
+            "WHERE e.user = :user AND u.role = :role")
+    List<MidwifeListResponse> findMidwifesByUserAndRole(@Param("user") User user, @Param("role") Role role);
 }
