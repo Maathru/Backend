@@ -1,18 +1,22 @@
 package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.ClinicDto;
+import com.maathru.backend.Application.dto.response.ClinicListResponse;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Application.dto.response.RegionResponse;
 import com.maathru.backend.Domain.entity.Clinic;
 import com.maathru.backend.Domain.service.ClinicService;
 import com.maathru.backend.Domain.service.RegionService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -54,5 +58,10 @@ public class ClinicController {
     @GetMapping("/doctors")
     public ResponseEntity<List<DoctorsResponse>> getDoctors() {
         return regionService.getDoctors();
+    }
+
+    @GetMapping("/by/{date}")
+    public ResponseEntity<List<ClinicListResponse>> getClinicsByDate(@PathVariable String date) {
+        return clinicService.getClinicsByDate(date);
     }
 }

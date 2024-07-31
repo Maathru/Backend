@@ -9,7 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class RegionResponse {
-    private Long regionId;
-    private String regionName;
+public class ClinicListResponse {
+    private long id;
+    private String name;
+    private String region;
 }
