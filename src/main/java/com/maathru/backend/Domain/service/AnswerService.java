@@ -6,6 +6,7 @@ import com.maathru.backend.Domain.entity.Answer;
 import com.maathru.backend.Domain.entity.Question;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.exception.NotFoundException;
+import com.maathru.backend.Domain.exception.UnauthorizedException;
 import com.maathru.backend.Domain.mapper.AnswerMapper;
 import com.maathru.backend.External.repository.AnswerRepository;
 import com.maathru.backend.External.repository.QuestionRepository;
@@ -78,14 +79,29 @@ public class AnswerService {
         return ResponseEntity.ok(answerResponses);
     }
 
-    public ResponseEntity<Answer> deleteAnswer(Long id) {
+    public ResponseEntity<String> deleteAnswer(Long id) {
         Optional<Answer> optionalAnswer = answerRepository.findById(id);
 
         if (optionalAnswer.isPresent()) {
             answerRepository.delete(optionalAnswer.get());
-            return ResponseEntity.ok(optionalAnswer.get());
+            return ResponseEntity.ok().body("Answer deleted successfully");
         } else {
-            log.error("Answer not found");
+            throw new NotFoundException("Answer not found");
+        }
+    }
+
+    public ResponseEntity<String> editAnswer(Long id, AnswerDto answerDto) {
+        Optional<Answer> optionalAnswer = answerRepository.findById(id);
+
+        if (optionalAnswer.isPresent()) {
+            if(jwtService.getCurrentUser().getUserId() != optionalAnswer.get().getCreatedBy().getUserId()){
+                throw new UnauthorizedException("You are not authorized to edit this answer");
+            }
+            Answer answer = optionalAnswer.get();
+            answer.setAnswer(answerDto.getAnswer());
+            answerRepository.save(answer);
+            return ResponseEntity.ok().body("Answer updated successfully");
+        } else {
             throw new NotFoundException("Answer not found");
         }
     }

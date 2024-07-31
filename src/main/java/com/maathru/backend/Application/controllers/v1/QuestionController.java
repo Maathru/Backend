@@ -5,7 +5,6 @@ import com.maathru.backend.Application.dto.response.QuestionResponse;
 import com.maathru.backend.Domain.entity.Question;
 import com.maathru.backend.Domain.service.QuestionService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +50,17 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Question> deleteQuestion(@PathVariable long id) {
+    public ResponseEntity<String> deleteQuestion(@PathVariable long id) {
         return questionService.deleteQuestion(id);
     }
 
+    @GetMapping("/search/keyword/{keyword}")
+    public ResponseEntity<List<QuestionResponse>> searchQuestion(@PathVariable String keyword) {
+        return questionService.searchQuestionsByKeyword(keyword);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> editQuestion(@PathVariable long id, @RequestBody @Valid QuestionDto questionDto) {
+        return questionService.editQuestion(id, questionDto);
+    }
 }

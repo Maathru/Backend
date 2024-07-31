@@ -5,6 +5,7 @@ import com.maathru.backend.Application.dto.response.QuestionResponse;
 import com.maathru.backend.Domain.entity.Question;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.exception.NotFoundException;
+import com.maathru.backend.Domain.exception.UnauthorizedException;
 import com.maathru.backend.Domain.mapper.QuestionMapper;
 import com.maathru.backend.External.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -65,21 +66,53 @@ public class QuestionService {
     }
 
     public ResponseEntity<QuestionResponse> getQuestion(long id) {
+        Question question = questionRepository.findById(id).orElseThrow(()-> new NotFoundException("Question not found"));
+
+            return ResponseEntity.ok(QuestionMapper.toQuestionResponse(question));
+
+    }
+
+    public ResponseEntity<String> deleteQuestion(long id) {
         Optional<Question> optionalQuestion = questionRepository.findById(id);
 
         if (optionalQuestion.isPresent()) {
-            return ResponseEntity.ok(QuestionMapper.toQuestionResponse(optionalQuestion.get()));
+            if(jwtService.getCurrentUser().getUserId() != optionalQuestion.get().getCreatedBy().getUserId()){
+                throw new UnauthorizedException("You are not authorized to delete this question");
+            }
+            questionRepository.delete(optionalQuestion.get());
+            return ResponseEntity.ok().body("Question deleted Successfully");
         } else {
             throw new NotFoundException("Question not found");
         }
     }
 
-    public ResponseEntity<Question> deleteQuestion(long id) {
+    public ResponseEntity<List<QuestionResponse>> searchQuestionsByKeyword(String keyword) {
+        List<Question> questions = questionRepository.findByKeywordsContainingIgnoreCase(keyword);
+        if (questions.isEmpty()) {
+            throw new NotFoundException("Questions not found");
+        }
+
+        List<QuestionResponse> questionResponses = QuestionMapper.toQuestionResponseList(questions);
+        return ResponseEntity.ok(questionResponses);
+    }
+
+    public ResponseEntity<String> editQuestion(long id, QuestionDto questionDto) {
         Optional<Question> optionalQuestion = questionRepository.findById(id);
 
         if (optionalQuestion.isPresent()) {
-            questionRepository.delete(optionalQuestion.get());
-            return ResponseEntity.ok().body(optionalQuestion.get());
+            if(jwtService.getCurrentUser().getUserId() != optionalQuestion.get().getCreatedBy().getUserId()){
+                throw new UnauthorizedException("You are not authorized to edit this question");
+            }
+            Question question = optionalQuestion.get();
+            question.setTitle(questionDto.getTitle());
+            question.setDescription(questionDto.getDescription());
+            question.setKeywords(questionDto.getKeywords());
+            question.setUpdatedBy(jwtService.getCurrentUser());
+
+            question = questionRepository.save(question);
+            log.info("Question:{} updated successfully by {}", question.getQuestionId(), jwtService.getCurrentUser().getEmail());
+
+            return ResponseEntity.status(201).body("Question updated successfully");
         } else {
             throw new NotFoundException("Question not found");
         }

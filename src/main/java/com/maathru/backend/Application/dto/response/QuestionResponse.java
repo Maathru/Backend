@@ -13,5 +13,7 @@ public class QuestionResponse {
     private String description;
     private List<String> keywords;
     private String authorName;
+    private Long authorId;
     private String createdAt;
+    private int noOfAnswers;
 }

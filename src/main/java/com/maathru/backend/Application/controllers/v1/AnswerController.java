@@ -35,7 +35,12 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Answer> deleteAnswer(@PathVariable Long id) {
+    public ResponseEntity<String> deleteAnswer(@PathVariable Long id) {
         return answerService.deleteAnswer(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> editAnswer(@PathVariable Long id, @RequestBody @Valid AnswerDto answerDto) {
+        return answerService.editAnswer(id, answerDto);
     }
 }

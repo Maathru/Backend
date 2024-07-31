@@ -18,6 +18,7 @@ public class AnswerMapper {
         response.setId(answer.getAnswerId());
         response.setAnswer(answer.getAnswer());
         response.setAuthorName((answer.getCreatedBy() != null) ? answer.getCreatedBy().getFirstName() + " " + answer.getCreatedBy().getLastName() : null);
+        response.setAuthorId((answer.getCreatedBy() != null) ? answer.getCreatedBy().getUserId() : 0);
         response.setCreatedAt(answer.getCreatedAt().format(formatter));
         return response;
     }
