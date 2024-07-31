@@ -22,11 +22,11 @@ public class EmployeeController {
         return employeeService.createEmployee(employeeDto);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
-    @GetMapping("/doctor/{district}/{area}")
-    public ResponseEntity<List<DoctorsResponse>> getDoctorsByMohAreaAndDistrict(
-            @PathVariable String district,
-            @PathVariable String area) {
-        return employeeService.getDoctorsByMohAreaAndDistrict(district,area);
-    }
+//    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+//    @GetMapping("/doctor/{district}/{area}")
+//    public ResponseEntity<List<DoctorsResponse>> getDoctorsByMohAreaAndDistrict(
+//            @PathVariable String district,
+//            @PathVariable String area) {
+//        return employeeService.getDoctorsByMohAreaAndDistrict(district,area);
+//    }
 }

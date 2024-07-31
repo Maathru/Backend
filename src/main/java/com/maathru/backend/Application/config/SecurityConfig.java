@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -38,6 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/blog/**", "/api/v1/answer/**", "/api/v1/question/**").permitAll()
                         .anyRequest().authenticated()
                 ).userDetailsService(userService)
                 .exceptionHandling(e -> e.accessDeniedHandler(customAccessDeniedHandler)

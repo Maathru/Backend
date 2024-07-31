@@ -63,28 +63,4 @@ public class EmployeeService {
 
         return ResponseEntity.status(200).body(midwifeResponse);
     }
-
-    public ResponseEntity<List<DoctorsResponse>> getDoctorsByMohAreaAndDistrict(String district, String area) {
-        if (!LocationValidator.isValidRegionByDistrict(district, area)) {
-            throw new InvalidException("Invalid district, or area.");
-        }
-
-        District districtEnum;
-        Area areaEnum;
-
-        try {
-            districtEnum = District.valueOf(district.toUpperCase());
-            areaEnum = Area.valueOf(area.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new InvalidException("Invalid enum value for district, or area.");
-        }
-
-        List<DoctorsResponse> doctorsResponses = employeeRepository.findEmployeesByDistrictAndRegion(districtEnum, areaEnum, Role.DOCTOR);
-
-        if (doctorsResponses.isEmpty()) {
-            throw new NotFoundException("No doctor found for these details");
-        }
-
-        return ResponseEntity.status(201).body(doctorsResponses);
-    }
 }

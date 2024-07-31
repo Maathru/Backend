@@ -34,7 +34,6 @@ public class ClinicService {
         try {
             User currentUser = jwtService.getCurrentUser();
 
-
             Region region = regionRepository.findById(clinicDto.getRegion()).orElseThrow(() -> new NotFoundException("Region not found"));
 
             List<Employee> doctors = clinicDto.getDoctors().stream()
@@ -55,13 +54,15 @@ public class ClinicService {
             clinic.setEndTime(LocalTime.from(clinicDto.getEndTime()));
             clinic.setOther(clinicDto.getOther());
             clinic.setDoctors(doctors);
+            clinic.setMoh(region.getMoh());
+
             clinic.setCreatedBy(currentUser);
             clinic.setUpdatedBy(currentUser);
 
             clinic = clinicRepository.save(clinic);
 
             log.info("Clinic added successfully with ID: {}", clinic.getClinicId());
-            return ResponseEntity.status(201).body("Clinic ");
+            return ResponseEntity.status(201).body("Clinic added successfully");
         } catch (Exception e) {
             log.error("Error creating clinic");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating clinic");
