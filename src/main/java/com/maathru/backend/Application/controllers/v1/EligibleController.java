@@ -44,6 +44,18 @@ public class EligibleController {
         return eligibleService.getEligibleListForMidwife();
     }
 
+    @PreAuthorize("hasRole('MIDWIFE')")
+    @GetMapping("/midwife/parent/get")
+    public ResponseEntity<List<EligibleCoupleResponse>> getParentListForMidwife() {
+        return eligibleService.getParentListForMidwife();
+    }
+
+    @PreAuthorize("hasRole('MIDWIFE')")
+    @GetMapping("/midwife/update/{userId}/{eligibleId}")
+    public ResponseEntity<String> updateEligibleToParent(@PathVariable long userId, @PathVariable long eligibleId) {
+        return eligibleService.updateEligibleToParent(userId,eligibleId);
+    }
+
     @PreAuthorize("hasAnyRole('PARENT','ELIGIBLE')")
     @GetMapping
     public ResponseEntity<EligibleDto> getEligibleData() {
