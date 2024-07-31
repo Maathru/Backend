@@ -1,15 +1,24 @@
 package com.maathru.backend.Application.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.lang.reflect.Array;
+import java.util.List;
 
 @Getter
 @Setter
 public class BlogDto {
+
+    @NotEmpty(message = "Title cannot be empty")
     private String title;
-    private String content;
+    @NotEmpty(message = "Category cannot be empty")
     private String category;
-    private String image;
-    private String location;
-    private long author;
+    @NotEmpty(message = "Content cannot be empty")
+    private String content;
+    private String additionalNotes;
+    private List<String> keywords;
 }
