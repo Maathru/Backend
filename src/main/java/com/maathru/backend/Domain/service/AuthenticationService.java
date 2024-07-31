@@ -92,8 +92,8 @@ public class AuthenticationService {
         revokeAllTokenByUser(user);
         saveUserToken(accessToken, refreshToken, user);
 
-        log.info("{}:{} signed in successfully", user.getRole(), user.getUsername());
-        return new AuthenticationResponse(user.getUserId(), user.getFirstName(), accessToken, refreshToken, user.getRole(), "User logged in successfully");
+        log.info("{}:{} signed in Successfully", user.getRole(), user.getUsername());
+        return new AuthenticationResponse(user.getUserId(), user.getFirstName(), accessToken, refreshToken, user.getRole(), "Successfully logged in");
     }
 
     @Transactional
