@@ -17,4 +17,15 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "WHERE c.date = :date " +
             "AND u.email=:email ")
     List<ClinicListResponse> findClinicsByDate(@Param("date") LocalDate date, @Param("email") String email);
+
+    @Query("SELECT DISTINCT c.date " +
+            "FROM Clinic c " +
+            "JOIN Employee e ON c.moh = e.moh " +
+            "JOIN User u ON e.user = u " +
+            "WHERE u.email = :email " +
+            "AND EXTRACT(MONTH FROM c.date) = EXTRACT(MONTH FROM CAST(:currentDate AS DATE)) " +
+            "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:currentDate AS DATE))")
+    List<LocalDate> findAllClinicDatesForCurrentMonth(@Param("currentDate") LocalDate currentDate, @Param("email") String email);
+
+
 }
