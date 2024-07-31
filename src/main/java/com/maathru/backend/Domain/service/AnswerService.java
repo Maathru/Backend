@@ -1,52 +1,55 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.AnswerDto;
+import com.maathru.backend.Application.dto.response.AnswerResponse;
 import com.maathru.backend.Domain.entity.Answer;
 import com.maathru.backend.Domain.entity.Question;
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.Domain.exception.AnswerNotFoundException;
-import com.maathru.backend.Domain.exception.QuestionNotFoundException;
-import com.maathru.backend.Domain.exception.UserNotFoundException;
+import com.maathru.backend.Domain.exception.NotFoundException;
+import com.maathru.backend.Domain.exception.UnauthorizedException;
+import com.maathru.backend.Domain.mapper.AnswerMapper;
 import com.maathru.backend.External.repository.AnswerRepository;
 import com.maathru.backend.External.repository.QuestionRepository;
-import com.maathru.backend.External.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class AnswerService {
     private final AnswerRepository answerRepository;
-    private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
+    private final JwtService jwtService;
 
-    public ResponseEntity<Answer> createAnswer(AnswerDto answerDto) {
-        Optional<Question> optionalQuestion = questionRepository.findById(answerDto.getQuestion());
-        Optional<User> optionalUser = userRepository.findById(answerDto.getAuthor());
+    public ResponseEntity<String> addAnswer(AnswerDto answerDto) {
 
-        if (optionalQuestion.isPresent()) {
-            if (optionalUser.isPresent()) {
-                Answer answer = new Answer();
-                answer.setAnswer(answerDto.getAnswer());
-                answer.setQuestion(optionalQuestion.get());
-                answer.setAuthor(optionalUser.get());
-                answerRepository.save(answer);
-
-                return ResponseEntity.status(201).body(answer);
-            } else {
-                log.error("author not found");
-                throw new UserNotFoundException("Author not found");
-            }
-        } else {
-            log.error("Question not found");
-            throw new QuestionNotFoundException("Question not found");
+        User currentUser = jwtService.getCurrentUser();
+        if (currentUser.getUserId() == 0) {
+            throw new NotFoundException("Author not found");
         }
+
+        Optional<Question> optionalQuestion = questionRepository.findById(answerDto.getQuestion());
+
+        if (optionalQuestion.isEmpty()) {
+            throw new NotFoundException("Question not found");
+        }
+
+        Answer answer = new Answer();
+        answer.setAnswer(answerDto.getAnswer());
+        answer.setQuestion(optionalQuestion.get());
+        answer.setCreatedBy(currentUser);
+        answer.setUpdatedBy(currentUser);
+        answerRepository.save(answer);
+
+        log.info("Answer:{} added successfully for question:{} by {}", answer.getAnswerId(), answer.getQuestion().getQuestionId(), currentUser.getEmail());
+        return ResponseEntity.status(201).body("Answer added successfully");
     }
+
 
     public ResponseEntity<Answer> getAnswer(Long id) {
         Optional<Answer> optionalAnswer = answerRepository.findById(id);
@@ -55,37 +58,51 @@ public class AnswerService {
             return ResponseEntity.ok(optionalAnswer.get());
         } else {
             log.error("Answer not found");
-            throw new AnswerNotFoundException("Answer not found");
+            throw new NotFoundException("Answer not found");
         }
     }
 
 
-    public ResponseEntity<Iterable<Answer>> getAnswerByQuestion(Long id) {
+    public ResponseEntity<List<AnswerResponse>> getAnswerByQuestion(Long id) {
         Optional<Question> optionalQuestion = questionRepository.findById(id);
 
-        if (optionalQuestion.isPresent()) {
-            Optional<Iterable<Answer>> answers = answerRepository.findByQuestion(optionalQuestion.get());
-            if (answers.isPresent()) {
-                return ResponseEntity.ok(answers.get());
-            } else {
-                log.error("Answers not found");
-                throw new AnswerNotFoundException("Answers not found");
-            }
-        } else {
-            log.error("Question not found");
-            throw new QuestionNotFoundException("Question not found");
+        if (optionalQuestion.isEmpty()) {
+            throw new NotFoundException("Question not found");
         }
+
+        Optional<Iterable<Answer>> answers = answerRepository.findByQuestion(optionalQuestion.get());
+        if (answers.isEmpty()) {
+            throw new NotFoundException("Answers not found");
+        }
+
+        List<AnswerResponse> answerResponses = AnswerMapper.toAnswerResponseList(answers);
+        return ResponseEntity.ok(answerResponses);
     }
 
-    public ResponseEntity<Answer> deleteAnswer(Long id) {
+    public ResponseEntity<String> deleteAnswer(Long id) {
         Optional<Answer> optionalAnswer = answerRepository.findById(id);
 
         if (optionalAnswer.isPresent()) {
             answerRepository.delete(optionalAnswer.get());
-            return ResponseEntity.ok(optionalAnswer.get());
+            return ResponseEntity.ok().body("Answer deleted successfully");
         } else {
-            log.error("Answer not found");
-            throw new AnswerNotFoundException("Answer not found");
+            throw new NotFoundException("Answer not found");
+        }
+    }
+
+    public ResponseEntity<String> editAnswer(Long id, AnswerDto answerDto) {
+        Optional<Answer> optionalAnswer = answerRepository.findById(id);
+
+        if (optionalAnswer.isPresent()) {
+            if(jwtService.getCurrentUser().getUserId() != optionalAnswer.get().getCreatedBy().getUserId()){
+                throw new UnauthorizedException("You are not authorized to edit this answer");
+            }
+            Answer answer = optionalAnswer.get();
+            answer.setAnswer(answerDto.getAnswer());
+            answerRepository.save(answer);
+            return ResponseEntity.ok().body("Answer updated successfully");
+        } else {
+            throw new NotFoundException("Answer not found");
         }
     }
 }

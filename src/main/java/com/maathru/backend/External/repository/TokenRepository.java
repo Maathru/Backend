@@ -13,7 +13,7 @@ public interface TokenRepository extends JpaRepository<Token,Long> {
     @Query("select t from Token t inner join User u on t.user.userId = u.userId where t.user.userId = :userId and t.loggedOut = false ")
     List<Token> findAllAccessTokensByUser(Long userId);
 
-    Optional<Token> findByAccessToken(String accessToken);
+    Optional<Token> findByAccessTokenAndLoggedOutFalse(String accessToken);
 
-    Optional<Token> findByRefreshToken(String refreshToken);
+    Optional<Token> findByRefreshTokenAndLoggedOutFalse(String refreshToken);
 }

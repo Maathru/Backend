@@ -23,17 +23,22 @@ public class CustomLogoutHandler implements LogoutHandler {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.warn("Authorization header is missing or does not start with 'Bearer'");
             return;
         }
         String token = authHeader.substring(7);
 
         // get stored token from database
-        Token storedToken = tokenRepository.findByAccessToken(token).orElse(null);
+        Token storedToken = tokenRepository.findByAccessTokenAndLoggedOutFalse(token).orElse(null);
         if (storedToken != null) {
             storedToken.setLoggedOut(true);
             tokenRepository.save(storedToken);
+            log.debug("Stored token found and updated in database");
+        } else {
+            log.warn("Stored token not found in database");
         }
 
-        log.info("User {} signed out successfully", jwtService.extractEmail(token));
+        String email = jwtService.extractEmail(token);
+        log.info("User {} signed out successfully", email);
     }
 }

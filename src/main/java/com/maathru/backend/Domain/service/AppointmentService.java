@@ -5,10 +5,7 @@ import com.maathru.backend.Domain.entity.Appointment;
 import com.maathru.backend.Domain.entity.Clinic;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.entity.Parent;
-import com.maathru.backend.Domain.exception.AppointmentNotFoundException;
-import com.maathru.backend.Domain.exception.ClinicNotFoundException;
-import com.maathru.backend.Domain.exception.EmployeeNotFoundException;
-import com.maathru.backend.Domain.exception.ParentNotFoundException;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.External.repository.AppointmentRepository;
 import com.maathru.backend.External.repository.ClinicRepository;
 import com.maathru.backend.External.repository.EmployeeRepository;
@@ -48,15 +45,15 @@ public class AppointmentService {
                     return ResponseEntity.status(201).body(appointment);
                 } else {
                     log.error("Parent not found");
-                    throw new ParentNotFoundException("Parent not found");
+                    throw new NotFoundException("Parent not found");
                 }
             } else {
                 log.error("Clinic not found");
-                throw new ClinicNotFoundException("Clinic not found");
+                throw new NotFoundException("Clinic not found");
             }
         } else {
             log.error("Doctor not found");
-            throw new EmployeeNotFoundException("Doctor not found");
+            throw new NotFoundException("Doctor not found");
         }
     }
 
@@ -65,7 +62,7 @@ public class AppointmentService {
 
         if (appointments.isEmpty()) {
             log.error("Appointments not found");
-            throw new AppointmentNotFoundException("Appointments not found");
+            throw new NotFoundException("Appointments not found");
         }
 
         return ResponseEntity.ok(appointments);
@@ -79,7 +76,7 @@ public class AppointmentService {
             return ResponseEntity.ok(optionalAppointment.get());
         } else {
             log.error("Appointment not found");
-            throw new AppointmentNotFoundException("Appointment not found");
+            throw new NotFoundException("Appointment not found");
         }
     }
 
@@ -105,19 +102,19 @@ public class AppointmentService {
                         return ResponseEntity.status(201).body(appointment);
                     } else {
                         log.error("Parent not found");
-                        throw new ParentNotFoundException("Parent not found");
+                        throw new NotFoundException("Parent not found");
                     }
                 } else {
                     log.error("Clinic not found");
-                    throw new ClinicNotFoundException("Clinic not found");
+                    throw new NotFoundException("Clinic not found");
                 }
             } else {
                 log.error("Doctor not found");
-                throw new EmployeeNotFoundException("Doctor not found");
+                throw new NotFoundException("Doctor not found");
             }
         } else {
             log.error("Appointment not found");
-            throw new AppointmentNotFoundException("Appointment not found");
+            throw new NotFoundException("Appointment not found");
         }
     }
 }

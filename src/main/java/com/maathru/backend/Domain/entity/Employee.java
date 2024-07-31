@@ -1,5 +1,6 @@
 package com.maathru.backend.Domain.entity;
 
+import com.maathru.backend.enumeration.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,14 +10,13 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "employee")
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "employees")
 @Getter
 @Setter
-public class Employee {
+public class Employee extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, unique = true, nullable = false)
     private Long employeeId;
 
     @Column(unique = true)
@@ -24,7 +24,9 @@ public class Employee {
 
     @Column(unique = true)
     private String nic;
-    private String gender;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     private LocalDate dob;
     private String addressLine1;
     private String street;
@@ -32,11 +34,33 @@ public class Employee {
     private String designation;
     private String qualifications;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH, optional = false, orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @OneToOne
+    @JoinColumn(name = "user_user_id", updatable = false, nullable = false, unique = true)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "moh_moh_id")
+    private MOH moh;
+
+    @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
+
+    public Employee(Long employeeId, String phoneNumber, String nic, Gender gender, LocalDate dob, String addressLine1, String street, String city, String designation, String qualifications, User user, MOH moh) {
+        this.employeeId = employeeId;
+        this.phoneNumber = phoneNumber;
+        this.nic = nic;
+        this.gender = gender;
+        this.dob = dob;
+        this.addressLine1 = addressLine1;
+        this.street = street;
+        this.city = city;
+        this.designation = designation;
+        this.qualifications = qualifications;
+        this.user = user;
+        this.moh = moh;
+    }
+
+    public Employee() {
+    }
 }

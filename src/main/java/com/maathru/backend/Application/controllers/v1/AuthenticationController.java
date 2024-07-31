@@ -2,13 +2,14 @@ package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.SigninDto;
 import com.maathru.backend.Application.dto.request.SignupDto;
+import com.maathru.backend.Application.dto.request.TokenRequest;
 import com.maathru.backend.Application.dto.response.AuthenticationResponse;
 import com.maathru.backend.Domain.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Authentication Controller")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
@@ -35,7 +37,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthenticationResponse> refresh(HttpServletRequest request, HttpServletResponse response) {
-        return ResponseEntity.ok(authenticationService.refreshToken(request, response));
+    public ResponseEntity<AuthenticationResponse> refresh(HttpServletRequest request, @RequestBody @Valid TokenRequest tokenRequest) {
+        return ResponseEntity.ok(authenticationService.refreshToken(request, tokenRequest));
     }
 }

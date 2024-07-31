@@ -1,47 +1,52 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.DrugDto;
+import com.maathru.backend.Application.dto.response.DrugResponse;
 import com.maathru.backend.Domain.entity.Drug;
-import com.maathru.backend.Domain.exception.DrugNotFoundException;
+import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.External.repository.DrugRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class DrugService {
     private final DrugRepository drugRepository;
+    private final JwtService jwtService;
+    private final ModelMapper mapper;
 
-    public ResponseEntity<Drug> addDrug(DrugDto drugDto) {
-        Drug drug = new Drug();
-        drug.setComposition(drugDto.getComposition());
-        drug.setStrength(drugDto.getStrength());
-        drug.setBrandName(drugDto.getBrandName());
-        drug.setQuantity(drugDto.getQuantity());
-        drug.setBatchNumber(drugDto.getBatchNumber());
-        drug.setRecommendedDose(drugDto.getRecommendedDose());
-        drug.setExpiryDate(drugDto.getExpiryDate());
-        drug.setManufacturedDate(drugDto.getManufacturedDate());
-        drug.setReceivedDate(drugDto.getReceivedDate());
+    public ResponseEntity<String> addDrug(DrugDto drugDto) {
+        User currentUser = jwtService.getCurrentUser();
+        if (currentUser.getUserId() == 0) {
+            throw new NotFoundException("Author not found");
+        }
+
+        Drug drug = mapper.map(drugDto, Drug.class);
+        drug.setCreatedBy(currentUser);
+        drug.setUpdatedBy(currentUser);
 
         drug = drugRepository.save(drug);
-        return ResponseEntity.status(201).body(drug);
+        log.info("Drug:{} added successfully by {}", drug.getDrugId(), currentUser.getEmail());
+        return ResponseEntity.status(201).body("Drug added successfully");
     }
 
-    public ResponseEntity<Iterable<Drug>> getAllDrugs() {
+    public ResponseEntity<List<DrugResponse>> getAllDrugs() {
         List<Drug> drugs = drugRepository.findAll();
 
         if (drugs.isEmpty()) {
-            log.error("Drugs not found");
-            throw new DrugNotFoundException("Drugs not found");
+            throw new NotFoundException("Drugs not found");
         }
-        return ResponseEntity.ok(drugs);
+
+        return ResponseEntity.ok(drugs.stream().map(drug -> mapper.map(drug, DrugResponse.class)).collect(Collectors.toList()));
     }
 
     public ResponseEntity<Drug> getDrug(long id) {
@@ -51,7 +56,7 @@ public class DrugService {
             return ResponseEntity.ok(optionalDrug.get());
         } else {
             log.error("Drug not found");
-            throw new DrugNotFoundException("Drug not found");
+            throw new NotFoundException("Drug not found");
         }
     }
 
@@ -68,13 +73,12 @@ public class DrugService {
             drug.setRecommendedDose(drugDto.getRecommendedDose());
             drug.setExpiryDate(drugDto.getExpiryDate());
             drug.setManufacturedDate(drugDto.getManufacturedDate());
-            drug.setReceivedDate(drugDto.getReceivedDate());
 
             drug = drugRepository.save(drug);
             return ResponseEntity.status(201).body(drug);
         } else {
             log.error("Drug not found");
-            throw new DrugNotFoundException("Drug not found");
+            throw new NotFoundException("Drug not found");
         }
     }
 
@@ -86,7 +90,7 @@ public class DrugService {
             return ResponseEntity.ok(optionalDrug.get());
         } else {
             log.error("Drug not found");
-            throw new DrugNotFoundException("Drug not found");
+            throw new NotFoundException("Drug not found");
         }
     }
 }

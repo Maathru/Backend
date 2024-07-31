@@ -1,10 +1,10 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.BlogDto;
+import com.maathru.backend.Application.dto.response.ViewBlogDto;
 import com.maathru.backend.Domain.entity.Blog;
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.Domain.exception.BlogNotFoundException;
-import com.maathru.backend.Domain.exception.UserNotFoundException;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.External.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,24 +21,30 @@ import java.util.Optional;
 public class BlogService {
     private final BlogRepository blogRepository;
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
-    public ResponseEntity<Blog> addBlog(BlogDto blogDto) {
-        Optional<User> optionalUser = userRepository.findById(blogDto.getAuthor());
+    public ResponseEntity<String> addBlog(BlogDto blogDto) {
+        User user = jwtService.getCurrentUser();
 
-        if (optionalUser.isPresent()) {
+        try {
             Blog blog = new Blog();
             blog.setTitle(blogDto.getTitle());
-            blog.setContent(blogDto.getContent());
             blog.setCategory(blogDto.getCategory());
-            blog.setImage(blogDto.getImage());
-            blog.setLocation(blogDto.getLocation());
-            blog.setAuthor(optionalUser.get());
+            blog.setContent(blogDto.getContent());
+            blog.setAdditionalNotes(blogDto.getAdditionalNotes());
+            blog.setKeywords(blogDto.getKeywords());
+            blog.setAdditionalNotes("Pending");
+
+            blog.setCreatedBy(user);
+            blog.setUpdatedBy(user);
+
             blog = blogRepository.save(blog);
 
-            return ResponseEntity.status(201).body(blog);
-        } else {
-            log.error("Author not found");
-            throw new UserNotFoundException("Author not found");
+            log.info("Blog added successfully By: {}", user.getEmail());
+            return ResponseEntity.status(201).body("Blog added successfully");
+        } catch (Exception e) {
+            log.error("Error adding blog: {}", e.getMessage());
+            return ResponseEntity.status(500).body("Error adding blog");
         }
     }
 
@@ -49,46 +55,57 @@ public class BlogService {
             return ResponseEntity.ok(optionalBlog.get());
         } else {
             log.error("Blog not found");
-            throw new BlogNotFoundException("Blog not found");
+            throw new NotFoundException("Blog not found");
         }
     }
 
-    public ResponseEntity<Iterable<Blog>> getAllBlogs() {
-        List<Blog> blogs = blogRepository.findAll();
+    public ResponseEntity<Iterable<ViewBlogDto>> getAllBlogs() {
+        List<ViewBlogDto> blogs = blogRepository.findAllBlogsForDemo();
 
-        if (blogs.isEmpty()) {
-            log.error("Blogs not found");
-            throw new BlogNotFoundException("Blogs not found");
-        }
+//        if (blogs.isEmpty()) {
+//            log.error("Blogs not found");
+//            throw new NotFoundException("Blogs not found");
+//        }
+//        log.info("Getting all blogs");
+//
+//        List<ViewBlogDto> viewBlogDtos = blogs.stream().map(blog -> {
+//            ViewBlogDto viewBlogDto = new ViewBlogDto();
+//            viewBlogDto.setTitle(blog.getTitle());
+//            viewBlogDto.setCategory(blog.getCategory());
+//            viewBlogDto.setContent(blog.getContent());
+//            viewBlogDto.setKeywords(blog.getKeywords());
+//            log.info(blog.getContent());
+//            return viewBlogDto;
+//        }).toList();
 
         return ResponseEntity.ok(blogs);
     }
 
-    public ResponseEntity<Blog> updateBlog(long id, BlogDto blogDto) {
-        Optional<Blog> optionalBlog = blogRepository.findById(id);
-        Optional<User> optionalUser = userRepository.findById(blogDto.getAuthor());
-
-        if (optionalBlog.isPresent()) {
-            if (optionalUser.isPresent()) {
-                Blog blog = optionalBlog.get();
-                blog.setTitle(blogDto.getTitle());
-                blog.setContent(blogDto.getContent());
-                blog.setCategory(blogDto.getCategory());
-                blog.setImage(blogDto.getImage());
-                blog.setLocation(blogDto.getLocation());
-                blog.setAuthor(optionalUser.get());
-                blog = blogRepository.save(blog);
-
-                return ResponseEntity.status(201).body(blog);
-            } else {
-                log.error("Author not found");
-                throw new UserNotFoundException("Author not found");
-            }
-        } else {
-            log.error("Blogs not found");
-            throw new BlogNotFoundException("Blogs not found");
-        }
-    }
+//    public ResponseEntity<Blog> updateBlog(long id, BlogDto blogDto) {
+//        Optional<Blog> optionalBlog = blogRepository.findById(id);
+//        Optional<User> optionalUser = userRepository.findById(blogDto.getAuthor());
+//
+//        if (optionalBlog.isPresent()) {
+//            if (optionalUser.isPresent()) {
+//                Blog blog = optionalBlog.get();
+//                blog.setTitle(blogDto.getTitle());
+//                blog.setContent(blogDto.getContent());
+//                blog.setCategory(blogDto.getCategory());
+//                blog.setImage(blogDto.getImage());
+//                blog.setLocation(blogDto.getLocation());
+//                blog.setCreatedBy(optionalUser.get());
+//                blog = blogRepository.save(blog);
+//
+//                return ResponseEntity.status(201).body(blog);
+//            } else {
+//                log.error("Author not found");
+//                throw new NotFoundException("Author not found");
+//            }
+//        } else {
+//            log.error("Blogs not found");
+//            throw new NotFoundException("Blogs not found");
+//        }
+//    }
 
     public ResponseEntity<Blog> deleteBlog(long id) {
         Optional<Blog> optionalBlog = blogRepository.findById(id);
@@ -98,7 +115,7 @@ public class BlogService {
             return ResponseEntity.ok().body(optionalBlog.get());
         } else {
             log.error("Blog not found");
-            throw new BlogNotFoundException("Blog not found");
+            throw new NotFoundException("Blog not found");
         }
     }
 }

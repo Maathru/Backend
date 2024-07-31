@@ -1,33 +1,25 @@
 package com.maathru.backend.Domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "answer")
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "answers")
 @Getter
 @Setter
-public class Answer {
+public class Answer extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, unique = true, nullable = false)
     private Long answerId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id")
+    @ManyToOne
+    @JoinColumn(name = "question_question_id")
     private Question question;
+
+    @Column(length = 2048)
+    @NotNull
     private String answer;
-
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)
-    private LocalDateTime answeredTime;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
-    private User author;
 }

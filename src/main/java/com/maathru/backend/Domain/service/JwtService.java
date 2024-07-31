@@ -1,13 +1,17 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.exception.NotFoundException;
+import com.maathru.backend.Domain.exception.UnauthorizedException;
 import com.maathru.backend.External.repository.TokenRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import com.maathru.backend.External.repository.UserRepository;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +21,7 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtService {
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
@@ -26,6 +31,7 @@ public class JwtService {
     private long refreshTokenExpire;
 
     private final TokenRepository tokenRepository;
+    private final UserRepository userRepository;
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -33,18 +39,22 @@ public class JwtService {
 
     public boolean isAccessTokenValid(String accessToken, UserDetails user) {
         String email = extractEmail(accessToken);
-        boolean isValidAccessToken = tokenRepository.findByAccessToken(accessToken).map(t -> !t.isLoggedOut()).orElse(false);
+        boolean isValidAccessToken = tokenRepository.findByAccessTokenAndLoggedOutFalse(accessToken).map(t -> !t.isLoggedOut()).orElse(false);
         return email.equals(user.getUsername()) && isTokenExpired(accessToken) && isValidAccessToken;
     }
 
     public boolean isValidRefreshToken(String refreshToken, User user) {
         String email = extractEmail(refreshToken);
-        boolean isValidRefreshToken = tokenRepository.findByRefreshToken(refreshToken).map(t -> !t.isLoggedOut()).orElse(false);
+        boolean isValidRefreshToken = tokenRepository.findByRefreshTokenAndLoggedOutFalse(refreshToken).map(t -> !t.isLoggedOut()).orElse(false);
         return email.equals(user.getUsername()) && isTokenExpired(refreshToken) && isValidRefreshToken;
     }
 
-    private boolean isTokenExpired(String token) {
-        return !extractExpiration(token).before(new Date());
+    public boolean isTokenExpired(String token) {
+        try {
+            return !extractExpiration(token).before(new Date()); // Token is not expired
+        } catch (ExpiredJwtException e) {
+            return true; // Token is expired
+        }
     }
 
     private Date extractExpiration(String token) {
@@ -57,12 +67,27 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parser()
-                .verifyWith(getSignKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        try {
+            return Jwts
+                    .parser()
+                    .verifyWith(getSignKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (ExpiredJwtException e) {
+            log.error("Token has expired: {}", e.getMessage());
+            return e.getClaims();
+        } catch (UnsupportedJwtException e) {
+            log.error("Unsupported JWT: {}", e.getMessage());
+        } catch (MalformedJwtException e) {
+            log.error("Malformed JWT: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.error("Illegal argument: {}", e.getMessage());
+        } catch (JwtException e) {
+            log.error("JWT error: {}", e.getMessage());
+            throw new UnauthorizedException("Invalid Jwt Token");
+        }
+        return null;
     }
 
     public String generateAccessToken(User user) {
@@ -86,5 +111,13 @@ public class JwtService {
     private SecretKey getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public User getCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (email != null) {
+            return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
+        }
+        throw new UnauthorizedException("Email not found");
     }
 }
