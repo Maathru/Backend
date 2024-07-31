@@ -1,6 +1,7 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.ClinicDto;
+import com.maathru.backend.Application.dto.response.ClinicListResponse;
 import com.maathru.backend.Domain.entity.*;
 import com.maathru.backend.Domain.exception.*;
 import com.maathru.backend.External.repository.ClinicRepository;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -49,7 +51,7 @@ public class ClinicService {
 
             clinic.setName(clinicDto.getName());
             clinic.setRegion(region);
-            clinic.setDate(clinicDto.getDate());
+            clinic.setDate(clinicDto.getDate().plusDays(1));
             clinic.setStartTime(LocalTime.from(clinicDto.getStartTime()));
             clinic.setEndTime(LocalTime.from(clinicDto.getEndTime()));
             clinic.setOther(clinicDto.getOther());
@@ -101,5 +103,19 @@ public class ClinicService {
             log.error("Clinic not found");
             throw new NotFoundException("Clinic not found");
         }
+    }
+
+    public ResponseEntity<List<ClinicListResponse>> getClinicsByDate(String date) {
+        User currentUser = jwtService.getCurrentUser();
+
+        LocalDate localDate = LocalDate.parse(date);
+        List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByDate(localDate, currentUser.getEmail());
+
+        if (clinicListResponses.isEmpty()) {
+            log.error("Clinics not found for date {}", date);
+            throw new NotFoundException("Clinics not found for date " + date);
+        }
+
+        return ResponseEntity.ok(clinicListResponses);
     }
 }
