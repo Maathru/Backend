@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ import java.util.List;
 public class ViewBlogDto {
     private String title;
     private String content;
-    private String author;
+    private long author;
     private String category;
     private String image;
     private String location;
@@ -22,15 +23,15 @@ public class ViewBlogDto {
     private String statusReason;
     private List<String> keywords;
 
-    public ViewBlogDto(String title, String content, String author, String category, String image, String location, String approvalStatus, String statusReason, List<String> keywords) {
-        this.category = category;
-        this.author = author;
-        this.content = content;
+    public ViewBlogDto(String title, String content, long author, String category, String image, String location, String approvalStatus, String statusReason, String keywords) {
         this.title = title;
+        this.content = content;
+        this.author = author;
+        this.category = category;
         this.image = image;
         this.location = location;
         this.approvalStatus = approvalStatus;
         this.statusReason = statusReason;
-        this.keywords = keywords;
+        this.keywords = keywords == null ? Collections.emptyList() : Arrays.asList(keywords.split(","));
     }
 }
