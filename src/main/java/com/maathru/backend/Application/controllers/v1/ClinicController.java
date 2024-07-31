@@ -1,14 +1,19 @@
 package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.ClinicDto;
+import com.maathru.backend.Application.dto.response.DoctorsResponse;
+import com.maathru.backend.Application.dto.response.RegionResponse;
 import com.maathru.backend.Domain.entity.Clinic;
 import com.maathru.backend.Domain.service.ClinicService;
+import com.maathru.backend.Domain.service.RegionService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/clinic")
@@ -16,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class ClinicController {
     private final ClinicService clinicService;
+    private final RegionService regionService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public ResponseEntity<String> createClinic(@RequestBody @Valid ClinicDto clinicDto) {
         return clinicService.createClinic(clinicDto);
@@ -35,5 +42,17 @@ public class ClinicController {
     @DeleteMapping("/{clinicId}")
     public ResponseEntity<Clinic> deleteClinic(@PathVariable Long clinicId) {
         return clinicService.deleteClinic(clinicId);
+    }
+
+    //    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/regions")
+    public ResponseEntity<List<RegionResponse>> getRegions() {
+        return regionService.getRegions();
+    }
+
+    //    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/doctors")
+    public ResponseEntity<List<DoctorsResponse>> getDoctors() {
+        return regionService.getDoctors();
     }
 }

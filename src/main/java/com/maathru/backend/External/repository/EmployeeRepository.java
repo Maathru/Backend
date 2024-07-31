@@ -2,6 +2,8 @@ package com.maathru.backend.External.repository;
 
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Domain.entity.Employee;
+import com.maathru.backend.Domain.entity.MOH;
+import com.maathru.backend.Domain.entity.Region;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.enumeration.Area;
 import com.maathru.backend.enumeration.District;
@@ -27,12 +29,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT m.area, m.district FROM Employee e JOIN e.region r JOIN r.moh m WHERE e.user = :user")
     Object[] getAreaAndDistrict(@Param("user") User user);
 
-    @Query("SELECT new com.maathru.backend.Application.dto.response.DoctorsResponse(e.employeeId, e.user.firstName || ' ' || e.user.lastName) " +
-            "FROM Employee e " +
-            "WHERE e.moh.district = :district " +
-            "AND e.moh.area = :area " +
-            "AND e.user.role = :role")
-    List<DoctorsResponse> findEmployeesByDistrictAndRegion(@Param("district") District district, @Param("area") Area area, @Param("role") Role role);
-
     Optional<Employee> findByEmployeeIdAndUserRole(Long employeeId, Role role);
+
+    Optional<Employee> findByUser(User user);
+
+    @Query("SELECT new com.maathru.backend.Application.dto.response.DoctorsResponse(e2.employeeId, e2.user.firstName || ' ' || e2.user.lastName) " +
+            "FROM Employee e " +
+            "JOIN e.moh m " +
+            "JOIN Employee e2 ON e2.moh = m " +
+            "JOIN e2.user u " +
+            "WHERE e.user = :user AND u.role = :role")
+    List<DoctorsResponse> findEmployeesByUserAndRole(@Param("user") User user, @Param("role") Role role);
 }

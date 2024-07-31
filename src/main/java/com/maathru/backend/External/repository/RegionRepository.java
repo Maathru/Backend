@@ -1,5 +1,6 @@
 package com.maathru.backend.External.repository;
 
+import com.maathru.backend.Application.dto.response.RegionResponse;
 import com.maathru.backend.Domain.entity.Region;
 import com.maathru.backend.enumeration.Area;
 import com.maathru.backend.enumeration.District;
@@ -18,4 +19,13 @@ public interface RegionRepository extends JpaRepository<Region, Long> {
 
     @Query("SELECT r AS regionName FROM Region r WHERE r.moh.province = :province AND r.moh.district = :district AND r.moh.area = :area")
     List<Region> findRegionsByMOHAttributes(@Param("province") Province province, @Param("district") District district, @Param("area") Area area);
+
+    @Query("SELECT new com.maathru.backend.Application.dto.response.RegionResponse(r.regionId,r.regionName) " +
+            "FROM Region r " +
+            "JOIN r.moh m " +
+            "JOIN Employee e ON e.moh = m " +
+            "JOIN e.user u " +
+            "WHERE u.email = :email")
+    List<RegionResponse> findRegionsByUser(@Param("email") String email);
+
 }
