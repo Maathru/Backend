@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ViewBlogDto {
     private String title;
+    private long blogId;
     private String content;
     private long author;
     private String category;
@@ -23,8 +24,9 @@ public class ViewBlogDto {
     private String statusReason;
     private List<String> keywords;
 
-    public ViewBlogDto(String title, String content, long author, String category, String image, String location, String approvalStatus, String statusReason, String keywords) {
+    public ViewBlogDto(String title,long blogId ,String content, long author, String category, String image, String location, String approvalStatus, String statusReason, String keywords) {
         this.title = title;
+        this.blogId = blogId;
         this.content = content;
         this.author = author;
         this.category = category;

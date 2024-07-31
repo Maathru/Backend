@@ -11,6 +11,7 @@ import java.util.List;
 public interface BlogRepository extends JpaRepository<Blog, Long> {
 
     @Query("SELECT new com.maathru.backend.Application.dto.response.ViewBlogDto( b.title, " +
+            "b.blogId, " +
             "SUBSTRING(b.content, 1, 350), " +
             "b.createdBy.userId, " +
             "b.category, " +
