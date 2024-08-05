@@ -2,6 +2,7 @@ package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.ClinicDto;
 import com.maathru.backend.Application.dto.response.ClinicListResponse;
+import com.maathru.backend.Application.dto.response.ClinicResponse;
 import com.maathru.backend.Domain.entity.*;
 import com.maathru.backend.Domain.exception.*;
 import com.maathru.backend.External.repository.ClinicRepository;
@@ -11,9 +12,11 @@ import com.maathru.backend.External.utils.TimeUtils;
 import com.maathru.backend.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -31,7 +34,9 @@ public class ClinicService {
     private final RegionRepository regionRepository;
     private final EmployeeRepository employeeRepository;
     private final JwtService jwtService;
+    private final ModelMapper mapper;
 
+    @Transactional
     public ResponseEntity<String> createClinic(ClinicDto clinicDto) {
         try {
             User currentUser = jwtService.getCurrentUser();
@@ -71,15 +76,15 @@ public class ClinicService {
         }
     }
 
-    public ResponseEntity<Clinic> getClinic(Long clinicId) {
-        Optional<Clinic> optionalClinic = clinicRepository.findById(clinicId);
+    public ResponseEntity<ClinicResponse> getClinic(Long clinicId) {
+        User currentUser = jwtService.getCurrentUser();
 
-        if (optionalClinic.isPresent()) {
-            return ResponseEntity.ok(optionalClinic.get());
-        } else {
-            log.error("Clinic not found");
-            throw new NotFoundException("Clinic not found");
-        }
+        Clinic clinic = clinicRepository.findById(clinicId).orElseThrow(() -> new NotFoundException("Clinic not found"));
+
+//        ClinicResponse clinicResponse = clinicRepository.findClinicByIdAndEmployeeMoh(clinicId, currentUser.getEmail()).orElseThrow(() -> new NotFoundException("Clinic not found"));
+
+        ClinicResponse clinicResponse = mapper.map(clinic, ClinicResponse.class);
+        return ResponseEntity.ok(clinicResponse);
     }
 
     public ResponseEntity<Iterable<Clinic>> getAllClinics() {

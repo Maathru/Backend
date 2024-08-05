@@ -1,14 +1,18 @@
 package com.maathru.backend.External.repository;
 
 import com.maathru.backend.Application.dto.response.ClinicListResponse;
+import com.maathru.backend.Application.dto.response.ClinicResponse;
 import com.maathru.backend.Domain.entity.Clinic;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
+@Repository
 public interface ClinicRepository extends JpaRepository<Clinic, Long> {
     @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicListResponse(c.clinicId,c.name,c.region.regionName) " +
             "FROM User u " +
@@ -27,5 +31,15 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:currentDate AS DATE))")
     List<LocalDate> findAllClinicDatesForCurrentMonth(@Param("currentDate") LocalDate currentDate, @Param("email") String email);
 
+
+//    @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicResponse(c.clinicId, c.name, c.date, c.startTime, c.endTime, c.other,d.user.userId, d.user.firstName || ' ' || d.user.lastName) " +
+//            "FROM User u " +
+//            "JOIN Employee e on e.user=u " +
+//            "JOIN e.moh m " +
+//            "JOIN Clinic c on c.moh=m " +
+//            "JOIN c.doctors d " +
+//            "WHERE c.clinicId = :clinicId " +
+//            "AND u.email= :email")
+//    Optional<ClinicResponse> findClinicByIdAndEmployeeMoh(@Param("clinicId") long clinicId, @Param("email") String email);
 
 }

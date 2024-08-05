@@ -2,6 +2,7 @@ package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.ClinicDto;
 import com.maathru.backend.Application.dto.response.ClinicListResponse;
+import com.maathru.backend.Application.dto.response.ClinicResponse;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Application.dto.response.RegionResponse;
 import com.maathru.backend.Domain.entity.Clinic;
@@ -34,7 +35,7 @@ public class ClinicController {
     }
 
     @GetMapping("/{clinicId}")
-    public ResponseEntity<Clinic> getClinic(@PathVariable Long clinicId) {
+    public ResponseEntity<ClinicResponse> getClinic(@PathVariable Long clinicId) {
         return clinicService.getClinic(clinicId);
     }
 
