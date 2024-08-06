@@ -2,6 +2,7 @@ package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.ClinicDto;
 import com.maathru.backend.Application.dto.response.ClinicListResponse;
+import com.maathru.backend.Application.dto.response.ClinicResponse;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Application.dto.response.RegionResponse;
 import com.maathru.backend.Domain.entity.Clinic;
@@ -29,12 +30,12 @@ public class ClinicController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
-    public ResponseEntity<String> createClinic(@RequestBody @Valid ClinicDto clinicDto) {
-        return clinicService.createClinic(clinicDto);
+    public ResponseEntity<String> createOrUpdateClinic(@RequestBody @Valid ClinicDto clinicDto) {
+        return clinicService.createOrUpdateClinic(clinicDto);
     }
 
     @GetMapping("/{clinicId}")
-    public ResponseEntity<Clinic> getClinic(@PathVariable Long clinicId) {
+    public ResponseEntity<ClinicResponse> getClinic(@PathVariable Long clinicId) {
         return clinicService.getClinic(clinicId);
     }
 

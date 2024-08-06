@@ -18,6 +18,7 @@ import java.util.List;
 @Setter
 @ValidClinicTime
 public class ClinicDto {
+    private long clinicId;
     @NotEmpty(message = "Clinic name is required")
     private String name;
 
