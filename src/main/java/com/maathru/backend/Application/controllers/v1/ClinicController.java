@@ -30,8 +30,8 @@ public class ClinicController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
-    public ResponseEntity<String> createClinic(@RequestBody @Valid ClinicDto clinicDto) {
-        return clinicService.createClinic(clinicDto);
+    public ResponseEntity<String> createOrUpdateClinic(@RequestBody @Valid ClinicDto clinicDto) {
+        return clinicService.createOrUpdateClinic(clinicDto);
     }
 
     @GetMapping("/{clinicId}")

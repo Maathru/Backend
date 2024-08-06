@@ -31,15 +31,13 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:currentDate AS DATE))")
     List<LocalDate> findAllClinicDatesForCurrentMonth(@Param("currentDate") LocalDate currentDate, @Param("email") String email);
 
-
-//    @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicResponse(c.clinicId, c.name, c.date, c.startTime, c.endTime, c.other,d.user.userId, d.user.firstName || ' ' || d.user.lastName) " +
-//            "FROM User u " +
-//            "JOIN Employee e on e.user=u " +
-//            "JOIN e.moh m " +
-//            "JOIN Clinic c on c.moh=m " +
-//            "JOIN c.doctors d " +
-//            "WHERE c.clinicId = :clinicId " +
-//            "AND u.email= :email")
-//    Optional<ClinicResponse> findClinicByIdAndEmployeeMoh(@Param("clinicId") long clinicId, @Param("email") String email);
-
+    @Query("SELECT c " +
+            "FROM User u " +
+            "JOIN Employee e on e.user = u " +
+            "JOIN e.moh m " +
+            "JOIN Clinic c on c.moh = m " +
+            "LEFT JOIN FETCH c.doctors d " +
+            "WHERE c.clinicId = :clinicId " +
+            "AND u.email = :email")
+    Optional<Clinic> findClinicWithDoctorsById(@Param("clinicId") Long clinicId,@Param("email") String email);
 }
