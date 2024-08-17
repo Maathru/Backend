@@ -8,8 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@RequiredArgsConstructor
+
 public class RegionResponse {
     private Long regionId;
     private String regionName;
+    private Long population;
+    private String midwife;
+
+    public RegionResponse(Long regionId, String regionName) {
+        this.regionId = regionId;
+        this.regionName = regionName;
+    }
 }

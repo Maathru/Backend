@@ -5,6 +5,7 @@ import com.maathru.backend.Domain.entity.Region;
 import com.maathru.backend.enumeration.Area;
 import com.maathru.backend.enumeration.District;
 import com.maathru.backend.enumeration.Province;
+import com.maathru.backend.enumeration.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,4 +29,13 @@ public interface RegionRepository extends JpaRepository<Region, Long> {
             "WHERE u.email = :email")
     List<RegionResponse> findRegionsByUser(@Param("email") String email);
 
+    @Query("SELECT new com.maathru.backend.Application.dto.response.RegionResponse(r.regionId, r.regionName, r.population, " +
+            "COALESCE(e2.user.firstName || ' ' || e2.user.lastName, NULL)) " +
+            "FROM Region r " +
+            "LEFT JOIN Employee e2 ON e2.region = r AND e2.user.role = :midwife " +
+            "JOIN r.moh m " +
+            "JOIN Employee e ON e.moh = m " +
+            "JOIN e.user u " +
+            "WHERE u.email = :email")
+    List<RegionResponse> findRegionsByAdmin(@Param("email") String email, @Param("midwife") Role midwife);
 }

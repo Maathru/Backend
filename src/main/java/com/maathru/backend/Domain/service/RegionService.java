@@ -85,4 +85,16 @@ public class RegionService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    public ResponseEntity<List<RegionResponse>> getAllRegions() {
+        try{
+            User user = jwtService.getCurrentUser();
+            List<RegionResponse> regions = regionRepository.findRegionsByAdmin(user.getEmail(), Role.MIDWIFE);
+            return ResponseEntity.status(201).body(regions);
+        }
+        catch (Exception e){
+            log.error("Error retrieving current user regions {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }
