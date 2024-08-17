@@ -1,19 +1,23 @@
 package com.maathru.backend.Domain.service;
 
+import com.maathru.backend.Application.dto.request.RegionDto;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Application.dto.response.RegionResponse;
 import com.maathru.backend.Domain.entity.Employee;
+import com.maathru.backend.Domain.entity.MOH;
 import com.maathru.backend.Domain.entity.Region;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.exception.InvalidException;
 import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.Domain.validation.impl.LocationValidator;
 import com.maathru.backend.External.repository.EmployeeRepository;
+import com.maathru.backend.External.repository.MOHRepository;
 import com.maathru.backend.External.repository.RegionRepository;
 import com.maathru.backend.enumeration.Area;
 import com.maathru.backend.enumeration.District;
 import com.maathru.backend.enumeration.Province;
 import com.maathru.backend.enumeration.Role;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -32,6 +36,7 @@ public class RegionService {
     private final RegionRepository regionRepository;
     private final EmployeeRepository employeeRepository;
     private final ModelMapper mapper;
+    private final MOHRepository mohRepository;
 
     public ResponseEntity<List<RegionResponse>> getRegionNamesByMOHAttributes(String province, String district, String area) {
         if (!LocationValidator.isValidRegionByProvinceAndDistrict(province, district, area)) {
@@ -87,14 +92,38 @@ public class RegionService {
     }
 
     public ResponseEntity<List<RegionResponse>> getAllRegions() {
-        try{
+        try {
             User user = jwtService.getCurrentUser();
             List<RegionResponse> regions = regionRepository.findRegionsByAdmin(user.getEmail(), Role.MIDWIFE);
             return ResponseEntity.status(201).body(regions);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error("Error retrieving current user regions {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @Transactional
+    public ResponseEntity<String> addRegion(RegionDto regionDto) {
+
+        User currentUser = jwtService.getCurrentUser();
+        Employee currentEmployee = employeeRepository.findByUser(currentUser).orElseThrow(() -> new NotFoundException("Employee not found"));
+        MOH moh = mohRepository.findById(currentEmployee.getMoh().getMohId()).orElseThrow(() -> new NotFoundException("MOH not found"));
+
+        Region region = mapper.map(regionDto, Region.class);
+        region.setCreatedBy(currentUser);
+        region.setUpdatedBy(currentUser);
+        region.setMoh(moh);
+        region = regionRepository.save(region);
+        log.info("Region: {} added successfully by {}", region.getRegionId(), currentUser.getEmail());
+
+        if(regionDto.getMidwife() != null || regionDto.getMidwife() != 0) {
+            Employee midwife = employeeRepository.findByEmployeeIdAndUserRole(regionDto.getMidwife(), Role.MIDWIFE).orElseThrow(() -> new NotFoundException("Midwife not found"));
+            midwife.setRegion(region);
+            midwife.setUpdatedBy(currentUser);
+            employeeRepository.save(midwife);
+            log.info("Midwife: {} assigned successfully by {}", midwife.getUser().getEmail(), currentUser.getEmail());
+        }
+
+        return ResponseEntity.status(201).body("Region added successfully");
     }
 }

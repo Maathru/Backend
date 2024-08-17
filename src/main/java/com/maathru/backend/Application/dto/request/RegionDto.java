@@ -9,5 +9,5 @@ public class RegionDto {
     private String regionNumber;
     private String regionName;
     private Long population;
-    private long moh;
+    private Long midwife;
 }
