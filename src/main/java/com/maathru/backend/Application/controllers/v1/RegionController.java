@@ -4,6 +4,7 @@ import com.maathru.backend.Application.dto.request.DrugDto;
 import com.maathru.backend.Application.dto.request.RegionDto;
 import com.maathru.backend.Application.dto.response.DrugResponse;
 import com.maathru.backend.Application.dto.response.RegionResponse;
+import com.maathru.backend.Domain.entity.Drug;
 import com.maathru.backend.Domain.entity.Region;
 import com.maathru.backend.Domain.service.RegionService;
 import jakarta.validation.Valid;
@@ -28,4 +29,10 @@ public class RegionController {
     public ResponseEntity<String> addRegion(@RequestBody @Valid RegionDto regionDto) {
         return regionService.addRegion(regionDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteRegion(@PathVariable long id) {
+        return regionService.deleteRegion(id);
+    }
+
 }

@@ -1,13 +1,11 @@
 package com.maathru.backend.Application.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
 
 public class RegionResponse {
     private Long regionId;

@@ -3,12 +3,11 @@ package com.maathru.backend.Domain.service;
 import com.maathru.backend.Application.dto.request.RegionDto;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Application.dto.response.RegionResponse;
-import com.maathru.backend.Domain.entity.Employee;
-import com.maathru.backend.Domain.entity.MOH;
-import com.maathru.backend.Domain.entity.Region;
-import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.entity.*;
+import com.maathru.backend.Domain.exception.ApiException;
 import com.maathru.backend.Domain.exception.InvalidException;
 import com.maathru.backend.Domain.exception.NotFoundException;
+import com.maathru.backend.Domain.exception.SQLException;
 import com.maathru.backend.Domain.validation.impl.LocationValidator;
 import com.maathru.backend.External.repository.EmployeeRepository;
 import com.maathru.backend.External.repository.MOHRepository;
@@ -67,7 +66,7 @@ public class RegionService {
         return ResponseEntity.status(201).body(regionResponses);
     }
 
-    public ResponseEntity<List<RegionResponse>> getRegions() {
+    public ResponseEntity<List<RegionResponse>> getRegionsForClinics() {
         try {
             User user = jwtService.getCurrentUser();
             List<RegionResponse> regions = regionRepository.findRegionsByUser(user.getEmail());
@@ -116,14 +115,29 @@ public class RegionService {
         region = regionRepository.save(region);
         log.info("Region: {} added successfully by {}", region.getRegionId(), currentUser.getEmail());
 
-        if(regionDto.getMidwife() != null || regionDto.getMidwife() != 0) {
+        if (regionDto.getMidwife() != null || regionDto.getMidwife() != 0) {
             Employee midwife = employeeRepository.findByEmployeeIdAndUserRole(regionDto.getMidwife(), Role.MIDWIFE).orElseThrow(() -> new NotFoundException("Midwife not found"));
             midwife.setRegion(region);
             midwife.setUpdatedBy(currentUser);
             employeeRepository.save(midwife);
             log.info("Midwife: {} assigned successfully by {}", midwife.getUser().getEmail(), currentUser.getEmail());
         }
-
         return ResponseEntity.status(201).body("Region added successfully");
+    }
+
+    public ResponseEntity<String> deleteRegion(long id) {
+        try {
+            Region region = regionRepository.findById(id).orElseThrow(() -> new NotFoundException("Region:" + id + " not found"));
+            regionRepository.delete(region);
+            log.info("Region:{} deleted by {}", id, jwtService.getCurrentUser().getEmail());
+            return ResponseEntity.ok("Region:" + id + " deleted successfully");
+
+        } catch (NotFoundException e) {
+            log.error("An error occurred: {}", e.getMessage());
+            throw new NotFoundException(e.getMessage());
+        } catch (Exception e) {
+            log.error("An error occurred: {}", e.getMessage());
+            throw new ApiException("Cannot delete region until changing users assigned to this region");
+        }
     }
 }

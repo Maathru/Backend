@@ -9,8 +9,6 @@ import com.maathru.backend.Domain.entity.Clinic;
 import com.maathru.backend.Domain.service.ClinicService;
 import com.maathru.backend.Domain.service.RegionService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,7 +50,7 @@ public class ClinicController {
     //    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/regions")
     public ResponseEntity<List<RegionResponse>> getRegions() {
-        return regionService.getRegions();
+        return regionService.getRegionsForClinics();
     }
 
     //    @PreAuthorize("hasRole('ADMIN')")
