@@ -41,6 +41,11 @@ spring:
           starttls:
             enable: true
             required: true
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 #Server
 server:
@@ -59,3 +64,12 @@ application:
       secret-key: ${JWT_SECRET_KEY}
       access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
       refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+
+#RabbitMq
+rabbitmq:
+  queue:
+    name: ${RABBITMQ_QUEUE_NAME}
+  exchange:
+    name: ${RABBITMQ_EXCHANGE_NAME}
+  routing:
+    key: ${RABBITMQ_ROUTING_KEY}

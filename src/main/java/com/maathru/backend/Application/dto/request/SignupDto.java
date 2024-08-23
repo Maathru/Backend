@@ -3,7 +3,6 @@ package com.maathru.backend.Application.dto.request;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.maathru.backend.Domain.validation.ValidPassword;
 import com.maathru.backend.Domain.validation.ValidRole;
-import com.maathru.backend.enumeration.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
