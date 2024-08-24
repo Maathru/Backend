@@ -6,16 +6,13 @@ import com.maathru.backend.Application.dto.response.MidwifeListResponse;
 import com.maathru.backend.Application.dto.response.MidwifeResponse;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.entity.User;
-import com.maathru.backend.Domain.exception.InvalidException;
 import com.maathru.backend.Domain.exception.NotFoundException;
-import com.maathru.backend.Domain.validation.impl.LocationValidator;
 import com.maathru.backend.External.repository.EmployeeRepository;
 import com.maathru.backend.External.repository.UserRepository;
-import com.maathru.backend.enumeration.Area;
-import com.maathru.backend.enumeration.District;
 import com.maathru.backend.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -77,5 +74,30 @@ public class EmployeeService {
         }
 
         return ResponseEntity.status(200).body(midwifeListResponses);
+    }
+
+    public ResponseEntity<List<DoctorsResponse>> getMidwifesInCurrentMohForRegions() {
+        User user = jwtService.getCurrentUser();
+
+        List<DoctorsResponse> midwifeListResponses = employeeRepository.findMidwifesByUserAndRoleForRegions(user, Role.MIDWIFE);
+
+        if (midwifeListResponses.isEmpty()) {
+            log.error("MIDWIFE list is empty in this region");
+            throw new NotFoundException("MIDWIFE list is empty in this region");
+        }
+
+        return ResponseEntity.status(200).body(midwifeListResponses);
+    }
+
+    public ResponseEntity<List<DoctorsResponse>> getDoctorsForClinics() {
+        try {
+            User user = jwtService.getCurrentUser();
+            List<DoctorsResponse> doctors = employeeRepository.findEmployeesByUserAndRole(user, Role.DOCTOR);
+
+            return ResponseEntity.status(201).body(doctors);
+        } catch (Exception e) {
+            log.error("Error retrieving current user moh doctors {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }

@@ -49,4 +49,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "JOIN e2.user u " +
             "WHERE e.user = :user AND u.role = :role")
     List<MidwifeListResponse> findMidwifesByUserAndRole(@Param("user") User user, @Param("role") Role role);
+
+    @Query("SELECT new com.maathru.backend.Application.dto.response.DoctorsResponse(e2.employeeId, e2.user.firstName || ' ' || e2.user.lastName) " +
+            "FROM Employee e " +
+            "JOIN e.moh m " +
+            "JOIN Employee e2 ON e2.moh = m " +
+            "JOIN e2.user u " +
+            "WHERE e.user = :user AND u.role = :role")
+    List<DoctorsResponse> findMidwifesByUserAndRoleForRegions(@Param("user") User user, @Param("role") Role role);
 }
