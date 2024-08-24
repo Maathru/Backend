@@ -78,18 +78,6 @@ public class RegionService {
         }
     }
 
-    public ResponseEntity<List<DoctorsResponse>> getDoctors() {
-        try {
-            User user = jwtService.getCurrentUser();
-            List<DoctorsResponse> doctors = employeeRepository.findEmployeesByUserAndRole(user, Role.DOCTOR);
-
-            return ResponseEntity.status(201).body(doctors);
-        } catch (Exception e) {
-            log.error("Error retrieving current user moh doctors {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
     public ResponseEntity<List<RegionResponse>> getAllRegions() {
         try {
             User user = jwtService.getCurrentUser();
@@ -101,28 +89,48 @@ public class RegionService {
         }
     }
 
+    public ResponseEntity<RegionDto> getRegion(long id) {
+        try {
+            User user = jwtService.getCurrentUser();
+            RegionDto region = regionRepository.findRegionAndMidwife(user.getEmail(), Role.MIDWIFE, id);
+            return ResponseEntity.status(201).body(region);
+        } catch (Exception e) {
+            log.error("Error retrieving region:{} {}", id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     @Transactional
-    public ResponseEntity<String> addRegion(RegionDto regionDto) {
+    public ResponseEntity<String> addOrUpdateRegion(RegionDto regionDto) {
 
         User currentUser = jwtService.getCurrentUser();
         Employee currentEmployee = employeeRepository.findByUser(currentUser).orElseThrow(() -> new NotFoundException("Employee not found"));
         MOH moh = mohRepository.findById(currentEmployee.getMoh().getMohId()).orElseThrow(() -> new NotFoundException("MOH not found"));
 
-        Region region = mapper.map(regionDto, Region.class);
-        region.setCreatedBy(currentUser);
-        region.setUpdatedBy(currentUser);
-        region.setMoh(moh);
-        region = regionRepository.save(region);
-        log.info("Region: {} added successfully by {}", region.getRegionId(), currentUser.getEmail());
+        Region region = regionRepository.findById(regionDto.getRegionId()).orElseGet(Region::new);
 
-        if (regionDto.getMidwife() != null || regionDto.getMidwife() != 0) {
+        region.setRegionName(regionDto.getRegionName());
+        region.setRegionNumber(regionDto.getRegionNumber());
+        region.setPopulation(regionDto.getPopulation());
+        region.setMoh(moh);
+
+        if (regionDto.getMidwife() > 0) {
             Employee midwife = employeeRepository.findByEmployeeIdAndUserRole(regionDto.getMidwife(), Role.MIDWIFE).orElseThrow(() -> new NotFoundException("Midwife not found"));
             midwife.setRegion(region);
             midwife.setUpdatedBy(currentUser);
             employeeRepository.save(midwife);
             log.info("Midwife: {} assigned successfully by {}", midwife.getUser().getEmail(), currentUser.getEmail());
         }
-        return ResponseEntity.status(201).body("Region added successfully");
+
+        if (region.getRegionId() > 0) {
+            region.setCreatedBy(currentUser);
+        }
+        region.setUpdatedBy(currentUser);
+
+        region = regionRepository.save(region);
+        log.info("Region: {} added/updated successfully by {}", region.getRegionId(), currentUser.getEmail());
+
+        return ResponseEntity.status(201).body("Region added/updated successfully");
     }
 
     public ResponseEntity<String> deleteRegion(long id) {

@@ -7,6 +7,7 @@ import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Application.dto.response.RegionResponse;
 import com.maathru.backend.Domain.entity.Clinic;
 import com.maathru.backend.Domain.service.ClinicService;
+import com.maathru.backend.Domain.service.EmployeeService;
 import com.maathru.backend.Domain.service.RegionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.List;
 public class ClinicController {
     private final ClinicService clinicService;
     private final RegionService regionService;
+    private final EmployeeService employeeService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
@@ -56,7 +58,7 @@ public class ClinicController {
     //    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/doctors")
     public ResponseEntity<List<DoctorsResponse>> getDoctors() {
-        return regionService.getDoctors();
+        return employeeService.getDoctorsForClinics();
     }
 
     @GetMapping("/by/{date}")

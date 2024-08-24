@@ -17,12 +17,12 @@ public class Region extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
-    private Long regionId;
+    private long regionId;
 
     @Column(unique = true)
     private String regionNumber;
     private String regionName;
-    private Long population;
+    private long population;
 
     @ManyToOne
     @JoinColumn(name = "moh_id")
