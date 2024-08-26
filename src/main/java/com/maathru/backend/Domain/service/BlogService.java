@@ -15,6 +15,8 @@ import com.maathru.backend.External.repository.BlogRepository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.maathru.backend.constant.Constant.PENDING_BLOG;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -34,6 +36,7 @@ public class BlogService {
             blog.setAdditionalNotes(blogDto.getAdditionalNotes());
             blog.setKeywords(blogDto.getKeywords());
             blog.setAdditionalNotes("Pending");
+            blog.setApprovalStatus(PENDING_BLOG);
 
             blog.setCreatedBy(user);
             blog.setUpdatedBy(user);

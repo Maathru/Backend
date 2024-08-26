@@ -40,4 +40,7 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "WHERE c.clinicId = :clinicId " +
             "AND u.email = :email")
     Optional<Clinic> findClinicWithDoctorsById(@Param("clinicId") Long clinicId,@Param("email") String email);
+
+    @Query(value = "SELECT COUNT(c) FROM Clinic c WHERE MONTH(c.date) = MONTH(CURRENT_DATE()) AND YEAR(c.date) = YEAR(CURRENT_DATE())")
+    long countClinicsInCurrentMonth();
 }

@@ -49,4 +49,12 @@ public interface RegionRepository extends JpaRepository<Region, Long> {
             "WHERE u.email = :email " +
             "AND r.regionId = :regionId")
     RegionDto findRegionAndMidwife(@Param("email") String email, @Param("midwife") Role midwife, @Param("regionId") long regionId);
+
+    @Query("SELECT COUNT(r) " +
+            "FROM Region r " +
+            "JOIN r.moh m " +
+            "JOIN Employee e ON e.moh = m " +
+            "JOIN e.user u " +
+            "WHERE u.email = :email ")
+    long countByEmployeeAndMOH(@Param("email") String email);
 }

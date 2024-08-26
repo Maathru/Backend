@@ -1,5 +1,6 @@
 package com.maathru.backend.Application.controllers.v1;
 
+import com.maathru.backend.Application.dto.response.AdminDashboard;
 import com.maathru.backend.Application.dto.response.MidwifeResponse;
 import com.maathru.backend.Application.dto.response.RegionResponse;
 import com.maathru.backend.Application.dto.response.UserProfileDto;
@@ -29,6 +30,12 @@ public class UserController {
     @GetMapping("/getAll")
     public ResponseEntity<List<UserProfileDto>> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/dashboard")
+    public ResponseEntity<AdminDashboard> getAdminDashboardData() {
+        return userService.getAdminDashboardData();
     }
 
     @PreAuthorize("hasRole('MIDWIFE')")

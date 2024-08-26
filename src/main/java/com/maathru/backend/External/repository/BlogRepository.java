@@ -22,4 +22,6 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
             "b.keywords ) " +
             "FROM Blog b")
     List<ViewBlogDto> findAllBlogsForDemo();
+
+    long countByApprovalStatus(String approvalStatus);
 }
