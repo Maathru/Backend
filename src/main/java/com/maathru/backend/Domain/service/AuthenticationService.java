@@ -110,7 +110,7 @@ public class AuthenticationService {
 
         User user = userRepository.findByEmail(refreshEmail).orElseThrow(() -> new NotFoundException("User not found"));
 
-        if (!jwtService.isTokenExpired(token)) {
+        if (jwtService.isTokenExpired(token)) {
             log.info("Access token is still valid for user: {}", refreshEmail);
             return new AuthenticationResponse(token, tokenRequest.getToken(), "Access Token is still valid");
         }
