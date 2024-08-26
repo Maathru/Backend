@@ -1,9 +1,13 @@
 package com.maathru.backend.Domain.service;
 
+import com.maathru.backend.Application.dto.response.AdminDashboard;
 import com.maathru.backend.Application.dto.response.UserProfileDto;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.Domain.exception.UnauthorizedException;
+import com.maathru.backend.External.repository.BlogRepository;
+import com.maathru.backend.External.repository.ClinicRepository;
+import com.maathru.backend.External.repository.RegionRepository;
 import com.maathru.backend.External.repository.UserRepository;
 import com.maathru.backend.enumeration.Role;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +22,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.maathru.backend.constant.Constant.PENDING_BLOG;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final BlogRepository blogRepository;
+    private final RegionRepository regionRepository;
+    private final ClinicRepository clinicRepository;
 
     public ResponseEntity<List<UserProfileDto>> getAllUsers() {
         try {
@@ -83,5 +93,25 @@ public class UserService implements UserDetailsService {
 
         long userId = userRepository.findUserIdByEmailAndRole(email, Role.USER).orElseThrow(() -> new NotFoundException("User not found"));
         return ResponseEntity.ok(userId);
+    }
+
+    // For Admin Dashboard
+    public ResponseEntity<AdminDashboard> getAdminDashboardData(){
+        User user = jwtService.getCurrentUser();
+
+        log.info("1");
+
+        AdminDashboard adminDashboard = new AdminDashboard();
+        log.info("2");
+        adminDashboard.setUsers(userRepository.countByEnabled(true));
+        log.info("3");
+        adminDashboard.setBlogsToConfirm(blogRepository.countByApprovalStatus(PENDING_BLOG));
+        log.info("4");
+        adminDashboard.setThisMonthClinics(clinicRepository.countClinicsInCurrentMonth());
+        log.info("5");
+        adminDashboard.setRegions(regionRepository.countByEmployeeAndMOH(user.getEmail()));
+        log.info("6");
+
+        return ResponseEntity.ok(adminDashboard);
     }
 }

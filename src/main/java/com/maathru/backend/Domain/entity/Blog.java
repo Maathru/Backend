@@ -34,8 +34,6 @@ public class Blog extends Auditable {
     private String additionalNotes;
     private String image;
     private String location;
-
-    @Column
     private String approvalStatus;
     private String statusReason;
 
