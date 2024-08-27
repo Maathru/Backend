@@ -27,6 +27,11 @@ public class BlogController {
         return blogService.getAllBlogs();
     }
 
+    @GetMapping("/pending")
+    public ResponseEntity<Iterable<ViewBlogDto>> getPendingBlogs() {
+        return blogService.getPendingBlogs();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Blog> getBlog(@PathVariable long id) {
         return blogService.getBlog(id);
