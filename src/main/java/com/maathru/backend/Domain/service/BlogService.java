@@ -51,6 +51,11 @@ public class BlogService {
         }
     }
 
+    public ResponseEntity<Iterable<ViewBlogDto>> getPendingBlogs() {
+        List<ViewBlogDto> blogs = blogRepository.findAllPendingBlogsForDemo(PENDING_BLOG);
+        return ResponseEntity.ok(blogs);
+    }
+
     public ResponseEntity<Blog> getBlog(Long id) {
         Optional<Blog> optionalBlog = blogRepository.findById(id);
 
@@ -64,23 +69,6 @@ public class BlogService {
 
     public ResponseEntity<Iterable<ViewBlogDto>> getAllBlogs() {
         List<ViewBlogDto> blogs = blogRepository.findAllBlogsForDemo();
-
-//        if (blogs.isEmpty()) {
-//            log.error("Blogs not found");
-//            throw new NotFoundException("Blogs not found");
-//        }
-//        log.info("Getting all blogs");
-//
-//        List<ViewBlogDto> viewBlogDtos = blogs.stream().map(blog -> {
-//            ViewBlogDto viewBlogDto = new ViewBlogDto();
-//            viewBlogDto.setTitle(blog.getTitle());
-//            viewBlogDto.setCategory(blog.getCategory());
-//            viewBlogDto.setContent(blog.getContent());
-//            viewBlogDto.setKeywords(blog.getKeywords());
-//            log.info(blog.getContent());
-//            return viewBlogDto;
-//        }).toList();
-
         return ResponseEntity.ok(blogs);
     }
 

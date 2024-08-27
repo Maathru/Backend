@@ -99,18 +99,11 @@ public class UserService implements UserDetailsService {
     public ResponseEntity<AdminDashboard> getAdminDashboardData(){
         User user = jwtService.getCurrentUser();
 
-        log.info("1");
-
         AdminDashboard adminDashboard = new AdminDashboard();
-        log.info("2");
         adminDashboard.setUsers(userRepository.countByEnabled(true));
-        log.info("3");
         adminDashboard.setBlogsToConfirm(blogRepository.countByApprovalStatus(PENDING_BLOG));
-        log.info("4");
         adminDashboard.setThisMonthClinics(clinicRepository.countClinicsInCurrentMonth());
-        log.info("5");
         adminDashboard.setRegions(regionRepository.countByEmployeeAndMOH(user.getEmail()));
-        log.info("6");
 
         return ResponseEntity.ok(adminDashboard);
     }
