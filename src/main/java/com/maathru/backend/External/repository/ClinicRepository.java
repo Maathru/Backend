@@ -22,6 +22,17 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "AND u.email=:email ")
     List<ClinicListResponse> findClinicsByDate(@Param("date") LocalDate date, @Param("email") String email);
 
+
+    @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicListResponse(c.clinicId, c.name, c.date, c.startTime, c.endTime,c.region.regionName) " +
+            "FROM User u " +
+            "JOIN Employee e on e.user = u " +
+            "JOIN Clinic c on c.moh = e.moh " +
+            "WHERE u.email = :email " +
+            "AND EXTRACT(MONTH FROM c.date) = EXTRACT(MONTH FROM CAST(:date AS DATE)) " +
+            "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:date AS DATE))")
+    List<ClinicListResponse> findClinicsByMonth(@Param("date") LocalDate date, @Param("email") String email);
+
+
     @Query("SELECT DISTINCT c.date " +
             "FROM Clinic c " +
             "JOIN Employee e ON c.moh = e.moh " +
@@ -39,7 +50,7 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "LEFT JOIN FETCH c.doctors d " +
             "WHERE c.clinicId = :clinicId " +
             "AND u.email = :email")
-    Optional<Clinic> findClinicWithDoctorsById(@Param("clinicId") Long clinicId,@Param("email") String email);
+    Optional<Clinic> findClinicWithDoctorsById(@Param("clinicId") Long clinicId, @Param("email") String email);
 
     @Query(value = "SELECT COUNT(c) FROM Clinic c WHERE MONTH(c.date) = MONTH(CURRENT_DATE()) AND YEAR(c.date) = YEAR(CURRENT_DATE())")
     long countClinicsInCurrentMonth();

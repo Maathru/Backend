@@ -67,7 +67,7 @@ public class ClinicController {
     }
 
     @GetMapping("/month/{date}")
-    public ResponseEntity<List<LocalDate>> getClinicsGivenMonth(@PathVariable String date) {
+    public ResponseEntity<List<ClinicListResponse>> getClinicsGivenMonth(@PathVariable String date) {
         return clinicService.getClinicsGivenMonth(date);
     }
 }
