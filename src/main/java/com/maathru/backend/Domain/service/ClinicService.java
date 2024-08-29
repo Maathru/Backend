@@ -150,16 +150,16 @@ public class ClinicService {
         return ResponseEntity.ok(clinicListResponses);
     }
 
-    public ResponseEntity<List<LocalDate>> getClinicsGivenMonth(String date) {
+    public ResponseEntity<List<ClinicListResponse>> getClinicsGivenMonth(String date) {
         User currentUser = jwtService.getCurrentUser();
 
         LocalDate localDate = LocalDate.parse(date);
-        List<LocalDate> clinicDates = clinicRepository.findAllClinicDatesForCurrentMonth(localDate, currentUser.getEmail());
+        List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByMonth(localDate, currentUser.getEmail());
 
-        if (clinicDates.isEmpty()) {
+        if (clinicListResponses.isEmpty()) {
             log.error("Clinics not found for this month {}", date);
             throw new NotFoundException("Clinics not found for this month " + date);
         }
-        return ResponseEntity.ok(clinicDates);
+        return ResponseEntity.ok(clinicListResponses);
     }
 }
