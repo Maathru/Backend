@@ -13,6 +13,7 @@ public class EligibleCoupleResponse {
     private String womanName;
     private String manName;
     private String address;
+    private String location;
     private String womanPhone;
     private String manPhone;
     private LocalDate womanDob;

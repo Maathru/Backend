@@ -28,8 +28,10 @@ public class BasicInfoMapper implements Mapper<BasicInfo, BasicInfoDto> {
         dto.setWomanName(basicInfo.getWomanName());
         dto.setManName(basicInfo.getManName());
         dto.setAddress(basicInfo.getAddress());
+        dto.setLocation(basicInfo.getLocation());
         dto.setUserId(basicInfo.getUser().getUserId());
         dto.setCreatedDate(LocalDate.from(basicInfo.getCreatedAt()));
+        dto.setRegion(basicInfo.getRegion().getRegionName());
 
         return dto;
     }
@@ -74,6 +76,7 @@ public class BasicInfoMapper implements Mapper<BasicInfo, BasicInfoDto> {
         basicInfo.setWomanName(dto.getWomanName());
         basicInfo.setManName(dto.getManName());
         basicInfo.setAddress(dto.getAddress());
+        basicInfo.setLocation(dto.getLocation());
         basicInfo.setWomanPhone(dto.getWomanPhone());
         basicInfo.setManPhone(dto.getManPhone());
         basicInfo.setWomanDob(dto.getWomanDob());
@@ -96,6 +99,7 @@ public class BasicInfoMapper implements Mapper<BasicInfo, BasicInfoDto> {
         eligibleCoupleResponse.setWomanName(basicInfo.getWomanName());
         eligibleCoupleResponse.setManName(basicInfo.getManName());
         eligibleCoupleResponse.setAddress(basicInfo.getAddress());
+        eligibleCoupleResponse.setLocation(basicInfo.getLocation());
         eligibleCoupleResponse.setWomanPhone(basicInfo.getWomanPhone());
         eligibleCoupleResponse.setManPhone(basicInfo.getManPhone());
         eligibleCoupleResponse.setWomanDob(basicInfo.getWomanDob());
