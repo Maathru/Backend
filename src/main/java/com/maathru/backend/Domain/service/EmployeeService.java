@@ -1,14 +1,12 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.EmployeeDto;
-import com.maathru.backend.Application.dto.response.DoctorsResponse;
-import com.maathru.backend.Application.dto.response.MidwifeListResponse;
-import com.maathru.backend.Application.dto.response.MidwifeResponse;
+import com.maathru.backend.Application.dto.response.*;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.exception.NotFoundException;
-import com.maathru.backend.External.repository.EmployeeRepository;
-import com.maathru.backend.External.repository.UserRepository;
+import com.maathru.backend.External.repository.*;
+import com.maathru.backend.External.repository.eligible.BasicInfoRepository;
 import com.maathru.backend.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +17,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.maathru.backend.constant.Constant.PENDING_BLOG;
+
 @Service
 @AllArgsConstructor
 @Slf4j
 public class EmployeeService {
+    private final BasicInfoRepository basicInfoRepository;
+    private final RegionRepository regionRepository;
+    private final ClinicRepository clinicRepository;
+    private final BlogRepository blogRepository;
     private final EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -99,5 +103,29 @@ public class EmployeeService {
             log.error("Error retrieving current user moh doctors {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    // For Admin Dashboard
+    public ResponseEntity<AdminDashboard> getAdminDashboardData(){
+        User user = jwtService.getCurrentUser();
+
+        AdminDashboard adminDashboard = new AdminDashboard();
+        adminDashboard.setUsers(userRepository.countByEnabled(true));
+        adminDashboard.setBlogsToConfirm(blogRepository.countByApprovalStatus(PENDING_BLOG));
+        adminDashboard.setThisMonthClinics(clinicRepository.countClinicsInCurrentMonth());
+        adminDashboard.setRegions(regionRepository.countByEmployeeAndMOH(user.getEmail()));
+
+        return ResponseEntity.ok(adminDashboard);
+    }
+
+    public ResponseEntity<MidwifeDashboard> getMidwifeDashboardData() {
+        User user = jwtService.getCurrentUser();
+
+        MidwifeDashboard midwifeDashboard = new MidwifeDashboard();
+        midwifeDashboard.setEligibles(basicInfoRepository.countByUserRoleAndRegion(user.getEmail(), Role.ELIGIBLE));
+        midwifeDashboard.setParents(basicInfoRepository.countByUserRoleAndRegion(user.getEmail(), Role.PARENT));
+        midwifeDashboard.setClinics(clinicRepository.countClinicsInCurrentMonthAndRegion(user.getEmail()));
+
+        return ResponseEntity.ok(midwifeDashboard);
     }
 }

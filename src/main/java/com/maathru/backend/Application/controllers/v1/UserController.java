@@ -32,12 +32,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/dashboard")
-    public ResponseEntity<AdminDashboard> getAdminDashboardData() {
-        return userService.getAdminDashboardData();
-    }
-
     @PreAuthorize("hasRole('MIDWIFE')")
     @GetMapping("/midwife/get/{email}")
     public ResponseEntity<Long> getUserIdByEmailForMidwife(@PathVariable String email) {

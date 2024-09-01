@@ -49,7 +49,23 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "WHERE u.email = :email " +
             "AND EXTRACT(MONTH FROM c.date) = EXTRACT(MONTH FROM CAST(:currentDate AS DATE)) " +
             "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:currentDate AS DATE))")
-    List<LocalDate> findAllClinicDatesForCurrentMonth(@Param("currentDate") LocalDate currentDate, @Param("email") String email);
+    List<LocalDate> findAllClinicDatesForCurrentMonthByAdmin(@Param("currentDate") LocalDate currentDate, @Param("email") String email);
+
+    @Query("SELECT DISTINCT c.date " +
+            "FROM Clinic c " +
+            "JOIN Employee e ON c.region = e.region " +
+            "WHERE e.user.email = :email " +
+            "AND EXTRACT(MONTH FROM c.date) = EXTRACT(MONTH FROM CAST(:currentDate AS DATE)) " +
+            "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:currentDate AS DATE))")
+    List<LocalDate> findAllClinicDatesForCurrentMonthByMidwife(@Param("currentDate") LocalDate currentDate, @Param("email") String email);
+
+    @Query("SELECT DISTINCT c.date " +
+            "FROM BasicInfo b " +
+            "JOIN Clinic c ON c.region = b.region " +
+            "WHERE b.user.email = :email " +
+            "AND EXTRACT(MONTH FROM c.date) = EXTRACT(MONTH FROM CAST(:currentDate AS DATE)) " +
+            "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:currentDate AS DATE))")
+    List<LocalDate> findAllClinicDatesForCurrentMonthByParent(@Param("currentDate") LocalDate currentDate, @Param("email") String email);
 
     @Query("SELECT c " +
             "FROM User u " +
@@ -63,4 +79,12 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
 
     @Query(value = "SELECT COUNT(c) FROM Clinic c WHERE MONTH(c.date) = MONTH(CURRENT_DATE()) AND YEAR(c.date) = YEAR(CURRENT_DATE())")
     long countClinicsInCurrentMonth();
+
+    @Query(value = "SELECT COUNT(c) " +
+            "FROM Clinic c " +
+            "JOIN Employee e ON e.user.email = :email " +
+            "JOIN c.region r ON r = e.region " +
+            "WHERE MONTH(c.date) = MONTH(CURRENT_DATE()) " +
+            "AND YEAR(c.date) = YEAR(CURRENT_DATE())")
+    long countClinicsInCurrentMonthAndRegion(@Param("email") String email);
 }

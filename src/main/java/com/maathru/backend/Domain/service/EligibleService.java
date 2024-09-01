@@ -236,7 +236,9 @@ public class EligibleService {
 
     // get all eligible users for midwife
     public ResponseEntity<List<EligibleCoupleResponse>> getEligibleListForMidwife() {
-        List<BasicInfo> basicInfoList = basicInfoRepository.findAll();
+        User currentUser = jwtService.getCurrentUser();
+
+        List<BasicInfo> basicInfoList = basicInfoRepository.findAllByRegion(currentUser.getEmail());
         if (basicInfoList.isEmpty()) {
             throw new NotFoundException("Eligible users not found");
         }
@@ -349,7 +351,9 @@ public class EligibleService {
     }
 
     public ResponseEntity<List<EligibleCoupleResponse>> getParentListForMidwife() {
-        List<BasicInfo> basicInfoList = basicInfoRepository.findAll();
+        User currentUser = jwtService.getCurrentUser();
+
+        List<BasicInfo> basicInfoList = basicInfoRepository.findByUserRoleAndRegion(currentUser.getEmail(), Role.PARENT);
         if (basicInfoList.isEmpty()) {
             throw new NotFoundException("Parent users not found");
         }

@@ -94,17 +94,4 @@ public class UserService implements UserDetailsService {
         long userId = userRepository.findUserIdByEmailAndRole(email, Role.USER).orElseThrow(() -> new NotFoundException("User not found"));
         return ResponseEntity.ok(userId);
     }
-
-    // For Admin Dashboard
-    public ResponseEntity<AdminDashboard> getAdminDashboardData(){
-        User user = jwtService.getCurrentUser();
-
-        AdminDashboard adminDashboard = new AdminDashboard();
-        adminDashboard.setUsers(userRepository.countByEnabled(true));
-        adminDashboard.setBlogsToConfirm(blogRepository.countByApprovalStatus(PENDING_BLOG));
-        adminDashboard.setThisMonthClinics(clinicRepository.countClinicsInCurrentMonth());
-        adminDashboard.setRegions(regionRepository.countByEmployeeAndMOH(user.getEmail()));
-
-        return ResponseEntity.ok(adminDashboard);
-    }
 }
