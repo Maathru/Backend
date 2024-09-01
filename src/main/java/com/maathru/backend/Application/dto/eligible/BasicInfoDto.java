@@ -39,6 +39,7 @@ public class BasicInfoDto {
     private String womanName;
     private String manName;
     private String address;
+    private String location;
     private long userId;
     private LocalDate createdDate;
     private String region;

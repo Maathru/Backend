@@ -22,6 +22,9 @@ public class EligibleCoupleDTO {
     @NotEmpty(message = "Address cannot be empty")
     private String address;
 
+    @NotEmpty(message = "Location cannot be empty")
+    private String location;
+
     @NotEmpty(message = "Woman's telephone number cannot be empty")
     private String womanPhone;
     private String manPhone;

@@ -139,17 +139,13 @@ public class EligibleService {
             HomeEnvironment homeEnvironment = homeEnvironmentRepository.findByUser(currentUser).orElseGet(HomeEnvironment::new);
             MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(currentUser).orElseGet(MidwifeAssessment::new);
 
-            BasicInfoDto basicInfoDto = mapper.map(basicInfo, BasicInfoDto.class);
+            BasicInfoDto basicInfoDto = BasicInfoMapper.toDto(basicInfo);
             basicInfoDto.setUserId(basicInfo.getUser().getUserId());
             basicInfoDto.setCreatedDate(basicInfo.getCreatedAt().toLocalDate());
 
-            // get region by midwife
-            String region = getRegionNameByUser(basicInfo.getCreatedBy());
+            // get moh by midwife
             Object[] obj = getMOHDetailsByUser(basicInfo.getCreatedBy());
-
-            basicInfoDto.setRegion(region);
             basicInfoDto.setMoh(obj[0]);
-
 
             EligibleDto eligibleDto = new EligibleDto();
             eligibleDto.setBasicInfoDto(basicInfoDto);
