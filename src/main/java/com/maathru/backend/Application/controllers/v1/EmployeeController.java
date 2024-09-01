@@ -1,7 +1,9 @@
 package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.EmployeeDto;
+import com.maathru.backend.Application.dto.response.AdminDashboard;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
+import com.maathru.backend.Application.dto.response.MidwifeDashboard;
 import com.maathru.backend.Application.dto.response.MidwifeListResponse;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.service.EmployeeService;
@@ -26,5 +28,17 @@ public class EmployeeController {
     @GetMapping("/midwife")
     public ResponseEntity<List<MidwifeListResponse>> getMidwifesInCurrentMoh() {
         return employeeService.getMidwifesInCurrentMoh();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/dashboard/admin")
+    public ResponseEntity<AdminDashboard> getAdminDashboardData() {
+        return employeeService.getAdminDashboardData();
+    }
+
+    @PreAuthorize("hasRole('MIDWIFE')")
+    @GetMapping("/dashboard/midwife")
+    public ResponseEntity<MidwifeDashboard> getMidwifeDashboardData() {
+        return employeeService.getMidwifeDashboardData();
     }
 }
