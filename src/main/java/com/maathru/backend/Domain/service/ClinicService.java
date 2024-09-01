@@ -5,10 +5,12 @@ import com.maathru.backend.Application.dto.response.ClinicListResponse;
 import com.maathru.backend.Application.dto.response.ClinicResponse;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Domain.entity.*;
+import com.maathru.backend.Domain.entity.eligible.BasicInfo;
 import com.maathru.backend.Domain.exception.*;
 import com.maathru.backend.External.repository.ClinicRepository;
 import com.maathru.backend.External.repository.EmployeeRepository;
 import com.maathru.backend.External.repository.RegionRepository;
+import com.maathru.backend.External.repository.eligible.BasicInfoRepository;
 import com.maathru.backend.External.utils.TimeUtils;
 import com.maathru.backend.enumeration.Role;
 import lombok.AllArgsConstructor;
@@ -34,6 +36,7 @@ public class ClinicService {
     private final EmployeeRepository employeeRepository;
     private final JwtService jwtService;
     private final ModelMapper mapper;
+    private final BasicInfoRepository basicInfoRepository;
 
     @Transactional
     public ResponseEntity<String> createOrUpdateClinic(ClinicDto clinicDto) {
@@ -155,6 +158,19 @@ public class ClinicService {
 
         LocalDate localDate = LocalDate.parse(date);
         List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByMonth(localDate, currentUser.getEmail());
+
+        if (clinicListResponses.isEmpty()) {
+            log.error("Clinics not found for this month {}", date);
+            throw new NotFoundException("Clinics not found for this month " + date);
+        }
+        return ResponseEntity.ok(clinicListResponses);
+    }
+
+    public ResponseEntity<List<ClinicListResponse>> getClinicsGivenMonthForParent(String date) {
+        User currentUser = jwtService.getCurrentUser();
+
+        LocalDate localDate = LocalDate.parse(date);
+        List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByMonthForParent(localDate, currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
             log.error("Clinics not found for this month {}", date);

@@ -2,6 +2,7 @@ package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.eligible.*;
 import com.maathru.backend.Application.dto.response.EligibleCoupleResponse;
+import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.entity.FamilyPlanningMethod;
 import com.maathru.backend.Domain.entity.PastPregnancy;
 import com.maathru.backend.Domain.entity.eligible.*;
@@ -267,6 +268,9 @@ public class EligibleService {
         basicInfo.setUpdatedBy(byUser);
         basicInfo.setPastPregnancies(mapPastPregnancies(dto.getPastPregnancies(), basicInfo, byUser));
         basicInfo.setFamilyPlanningMethods(mapFamilyPlanningMethods(dto.getFamilyPlanningMethods(), basicInfo, byUser));
+
+        Employee currentEmployee = employeeRepository.findByUser(byUser).orElseThrow(() -> new NotFoundException("Employee not found"));
+        basicInfo.setRegion(currentEmployee.getRegion());
     }
 
     private List<PastPregnancy> mapPastPregnancies(List<PastPregnancyDTO> dtos, BasicInfo basicInfo, User byUser) {
@@ -292,7 +296,6 @@ public class EligibleService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
-
 
     private List<FamilyPlanningMethod> mapFamilyPlanningMethods(List<FamilyPlanningMethodDTO> dtos, BasicInfo basicInfo, User byUser) {
         return dtos.stream()
