@@ -32,6 +32,15 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:date AS DATE))")
     List<ClinicListResponse> findClinicsByMonth(@Param("date") LocalDate date, @Param("email") String email);
 
+    @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicListResponse(c.clinicId, c.name, c.date, c.startTime, c.endTime) " +
+            "FROM BasicInfo b " +
+            "JOIN Region r on r.regionId = b.region.regionId " +
+            "JOIN Clinic c on c.moh = r.moh " +
+            "AND b.user.email = :email " +
+            "AND EXTRACT(MONTH FROM c.date) = EXTRACT(MONTH FROM CAST(:date AS DATE)) " +
+            "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:date AS DATE))")
+    List<ClinicListResponse> findClinicsByMonthForParent(@Param("date") LocalDate date, @Param("email") String email);
+
 
     @Query("SELECT DISTINCT c.date " +
             "FROM Clinic c " +

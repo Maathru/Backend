@@ -16,6 +16,15 @@ public class ClinicListResponse {
     private String name;
     private LocalDate date;
     private LocalTime startTime;
+
+    public ClinicListResponse(long id, String name, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     private LocalTime endTime;
     private String region;
 

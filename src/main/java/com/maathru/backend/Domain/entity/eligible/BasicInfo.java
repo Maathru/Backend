@@ -42,6 +42,10 @@ public class BasicInfo extends Auditable implements BaseEntity{
     private int manAgeMarried;
     private int children;
 
+    @ManyToOne
+    @JoinColumn(name = "region_region_id")
+    private Region region;
+
     @OneToMany(mappedBy = "basicInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PastPregnancy> pastPregnancies = new ArrayList<>();
 
