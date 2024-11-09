@@ -34,43 +34,6 @@ public class NICValidator implements ConstraintValidator<ValidNIC, String> {
         }
     }
 
-//    static class MonthData {
-//        String month;
-//        int days;
-//
-//        public MonthData(String month, int days) {
-//            this.month = month;
-//            this.days = days;
-//        }
-//    }
-
-//    static class DayGenderResult {
-//        int day;
-//        String month;
-//        String gender;
-//
-//        public DayGenderResult(int day, String month, String gender) {
-//            this.day = day;
-//            this.month = month;
-//            this.gender = gender;
-//        }
-//    }
-
-//    private static final List<MonthData> dArray = List.of(
-//            new MonthData("January", 31),
-//            new MonthData("February", 29),
-//            new MonthData("March", 31),
-//            new MonthData("April", 30),
-//            new MonthData("May", 31),
-//            new MonthData("June", 30),
-//            new MonthData("July", 31),
-//            new MonthData("August", 31),
-//            new MonthData("September", 30),
-//            new MonthData("October", 31),
-//            new MonthData("November", 30),
-//            new MonthData("December", 31)
-//    );
-
     private static final int MAX_DAYS = 866;
     private static final int FEMALE_OFFSET = 500;
     private static final int MAX_MALE_DAYS = 366;
@@ -86,25 +49,8 @@ public class NICValidator implements ConstraintValidator<ValidNIC, String> {
                 return false;
             }
 
-//            DayGenderResult foundData = findDayAndGender(days, dArray);
-
             int year = Integer.parseInt(extractedData.year);
             return year >= MIN_VALID_YEAR && year <= MAX_VALID_YEAR;
-
-//            String month = foundData.month;
-//            int day = foundData.day;
-//            String gender = foundData.gender;
-
-            // Formatting birthday
-//            String bdayString = String.format("%02d-%s-%04d", day, month, year);
-//            LocalDate birthday = LocalDate.parse(
-//                    bdayString,
-//                    DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
-//            );
-
-//            String formattedDate = getFormattedDate(birthday);
-//            System.out.println("Formatted Birthday: " + formattedDate);
-//            System.out.println("Gender: " + gender);
         } else {
             return false;
         }
@@ -140,31 +86,4 @@ public class NICValidator implements ConstraintValidator<ValidNIC, String> {
 
         return new ExtractedData(year, dayList, character);
     }
-
-//    private static DayGenderResult findDayAndGender(int days, List<MonthData> dArray) {
-//        int dayList = days;
-//        String month = "";
-//        String gender = (dayList < 500) ? "Male" : "Female";
-//
-//        // Adjust days if gender is female
-//        if (dayList >= 500) {
-//            dayList -= 500;
-//        }
-//
-//        for (MonthData data : dArray) {
-//            if (dayList > data.days) {
-//                dayList -= data.days;
-//            } else {
-//                month = data.month;
-//                break;
-//            }
-//        }
-//
-//        return new DayGenderResult(dayList, month, gender);
-//    }
-
-//    private static String getFormattedDate(LocalDate date) {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-//        return date.format(formatter);
-//    }
 }
