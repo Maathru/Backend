@@ -71,19 +71,25 @@ public class NICValidator implements ConstraintValidator<ValidNIC, String> {
 //            new MonthData("December", 31)
 //    );
 
+    private static final int MAX_DAYS = 866;
+    private static final int FEMALE_OFFSET = 500;
+    private static final int MAX_MALE_DAYS = 366;
+    private static final int MIN_VALID_YEAR = 1953;
+    private static final int MAX_VALID_YEAR = 2005;
+
     private static boolean validateNIC(String nicNumber) {
         if (validation(nicNumber)) {
             ExtractedData extractedData = extractData(nicNumber);
             int days = Integer.parseInt(extractedData.dayList);
 
-            if (days < 0 || days > 866 || (days > 366 && days < 500)) {
+            if (days < 0 || days > MAX_DAYS || (days > MAX_MALE_DAYS && days < FEMALE_OFFSET)) {
                 return false;
             }
 
 //            DayGenderResult foundData = findDayAndGender(days, dArray);
 
             int year = Integer.parseInt(extractedData.year);
-            return year >= 1953 && year <= 2005;
+            return year >= MIN_VALID_YEAR && year <= MAX_VALID_YEAR;
 
 //            String month = foundData.month;
 //            int day = foundData.day;
