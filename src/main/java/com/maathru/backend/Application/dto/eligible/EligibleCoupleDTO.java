@@ -1,6 +1,7 @@
 package com.maathru.backend.Application.dto.eligible;
 
 import com.maathru.backend.Domain.validation.PastDate;
+import com.maathru.backend.enumeration.Role;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -71,4 +72,6 @@ public class EligibleCoupleDTO {
 
     private List<PastPregnancyDTO> pastPregnancies;
     private List<FamilyPlanningMethodDTO> familyPlanningMethods;
+
+    private Role role;
 }
