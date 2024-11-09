@@ -29,10 +29,6 @@ import static com.maathru.backend.constant.Constant.PENDING_BLOG;
 @Slf4j
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final JwtService jwtService;
-    private final BlogRepository blogRepository;
-    private final RegionRepository regionRepository;
-    private final ClinicRepository clinicRepository;
 
     public ResponseEntity<List<UserProfileDto>> getAllUsers() {
         try {

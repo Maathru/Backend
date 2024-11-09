@@ -2,9 +2,7 @@ package com.maathru.backend.Domain.entity;
 
 import com.maathru.backend.enumeration.Gender;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;

@@ -4,20 +4,26 @@ import com.maathru.backend.Application.dto.request.EmployeeDto;
 import com.maathru.backend.Application.dto.response.*;
 import com.maathru.backend.Domain.entity.Employee;
 import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.exception.ApiException;
 import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.External.repository.*;
 import com.maathru.backend.External.repository.eligible.BasicInfoRepository;
+import com.maathru.backend.enumeration.Gender;
 import com.maathru.backend.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static com.maathru.backend.constant.Constant.PENDING_BLOG;
+import static com.maathru.backend.enumeration.Gender.FEMALE;
+import static com.maathru.backend.enumeration.Gender.MALE;
 
 @Service
 @AllArgsConstructor
@@ -30,28 +36,45 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final ModelMapper mapper;
+    private final AuthenticationService authenticationService;
 
-    public ResponseEntity<Employee> createEmployee(EmployeeDto employeeDto) {
-        Optional<User> optionalUser = userRepository.findById(employeeDto.getUser());
+    @Transactional
+    public ResponseEntity<String> createEmployee(EmployeeDto employeeDto) {
+        User currentUser = jwtService.getCurrentUser();
 
-        if (optionalUser.isPresent()) {
-            Employee employee = new Employee();
-            employee.setPhoneNumber(employeeDto.getPhoneNumber());
-            employee.setNic(employeeDto.getNic());
-            employee.setAddressLine1(employeeDto.getAddressLine1());
-            employee.setStreet(employeeDto.getStreet());
-            employee.setCity(employeeDto.getCity());
-            employee.setDesignation(employeeDto.getDesignation());
-            employee.setQualifications(employeeDto.getQualifications());
-            employee.setUser(optionalUser.get());
+        // User registration
+        try {
+            User user = mapper.map(employeeDto, User.class);
+            authenticationService.encodePassword(user);
+            authenticationService.initializeUserFields(user, currentUser);
+
+            user.setRole(Role.valueOf(employeeDto.getDesignation().toUpperCase()));
+            user.setRole(authenticationService.determineUserRole(currentUser, user));
+            user = userRepository.save(user);
+            log.info("User signed up successfully: {} by {}: {}", user.getUsername(), currentUser.getRole(), currentUser.getUserId());
+
+            // Employee registration
+            Employee employee = mapper.map(employeeDto, Employee.class);
+            employee.setGender(findGender(employee.getNic()));
+            employee.setDob(findBirthday(employee.getNic()));
+            employee.setUser(user);
+
+            // region and moh set by admin
+            Employee admin = employeeRepository.findByUser(currentUser).orElseThrow(() -> new NotFoundException("Employee not found"));
+            employee.setRegion(admin.getRegion());
+            employee.setMoh(admin.getMoh());
+
             employee = employeeRepository.save(employee);
-
-            return ResponseEntity.status(201).body(employee);
-        } else {
-            log.error("User not found");
-            throw new NotFoundException("User not found");
+            log.info("Employee signed up successfully: {} by {}: {}", employee.getUser().getUsername(), currentUser.getRole(), currentUser.getUserId());
+            return ResponseEntity.status(201).body("Employee signed up successfully");
+        } catch (NotFoundException e) {
+            log.error("{}", e.getMessage());
+            throw new NotFoundException("Employee not found");
+        } catch (Exception e) {
+            log.error("Error during employee signup: {}", e.getMessage());
+            throw new ApiException("An error occurred during employee signup");
         }
-
     }
 
     public ResponseEntity<MidwifeResponse> getMidwifeByRegionId(long regionId) {
@@ -106,7 +129,7 @@ public class EmployeeService {
     }
 
     // For Admin Dashboard
-    public ResponseEntity<AdminDashboard> getAdminDashboardData(){
+    public ResponseEntity<AdminDashboard> getAdminDashboardData() {
         User user = jwtService.getCurrentUser();
 
         AdminDashboard adminDashboard = new AdminDashboard();
@@ -127,5 +150,72 @@ public class EmployeeService {
         midwifeDashboard.setClinics(clinicRepository.countClinicsInCurrentMonthAndRegion(user.getEmail()));
 
         return ResponseEntity.ok(midwifeDashboard);
+    }
+
+    static class MonthData {
+        int month;
+        int days;
+
+        public MonthData(int month, int days) {
+            this.month = month;
+            this.days = days;
+        }
+    }
+
+    private static final List<MonthData> dArray = List.of(
+            new MonthData(1, 31),
+            new MonthData(2, 29),
+            new MonthData(3, 31),
+            new MonthData(4, 30),
+            new MonthData(5, 31),
+            new MonthData(6, 30),
+            new MonthData(7, 31),
+            new MonthData(8, 31),
+            new MonthData(9, 30),
+            new MonthData(10, 31),
+            new MonthData(11, 30),
+            new MonthData(12, 31)
+    );
+
+    private static Gender findGender(String nicNumber) {
+        int days;
+
+        if (nicNumber.length() == 10) {
+            days = Integer.parseInt(nicNumber.substring(2, 5));
+        } else {
+            days = Integer.parseInt(nicNumber.substring(4, 7));
+        }
+
+        return (days < 500) ? MALE : FEMALE;
+    }
+
+    private static LocalDate findBirthday(String nicNumber) {
+        int year;
+        int month = 0;
+        int days;
+
+        if (nicNumber.length() == 10) {
+            year = Integer.parseInt(nicNumber.substring(0, 2)) + 1900;
+            days = Integer.parseInt(nicNumber.substring(2, 5));
+        } else {
+            year = Integer.parseInt(nicNumber.substring(0, 4));
+            days = Integer.parseInt(nicNumber.substring(4, 7));
+        }
+
+        // Adjust days if gender is female
+        if (days >= 500) {
+            days -= 500;
+        }
+
+        for (MonthData data : dArray) {
+            if (days > data.days) {
+                days -= data.days;
+            } else {
+                month = data.month;
+                break;
+            }
+        }
+
+        return LocalDate.parse(String.format("%d-%02d-%02d", year, month, days));
     }
 }
