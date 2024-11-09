@@ -21,6 +21,7 @@ import java.util.List;
 public class EmployeeController {
     private final EmployeeService employeeService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public ResponseEntity<String> createEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
         return employeeService.createEmployee(employeeDto);

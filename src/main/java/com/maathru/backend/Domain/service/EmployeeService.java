@@ -38,6 +38,7 @@ public class EmployeeService {
     private final JwtService jwtService;
     private final ModelMapper mapper;
     private final AuthenticationService authenticationService;
+    private final EmailService emailService;
 
     @Transactional
     public ResponseEntity<String> createEmployee(EmployeeDto employeeDto) {
@@ -46,6 +47,9 @@ public class EmployeeService {
         // User registration
         try {
             User user = mapper.map(employeeDto, User.class);
+
+            boolean passwordStatus = user.getPassword() == null;
+
             authenticationService.encodePassword(user);
             authenticationService.initializeUserFields(user, currentUser);
 
@@ -53,6 +57,16 @@ public class EmployeeService {
             user.setRole(authenticationService.determineUserRole(currentUser, user));
             user = userRepository.save(user);
             log.info("User signed up successfully: {} by {}: {}", user.getUsername(), currentUser.getRole(), currentUser.getUserId());
+
+            if (passwordStatus) {
+                // after user created successfully send password
+                try {
+                    emailService.sendNewAccountEmail(user.getFirstName(), user.getEmail(), user.getPassword());
+                } catch (Exception e) {
+                    log.error("Failed to send account creation email: {}", e.getMessage());
+                    throw new ApiException("Failed to send account creation email");
+                }
+            }
 
             // Employee registration
             Employee employee = mapper.map(employeeDto, Employee.class);
@@ -73,7 +87,7 @@ public class EmployeeService {
             throw e;
         } catch (Exception e) {
             log.error("Error during employee signup: {}", e.getMessage());
-            throw new ApiException("An error occurred during employee signup", e);
+            throw new ApiException("An error occurred during employee signup");
         }
     }
 
@@ -179,16 +193,11 @@ public class EmployeeService {
 
     private static Gender findGender(String nicNumber) {
         int days;
-        try {
-            if (nicNumber.length() == 10) {
-                days = Integer.parseInt(nicNumber.substring(2, 5));
-            } else if (nicNumber.length() == 12) {
-                days = Integer.parseInt(nicNumber.substring(4, 7));
-            } else {
-                throw new IllegalArgumentException("Invalid NIC number length");
-            }
-        } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("Invalid NIC number format", e);
+
+        if (nicNumber.length() == 10) {
+            days = Integer.parseInt(nicNumber.substring(2, 5));
+        } else {
+            days = Integer.parseInt(nicNumber.substring(4, 7));
         }
 
         return (days < 500) ? MALE : FEMALE;
@@ -198,15 +207,14 @@ public class EmployeeService {
         int year;
         int month = 0;
         int day;
+
         try {
             if (nicNumber.length() == 10) {
                 year = Integer.parseInt(nicNumber.substring(0, 2)) + 1900;
                 day = Integer.parseInt(nicNumber.substring(2, 5));
-            } else if (nicNumber.length() == 12) {
+            } else {
                 year = Integer.parseInt(nicNumber.substring(0, 4));
                 day = Integer.parseInt(nicNumber.substring(4, 7));
-            } else {
-                throw new IllegalArgumentException("Invalid NIC number length");
             }
 
             // Adjust day for gender

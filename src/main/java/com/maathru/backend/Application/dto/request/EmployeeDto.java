@@ -4,6 +4,7 @@ import com.maathru.backend.Domain.validation.ValidNIC;
 import com.maathru.backend.Domain.validation.ValidRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 

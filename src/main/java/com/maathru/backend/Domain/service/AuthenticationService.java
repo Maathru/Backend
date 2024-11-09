@@ -49,19 +49,22 @@ public class AuthenticationService {
             User currentUser = getCurrentUser();
             User user = mapper.map(signupDto, User.class);
 
+            boolean passwordStatus = user.getPassword() == null;
+
             encodePassword(user);
             initializeUserFields(user, currentUser);
             user.setRole(determineUserRole(currentUser, user));
 
-
             user = userRepository.save(user);
 
-            // after user created successfully send password
-            try {
-                emailService.sendNewAccountEmail(user.getFirstName(), user.getEmail(), user.getPassword());
-            } catch (Exception e) {
-                log.error("Failed to send account email: {}", e.getMessage());
-                throw new ApiException("Failed to send account creation email", e);
+            if (passwordStatus) {
+                // after user created successfully send password
+                try {
+                    emailService.sendNewAccountEmail(user.getFirstName(), user.getEmail(), user.getPassword());
+                } catch (Exception e) {
+                    log.error("Failed to send account creation email: {}", e.getMessage());
+                    throw new ApiException("Failed to send account creation email");
+                }
             }
 
             if (currentUser.getUserId() != 0) {

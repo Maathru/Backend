@@ -1,13 +1,9 @@
 package com.maathru.backend.Domain.service;
 
-import com.maathru.backend.Application.dto.response.AdminDashboard;
 import com.maathru.backend.Application.dto.response.UserProfileDto;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.Domain.exception.UnauthorizedException;
-import com.maathru.backend.External.repository.BlogRepository;
-import com.maathru.backend.External.repository.ClinicRepository;
-import com.maathru.backend.External.repository.RegionRepository;
 import com.maathru.backend.External.repository.UserRepository;
 import com.maathru.backend.enumeration.Role;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.maathru.backend.constant.Constant.PENDING_BLOG;
 
 @Service
 @RequiredArgsConstructor
