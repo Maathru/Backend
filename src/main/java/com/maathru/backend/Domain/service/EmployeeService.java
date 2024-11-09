@@ -70,10 +70,10 @@ public class EmployeeService {
             return ResponseEntity.status(201).body("Employee signed up successfully");
         } catch (NotFoundException e) {
             log.error("{}", e.getMessage());
-            throw new NotFoundException("Employee not found");
+            throw e;
         } catch (Exception e) {
             log.error("Error during employee signup: {}", e.getMessage());
-            throw new ApiException("An error occurred during employee signup");
+            throw new ApiException("An error occurred during employee signup", e);
         }
     }
 
