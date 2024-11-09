@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Authentication Controller")
 @RequiredArgsConstructor
 @Validated
-@Slf4j
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
