@@ -192,30 +192,36 @@ public class EmployeeService {
     private static LocalDate findBirthday(String nicNumber) {
         int year;
         int month = 0;
-        int days;
-
-        if (nicNumber.length() == 10) {
-            year = Integer.parseInt(nicNumber.substring(0, 2)) + 1900;
-            days = Integer.parseInt(nicNumber.substring(2, 5));
-        } else {
-            year = Integer.parseInt(nicNumber.substring(0, 4));
-            days = Integer.parseInt(nicNumber.substring(4, 7));
-        }
-
-        // Adjust days if gender is female
-        if (days >= 500) {
-            days -= 500;
-        }
-
-        for (MonthData data : dArray) {
-            if (days > data.days) {
-                days -= data.days;
+        int day;
+        try {
+            if (nicNumber.length() == 10) {
+                year = Integer.parseInt(nicNumber.substring(0, 2)) + 1900;
+                day = Integer.parseInt(nicNumber.substring(2, 5));
+            } else if (nicNumber.length() == 12) {
+                year = Integer.parseInt(nicNumber.substring(0, 4));
+                day = Integer.parseInt(nicNumber.substring(4, 7));
             } else {
-                month = data.month;
-                break;
+                throw new IllegalArgumentException("Invalid NIC number length");
             }
-        }
 
-        return LocalDate.parse(String.format("%d-%02d-%02d", year, month, days));
+            // Adjust day for gender
+            if (day >= 500) {
+                day -= 500;
+            }
+
+            // Determine month and day
+            for (MonthData data : dArray) {
+                if (day > data.days) {
+                    day -= data.days;
+                } else {
+                    month = data.month;
+                    break;
+                }
+            }
+
+            return LocalDate.of(year, month, day);
+        } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Invalid NIC number format", e);
+        }
     }
 }
