@@ -24,6 +24,7 @@ public class EmployeeDto {
     private String role;
 
     @NotEmpty(message = "Phone number cannot be empty")
+    @Pattern(regexp = "^\\+?[0-9]{10,12}$", message = "Invalid phone number format")
     private String phoneNumber;
 
     @NotEmpty(message = "NIC cannot be empty")
