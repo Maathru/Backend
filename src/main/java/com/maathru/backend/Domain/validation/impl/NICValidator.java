@@ -4,10 +4,6 @@ import com.maathru.backend.Domain.validation.ValidNIC;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 public class NICValidator implements ConstraintValidator<ValidNIC, String> {
     @Override
     public void initialize(ValidNIC constraintAnnotation) {

@@ -205,10 +205,10 @@ public class EligibleService {
     @Transactional(readOnly = true)
     public ResponseEntity<EligibleCoupleDTO> getEligibleForMidwife(long userId) {
         try {
-            User currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+            User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
 
-            BasicInfo basicInfo = basicInfoRepository.findByUser(currentUser).orElseGet(BasicInfo::new);
-            MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(currentUser).orElseGet(MidwifeAssessment::new);
+            BasicInfo basicInfo = basicInfoRepository.findByUser(user).orElseGet(BasicInfo::new);
+            MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(user).orElseGet(MidwifeAssessment::new);
 
             List<PastPregnancyDTO> pastPregnancyDTOs = basicInfo.getPastPregnancies().stream()
                     .map(this::convertToPastPregnancyDTO)
@@ -223,6 +223,7 @@ public class EligibleService {
             mapper.map(midwifeAssessment, eligibleCoupleDTO);
             eligibleCoupleDTO.setPastPregnancies(pastPregnancyDTOs);
             eligibleCoupleDTO.setFamilyPlanningMethods(familyPlanningMethodDTOs);
+            eligibleCoupleDTO.setRole(user.getRole());
 
             return ResponseEntity.status(HttpStatus.OK).body(eligibleCoupleDTO);
         } catch (NotFoundException e) {
