@@ -179,11 +179,16 @@ public class EmployeeService {
 
     private static Gender findGender(String nicNumber) {
         int days;
-
-        if (nicNumber.length() == 10) {
-            days = Integer.parseInt(nicNumber.substring(2, 5));
-        } else {
-            days = Integer.parseInt(nicNumber.substring(4, 7));
+        try {
+            if (nicNumber.length() == 10) {
+                days = Integer.parseInt(nicNumber.substring(2, 5));
+            } else if (nicNumber.length() == 12) {
+                days = Integer.parseInt(nicNumber.substring(4, 7));
+            } else {
+                throw new IllegalArgumentException("Invalid NIC number length");
+            }
+        } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Invalid NIC number format", e);
         }
 
         return (days < 500) ? MALE : FEMALE;
