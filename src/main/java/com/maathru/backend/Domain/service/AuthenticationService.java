@@ -60,8 +60,8 @@ public class AuthenticationService {
             try {
                 emailService.sendNewAccountEmail(user.getFirstName(), user.getEmail(), user.getPassword());
             } catch (Exception e) {
-                log.error("Error encoding password or sending email: {}", e.getMessage());
-                throw new ApiException("An error occurred during password encoding or email sending");
+                log.error("Failed to send account email: {}", e.getMessage());
+                throw new ApiException("Failed to send account creation email", e);
             }
 
             if (currentUser.getUserId() != 0) {
