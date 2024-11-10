@@ -28,6 +28,12 @@ public class Auditable {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "deleted_by_user_id")
+    private User deletedBy;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     @PrePersist
     public void beforePersist() {
         setCreatedAt(now());

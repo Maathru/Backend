@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface HomeEnvironmentRepository extends JpaRepository<HomeEnvironment, Long> {
-    Optional<HomeEnvironment> findByUser(User currentUser);
+    Optional<HomeEnvironment> findByUserAndDeletedAtIsNull(User currentUser);
 }

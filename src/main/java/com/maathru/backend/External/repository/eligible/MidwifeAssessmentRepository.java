@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface MidwifeAssessmentRepository extends JpaRepository<MidwifeAssessment, Long> {
-    Optional<MidwifeAssessment> findByUser(User currentUser);
+    Optional<MidwifeAssessment> findByUserAndDeletedAtIsNull(User currentUser);
 }

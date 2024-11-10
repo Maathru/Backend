@@ -23,8 +23,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,56 +53,56 @@ public class EligibleService {
             User currentUser = jwtService.getCurrentUser();
 
             BasicInfo basicInfo = setDataForEntity(
-                    basicInfoRepository.findByUser(currentUser).orElseGet(BasicInfo::new),
+                    basicInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(BasicInfo::new),
                     currentUser,
                     new BasicInfoMapper(),
                     eligibleDto.getBasicInfoDto()
             );
 
             MedicalHistory medicalHistory = setDataForEntity(
-                    medicalHistoryRepository.findByUser(currentUser).orElseGet(MedicalHistory::new),
+                    medicalHistoryRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(MedicalHistory::new),
                     currentUser,
                     new MedicalHistoryMapper(),
                     eligibleDto.getMedicalHistoryDto()
             );
 
             SpecialWoman specialWoman = setDataForEntity(
-                    specialWomanRepository.findByUser(currentUser).orElseGet(SpecialWoman::new),
+                    specialWomanRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(SpecialWoman::new),
                     currentUser,
                     new SpecialWomanMapper(),
                     eligibleDto.getSpecialWomanDto()
             );
 
             SpecialBoth specialBoth = setDataForEntity(
-                    specialBothRepository.findByUser(currentUser).orElseGet(SpecialBoth::new),
+                    specialBothRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(SpecialBoth::new),
                     currentUser,
                     new SpecialBothMapper(),
                     eligibleDto.getSpecialBothDto()
             );
 
             FamilyHealthInfo familyHealthInfo = setDataForEntity(
-                    familyHealthInfoRepository.findByUser(currentUser).orElseGet(FamilyHealthInfo::new),
+                    familyHealthInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(FamilyHealthInfo::new),
                     currentUser,
                     new FamilyHealthInfoMapper(),
                     eligibleDto.getFamilyHealthInfoDto()
             );
 
             FamilyNutrition familyNutrition = setDataForEntity(
-                    familyNutritionRepository.findByUser(currentUser).orElseGet(FamilyNutrition::new),
+                    familyNutritionRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(FamilyNutrition::new),
                     currentUser,
                     new FamilyNutritionMapper(),
                     eligibleDto.getFamilyNutritionDto()
             );
 
             ParentHabit parentHabit = setDataForEntity(
-                    parentHabitRepository.findByUser(currentUser).orElseGet(ParentHabit::new),
+                    parentHabitRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ParentHabit::new),
                     currentUser,
                     new ParentHabitMapper(),
                     eligibleDto.getParentHabitDto()
             );
 
             HomeEnvironment homeEnvironment = setDataForEntity(
-                    homeEnvironmentRepository.findByUser(currentUser).orElseGet(HomeEnvironment::new),
+                    homeEnvironmentRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(HomeEnvironment::new),
                     currentUser,
                     new HomeEnvironmentMapper(),
                     eligibleDto.getHomeEnvironmentDto()
@@ -129,15 +131,15 @@ public class EligibleService {
         try {
             User currentUser = jwtService.getCurrentUser();
 
-            BasicInfo basicInfo = basicInfoRepository.findByUser(currentUser).orElseGet(BasicInfo::new);
-            MedicalHistory medicalHistory = medicalHistoryRepository.findByUser(currentUser).orElseGet(MedicalHistory::new);
-            SpecialWoman specialWoman = specialWomanRepository.findByUser(currentUser).orElseGet(SpecialWoman::new);
-            SpecialBoth specialBoth = specialBothRepository.findByUser(currentUser).orElseGet(SpecialBoth::new);
-            FamilyHealthInfo familyHealthInfo = familyHealthInfoRepository.findByUser(currentUser).orElseGet(FamilyHealthInfo::new);
-            FamilyNutrition familyNutrition = familyNutritionRepository.findByUser(currentUser).orElseGet(FamilyNutrition::new);
-            ParentHabit parentHabit = parentHabitRepository.findByUser(currentUser).orElseGet(ParentHabit::new);
-            HomeEnvironment homeEnvironment = homeEnvironmentRepository.findByUser(currentUser).orElseGet(HomeEnvironment::new);
-            MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(currentUser).orElseGet(MidwifeAssessment::new);
+            BasicInfo basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(BasicInfo::new);
+            MedicalHistory medicalHistory = medicalHistoryRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(MedicalHistory::new);
+            SpecialWoman specialWoman = specialWomanRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(SpecialWoman::new);
+            SpecialBoth specialBoth = specialBothRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(SpecialBoth::new);
+            FamilyHealthInfo familyHealthInfo = familyHealthInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(FamilyHealthInfo::new);
+            FamilyNutrition familyNutrition = familyNutritionRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(FamilyNutrition::new);
+            ParentHabit parentHabit = parentHabitRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ParentHabit::new);
+            HomeEnvironment homeEnvironment = homeEnvironmentRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(HomeEnvironment::new);
+            MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(MidwifeAssessment::new);
 
             BasicInfoDto basicInfoDto = BasicInfoMapper.toDto(basicInfo);
             basicInfoDto.setUserId(basicInfo.getUser().getUserId());
@@ -176,10 +178,10 @@ public class EligibleService {
                 throw new InvalidException("This user cannot handle eligible user profile");
             }
 
-            BasicInfo basicInfo = basicInfoRepository.findByUser(eligibleUser).orElseGet(BasicInfo::new);
+            BasicInfo basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(eligibleUser).orElseGet(BasicInfo::new);
             mapBasicInfo(eligibleCoupleDTO, basicInfo, currentUser, eligibleUser);
 
-            MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(eligibleUser).orElseGet(MidwifeAssessment::new);
+            MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUserAndDeletedAtIsNull(eligibleUser).orElseGet(MidwifeAssessment::new);
             mapMidwifeAssessment(eligibleCoupleDTO, midwifeAssessment, currentUser, eligibleUser);
 
             basicInfo = basicInfoRepository.save(basicInfo);
@@ -207,8 +209,8 @@ public class EligibleService {
         try {
             User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
 
-            BasicInfo basicInfo = basicInfoRepository.findByUser(user).orElseGet(BasicInfo::new);
-            MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUser(user).orElseGet(MidwifeAssessment::new);
+            BasicInfo basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(user).orElseGet(BasicInfo::new);
+            MidwifeAssessment midwifeAssessment = midwifeAssessmentRepository.findByUserAndDeletedAtIsNull(user).orElseGet(MidwifeAssessment::new);
 
             List<PastPregnancyDTO> pastPregnancyDTOs = basicInfo.getPastPregnancies().stream()
                     .map(this::convertToPastPregnancyDTO)
@@ -372,5 +374,87 @@ public class EligibleService {
 
         log.info("Eligible user {} updated to parent", user.getEmail());
         return ResponseEntity.ok("Eligible user updated to parent");
+    }
+
+    // delete eligible user by midwife
+    @Transactional
+    public ResponseEntity<String> deleteEligibleCouple(long userId) {
+        try {
+            User currentUser = jwtService.getCurrentUser();
+            User eligibleUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+
+            if (eligibleUser.getRole() == Role.ELIGIBLE) {
+                eligibleUserDelete(eligibleUser, currentUser);
+
+                log.info("Eligible user:{} deleted successfully by:{}", eligibleUser.getEmail(), currentUser.getEmail());
+                return ResponseEntity.status(HttpStatus.OK).body("Eligible user deleted successfully");
+            } else if (eligibleUser.getRole() == Role.PARENT) {
+                eligibleUserDelete(eligibleUser, currentUser);
+
+                log.info("Eligible user:{} deleted successfully by:{}", eligibleUser.getEmail(), currentUser.getEmail());
+                return ResponseEntity.status(HttpStatus.OK).body("Eligible user deleted successfully");
+            } else {
+                log.warn("{}:{} is trying to delete unauthorized user:{}:{} as ELIGIBLE user", currentUser.getRole(), currentUser.getEmail(), eligibleUser.getRole(), eligibleUser.getEmail());
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Cannot perform delete action on this user");
+            }
+        } catch (Exception e) {
+            log.error("Error deleting eligible user", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting eligible use");
+        }
+    }
+
+    private void eligibleUserDelete(User eligibleUser, User currentUser) {
+        // Initially delete midwife created section
+        Optional<BasicInfo> basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+        Optional<MidwifeAssessment> midwifeAssessment = midwifeAssessmentRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+
+        if (basicInfo.isPresent() && midwifeAssessment.isPresent()) {
+            basicInfo.get().setDeletedAt(LocalDateTime.now());
+            midwifeAssessment.get().setDeletedAt(LocalDateTime.now());
+
+            basicInfo.get().setDeletedBy(currentUser);
+            midwifeAssessment.get().setDeletedBy(currentUser);
+
+            basicInfoRepository.save(basicInfo.get());
+            midwifeAssessmentRepository.save(midwifeAssessment.get());
+
+            // reset role to user
+            eligibleUser.setRole(Role.USER);
+            userRepository.save(eligibleUser);
+
+            // user created section delete
+            Optional<MedicalHistory> medicalHistory = medicalHistoryRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<SpecialWoman> specialWoman = specialWomanRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<SpecialBoth> specialBoth = specialBothRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<FamilyHealthInfo> familyHealthInfo = familyHealthInfoRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<FamilyNutrition> familyNutrition = familyNutritionRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<ParentHabit> parentHabit = parentHabitRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<HomeEnvironment> homeEnvironment = homeEnvironmentRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            if (medicalHistory.isPresent()) {
+                medicalHistory.get().setDeletedAt(LocalDateTime.now());
+                specialWoman.get().setDeletedAt(LocalDateTime.now());
+                specialBoth.get().setDeletedAt(LocalDateTime.now());
+                familyHealthInfo.get().setDeletedAt(LocalDateTime.now());
+                familyNutrition.get().setDeletedAt(LocalDateTime.now());
+                parentHabit.get().setDeletedAt(LocalDateTime.now());
+                homeEnvironment.get().setDeletedAt(LocalDateTime.now());
+
+                medicalHistory.get().setDeletedBy(currentUser);
+                specialWoman.get().setDeletedBy(currentUser);
+                specialBoth.get().setDeletedBy(currentUser);
+                familyHealthInfo.get().setDeletedBy(currentUser);
+                familyNutrition.get().setDeletedBy(currentUser);
+                parentHabit.get().setDeletedBy(currentUser);
+                homeEnvironment.get().setDeletedBy(currentUser);
+
+                medicalHistoryRepository.save(medicalHistory.get());
+                specialWomanRepository.save(specialWoman.get());
+                specialBothRepository.save(specialBoth.get());
+                familyHealthInfoRepository.save(familyHealthInfo.get());
+                familyNutritionRepository.save(familyNutrition.get());
+                parentHabitRepository.save(parentHabit.get());
+                homeEnvironmentRepository.save(homeEnvironment.get());
+            }
+        }
     }
 }

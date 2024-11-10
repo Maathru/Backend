@@ -13,25 +13,28 @@ import java.util.Optional;
 
 @Repository
 public interface BasicInfoRepository extends JpaRepository<BasicInfo, Long> {
-    Optional<BasicInfo> findByUser(User currentUser);
+    Optional<BasicInfo> findByUserAndDeletedAtIsNull(User currentUser);
 
     @Query("SELECT COUNT(b) " +
             "FROM BasicInfo b " +
             "JOIN Employee e ON e.user.email = :email " +
             "JOIN b.region r2 ON r2 = e.region " +
-            "WHERE b.user.role = :role")
+            "WHERE b.user.role = :role " +
+            "AND b.deletedAt IS NULL")
     long countByUserRoleAndRegion(@Param("email") String email, @Param("role") Role role);
 
     @Query("SELECT b " +
             "FROM BasicInfo b " +
             "JOIN Employee e ON e.user.email = :email " +
             "JOIN b.region r2 ON r2 = e.region " +
-            "WHERE b.user.role = :role")
+            "WHERE b.user.role = :role " +
+            "AND b.deletedAt IS NULL")
     List<BasicInfo> findByUserRoleAndRegion(@Param("email") String email, @Param("role") Role role);
 
     @Query("SELECT b " +
             "FROM BasicInfo b " +
             "JOIN Employee e ON e.user.email = :email " +
-            "JOIN b.region r2 ON r2 = e.region")
+            "JOIN b.region r2 ON r2 = e.region " +
+            "WHERE b.deletedAt IS NULL")
     List<BasicInfo> findAllByRegion(@Param("email") String email);
 }
