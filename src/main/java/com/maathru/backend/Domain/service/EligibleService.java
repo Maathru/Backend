@@ -423,14 +423,13 @@ public class EligibleService {
             userRepository.save(eligibleUser);
 
             // user created section delete
-            Optional<MedicalHistory> medicalHistory = medicalHistoryRepository.findByUserAndDeletedAtIsNull(currentUser);
-            Optional<SpecialWoman> specialWoman = specialWomanRepository.findByUserAndDeletedAtIsNull(currentUser);
-            Optional<SpecialBoth> specialBoth = specialBothRepository.findByUserAndDeletedAtIsNull(currentUser);
-            Optional<FamilyHealthInfo> familyHealthInfo = familyHealthInfoRepository.findByUserAndDeletedAtIsNull(currentUser);
-            Optional<FamilyNutrition> familyNutrition = familyNutritionRepository.findByUserAndDeletedAtIsNull(currentUser);
-            Optional<ParentHabit> parentHabit = parentHabitRepository.findByUserAndDeletedAtIsNull(currentUser);
-            Optional<HomeEnvironment> homeEnvironment = homeEnvironmentRepository.findByUserAndDeletedAtIsNull(currentUser);
-
+            Optional<MedicalHistory> medicalHistory = medicalHistoryRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<SpecialWoman> specialWoman = specialWomanRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<SpecialBoth> specialBoth = specialBothRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<FamilyHealthInfo> familyHealthInfo = familyHealthInfoRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<FamilyNutrition> familyNutrition = familyNutritionRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<ParentHabit> parentHabit = parentHabitRepository.findByUserAndDeletedAtIsNull(eligibleUser);
+            Optional<HomeEnvironment> homeEnvironment = homeEnvironmentRepository.findByUserAndDeletedAtIsNull(eligibleUser);
             if (medicalHistory.isPresent()) {
                 medicalHistory.get().setDeletedAt(LocalDateTime.now());
                 specialWoman.get().setDeletedAt(LocalDateTime.now());
