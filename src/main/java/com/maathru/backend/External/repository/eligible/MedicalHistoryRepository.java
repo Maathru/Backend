@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, Long> {
-    Optional<MedicalHistory> findByUser(User currentUser);
+    Optional<MedicalHistory> findByUserAndDeletedAtIsNull(User currentUser);
 }

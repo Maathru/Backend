@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface ParentHabitRepository extends JpaRepository<ParentHabit, Long> {
-    Optional<ParentHabit> findByUser(User currentUser);
+    Optional<ParentHabit> findByUserAndDeletedAtIsNull(User currentUser);
 }

@@ -39,6 +39,12 @@ public class EligibleController {
     }
 
     @PreAuthorize("hasRole('MIDWIFE')")
+    @DeleteMapping("/midwife/delete/{userId}")
+    public ResponseEntity<String> deleteEligibleUserByMidwife(@PathVariable long userId) {
+        return eligibleService.deleteEligibleCouple(userId);
+    }
+
+    @PreAuthorize("hasRole('MIDWIFE')")
     @GetMapping("/midwife/get")
     public ResponseEntity<List<EligibleCoupleResponse>> getEligibleListForMidwife() {
         return eligibleService.getEligibleListForMidwife();
@@ -53,7 +59,7 @@ public class EligibleController {
     @PreAuthorize("hasRole('MIDWIFE')")
     @GetMapping("/midwife/update/{userId}/{eligibleId}")
     public ResponseEntity<String> updateEligibleToParent(@PathVariable long userId, @PathVariable long eligibleId) {
-        return eligibleService.updateEligibleToParent(userId,eligibleId);
+        return eligibleService.updateEligibleToParent(userId, eligibleId);
     }
 
     @PreAuthorize("hasAnyRole('PARENT','ELIGIBLE')")
