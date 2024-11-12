@@ -1,8 +1,6 @@
 package com.maathru.backend.Application.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -12,6 +10,13 @@ import java.util.List;
 @Getter
 @Setter
 public class ClinicResponse {
+    public ClinicResponse(String name, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.name = name;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     private long clinicId;
     private String name;
     private LocalDate date;

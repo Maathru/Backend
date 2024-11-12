@@ -21,7 +21,6 @@ import java.util.List;
 @RequestMapping("/api/v1/clinic")
 @RequiredArgsConstructor
 @Validated
-@Slf4j
 public class ClinicController {
     private final ClinicService clinicService;
     private final RegionService regionService;
@@ -92,15 +91,13 @@ public class ClinicController {
 
     @PreAuthorize("hasRole('MIDWIFE')")
     @GetMapping("/upcoming/midwife")
-    public ResponseEntity<List<ClinicDateAndNameResponse>> getUpcomingClinicsForMidwife() {
-        log.info("Here");
+    public ResponseEntity<List<ClinicResponse>> getUpcomingClinicsForMidwife() {
         return clinicService.getUpcomingClinicsForMidwife();
     }
 
     @PreAuthorize("hasRole('DOCTOR')")
     @GetMapping("/upcoming/doctor")
     public ResponseEntity<List<ClinicResponse>> getUpcomingClinicsForDoctor() {
-        log.info("Here");
         return clinicService.getUpcomingClinicsForDoctor();
     }
 }

@@ -1,6 +1,5 @@
 package com.maathru.backend.External.repository;
 
-import com.maathru.backend.Application.dto.response.ClinicDateAndNameResponse;
 import com.maathru.backend.Application.dto.response.ClinicListResponse;
 import com.maathru.backend.Application.dto.response.ClinicResponse;
 import com.maathru.backend.Domain.entity.Clinic;
@@ -97,14 +96,14 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "AND YEAR(c.date) = YEAR(CURRENT_DATE())")
     long countClinicsInCurrentMonthAndRegion(@Param("email") String email);
 
-    @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicDateAndNameResponse(c.name, c.date) " +
+    @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicResponse(c.name, c.date, c.startTime, c.endTime) " +
             "FROM Clinic c " +
             "JOIN Employee e ON c.region = e.region " +
             "WHERE e.user.email = :email " +
             "AND c.date >= CURRENT_DATE " +
             "ORDER BY c.date ASC " +
             "LIMIT 10")
-    List<ClinicDateAndNameResponse> findUpcomingClinicsForMidwife(@Param("email") String email);
+    List<ClinicResponse> findUpcomingClinicsForMidwife(@Param("email") String email);
 
     @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicResponse(c.clinicId,c.name, c.date,c.startTime,c.endTime,c.region.regionName) " +
             "FROM Clinic c " +

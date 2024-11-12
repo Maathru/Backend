@@ -1,12 +1,10 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.ClinicDto;
-import com.maathru.backend.Application.dto.response.ClinicDateAndNameResponse;
 import com.maathru.backend.Application.dto.response.ClinicListResponse;
 import com.maathru.backend.Application.dto.response.ClinicResponse;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Domain.entity.*;
-import com.maathru.backend.Domain.entity.eligible.BasicInfo;
 import com.maathru.backend.Domain.exception.*;
 import com.maathru.backend.External.repository.ClinicRepository;
 import com.maathru.backend.External.repository.EmployeeRepository;
@@ -193,10 +191,10 @@ public class ClinicService {
         return ResponseEntity.ok(clinicListResponses);
     }
 
-    public ResponseEntity<List<ClinicDateAndNameResponse>> getUpcomingClinicsForMidwife() {
+    public ResponseEntity<List<ClinicResponse>> getUpcomingClinicsForMidwife() {
         User currentUser = jwtService.getCurrentUser();
 
-        List<ClinicDateAndNameResponse> clinicListResponses = clinicRepository.findUpcomingClinicsForMidwife(currentUser.getEmail());
+        List<ClinicResponse> clinicListResponses = clinicRepository.findUpcomingClinicsForMidwife(currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
             log.error("No any upcoming clinics");
