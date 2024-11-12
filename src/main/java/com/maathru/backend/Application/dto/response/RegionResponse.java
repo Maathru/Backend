@@ -5,8 +5,7 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@ToString
-
+@NoArgsConstructor
 public class RegionResponse {
     private Long regionId;
     private String regionName;
