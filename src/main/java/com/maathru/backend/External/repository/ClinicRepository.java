@@ -60,6 +60,14 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
     List<LocalDate> findAllClinicDatesForCurrentMonthByMidwife(@Param("currentDate") LocalDate currentDate, @Param("email") String email);
 
     @Query("SELECT DISTINCT c.date " +
+            "FROM Clinic c " +
+            "JOIN c.doctors d " +
+            "WHERE d.user.email = :email " +
+            "AND EXTRACT(MONTH FROM c.date) = EXTRACT(MONTH FROM CAST(:currentDate AS DATE)) " +
+            "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:currentDate AS DATE))")
+    List<LocalDate> findAllClinicDatesForCurrentMonthByDoctor(@Param("currentDate") LocalDate currentDate, @Param("email") String email);
+
+    @Query("SELECT DISTINCT c.date " +
             "FROM BasicInfo b " +
             "JOIN Clinic c ON c.region = b.region " +
             "WHERE b.user.email = :email " +
@@ -87,4 +95,22 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "WHERE MONTH(c.date) = MONTH(CURRENT_DATE()) " +
             "AND YEAR(c.date) = YEAR(CURRENT_DATE())")
     long countClinicsInCurrentMonthAndRegion(@Param("email") String email);
+
+    @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicResponse(c.name, c.date, c.startTime, c.endTime) " +
+            "FROM Clinic c " +
+            "JOIN Employee e ON c.region = e.region " +
+            "WHERE e.user.email = :email " +
+            "AND c.date >= CURRENT_DATE " +
+            "ORDER BY c.date ASC " +
+            "LIMIT 10")
+    List<ClinicResponse> findUpcomingClinicsForMidwife(@Param("email") String email);
+
+    @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicResponse(c.clinicId,c.name, c.date,c.startTime,c.endTime,c.region.regionName) " +
+            "FROM Clinic c " +
+            "JOIN c.doctors d " +
+            "WHERE d.user.email = :email " +
+            "AND c.date >= CURRENT_DATE " +
+            "ORDER BY c.date ASC " +
+            "LIMIT 10")
+    List<ClinicResponse> findUpcomingClinicsForDoctor(@Param("email") String email);
 }
