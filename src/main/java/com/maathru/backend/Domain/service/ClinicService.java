@@ -1,6 +1,7 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.ClinicDto;
+import com.maathru.backend.Application.dto.response.ClinicDateAndNameResponse;
 import com.maathru.backend.Application.dto.response.ClinicListResponse;
 import com.maathru.backend.Application.dto.response.ClinicResponse;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
@@ -188,6 +189,43 @@ public class ClinicService {
         if (clinicListResponses.isEmpty()) {
             log.error("Clinics not found for this month {}", date);
             throw new NotFoundException("Clinics not found for this month " + date);
+        }
+        return ResponseEntity.ok(clinicListResponses);
+    }
+
+    public ResponseEntity<List<ClinicDateAndNameResponse>> getUpcomingClinicsForMidwife() {
+        User currentUser = jwtService.getCurrentUser();
+
+        List<ClinicDateAndNameResponse> clinicListResponses = clinicRepository.findUpcomingClinicsForMidwife(currentUser.getEmail());
+
+        if (clinicListResponses.isEmpty()) {
+            log.error("No any upcoming clinics");
+            throw new NotFoundException("No any upcoming clinics");
+        }
+        return ResponseEntity.ok(clinicListResponses);
+    }
+
+    public ResponseEntity<List<LocalDate>> getClinicsGivenMonthForDoctor(String date) {
+        User currentUser = jwtService.getCurrentUser();
+
+        LocalDate localDate = LocalDate.parse(date);
+        List<LocalDate> clinicListResponses = clinicRepository.findAllClinicDatesForCurrentMonthByDoctor(localDate, currentUser.getEmail());
+
+        if (clinicListResponses.isEmpty()) {
+            log.error("Clinics not found for this month {}", date);
+            throw new NotFoundException("Clinics not found for this month " + date);
+        }
+        return ResponseEntity.ok(clinicListResponses);
+    }
+
+    public ResponseEntity<List<ClinicResponse>> getUpcomingClinicsForDoctor() {
+        User currentUser = jwtService.getCurrentUser();
+
+        List<ClinicResponse> clinicListResponses = clinicRepository.findUpcomingClinicsForDoctor(currentUser.getEmail());
+
+        if (clinicListResponses.isEmpty()) {
+            log.error("No any upcoming clinics");
+            throw new NotFoundException("No any upcoming clinics");
         }
         return ResponseEntity.ok(clinicListResponses);
     }

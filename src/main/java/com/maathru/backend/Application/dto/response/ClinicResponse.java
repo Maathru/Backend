@@ -20,4 +20,16 @@ public class ClinicResponse {
     private long region;
     private String other;
     private List<DoctorsResponse> doctors;
+
+    public ClinicResponse() {
+    }
+
+    public ClinicResponse(long clinicId, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String region) {
+        this.clinicId = clinicId;
+        this.name = name;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.other = region;
+    }
 }
