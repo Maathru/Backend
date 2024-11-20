@@ -56,14 +56,26 @@ public class BlogService {
         return ResponseEntity.ok(blogs);
     }
 
-    public ResponseEntity<Blog> getBlog(Long id) {
-        Optional<Blog> optionalBlog = blogRepository.findById(id);
+//    public ResponseEntity<Blog> getBlog(Long id) {
+//        Optional<Blog> optionalBlog = blogRepository.findById(id);
+//
+//        if (optionalBlog.isPresent()) {
+//            return ResponseEntity.ok(optionalBlog.get());
+//        } else {
+//            log.error("Blog not found");
+//            throw new NotFoundException("Blog not found");
+//        }
+//    }
 
-        if (optionalBlog.isPresent()) {
-            return ResponseEntity.ok(optionalBlog.get());
+    public ResponseEntity<Optional<ViewBlogDto>> findArticle(Long id) {
+
+        Optional<ViewBlogDto> article = blogRepository.findArticle(id);
+
+        if (article.isPresent()) {
+            return ResponseEntity.ok(article);
         } else {
-            log.error("Blog not found");
-            throw new NotFoundException("Blog not found");
+            log.error("Article with id {} not found", id);
+            throw new NotFoundException("Article with id " + id + " not found");
         }
     }
 
