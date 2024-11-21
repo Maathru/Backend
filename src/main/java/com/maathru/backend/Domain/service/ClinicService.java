@@ -120,7 +120,7 @@ public class ClinicService {
         List<Clinic> clinics = clinicRepository.findAll();
 
         if (clinics.isEmpty()) {
-            log.error("Clinics not found");
+            log.warn("Clinics not found");
             throw new NotFoundException("Clinics not found");
         }
         return ResponseEntity.ok(clinics);
@@ -146,7 +146,7 @@ public class ClinicService {
         List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByDate(localDate, currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
-            log.error("Clinics not found for date {}", date);
+            log.warn("Clinics not found for date {}", date);
             throw new NotFoundException("Clinics not found for date " + date);
         }
         return ResponseEntity.ok(clinicListResponses);
@@ -159,7 +159,7 @@ public class ClinicService {
         List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByMonth(localDate, currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
-            log.error("Clinics not found for this month {}", date);
+            log.warn("Clinics not found for this month {}", date);
             throw new NotFoundException("Clinics not found for this month " + date);
         }
         return ResponseEntity.ok(clinicListResponses);
@@ -172,7 +172,7 @@ public class ClinicService {
         List<LocalDate> clinicListResponses = clinicRepository.findAllClinicDatesForCurrentMonthByParent(localDate, currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
-            log.error("Clinics not found for this month {}", date);
+            log.warn("Clinics not found for this month {}", date);
             throw new NotFoundException("Clinics not found for this month " + date);
         }
         return ResponseEntity.ok(clinicListResponses);
@@ -185,7 +185,7 @@ public class ClinicService {
         List<LocalDate> clinicListResponses = clinicRepository.findAllClinicDatesForCurrentMonthByMidwife(localDate, currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
-            log.error("Clinics not found for this month {}", date);
+            log.warn("Clinics not found for this month {}", date);
             throw new NotFoundException("Clinics not found for this month " + date);
         }
         return ResponseEntity.ok(clinicListResponses);
@@ -197,7 +197,7 @@ public class ClinicService {
         List<ClinicResponse> clinicListResponses = clinicRepository.findUpcomingClinicsForMidwife(currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
-            log.error("No any upcoming clinics");
+            log.warn("No any upcoming clinics");
             throw new NotFoundException("No any upcoming clinics");
         }
         return ResponseEntity.ok(clinicListResponses);
@@ -210,7 +210,7 @@ public class ClinicService {
         List<LocalDate> clinicListResponses = clinicRepository.findAllClinicDatesForCurrentMonthByDoctor(localDate, currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
-            log.error("Clinics not found for this month {}", date);
+            log.warn("Clinics not found for this month {}", date);
             throw new NotFoundException("Clinics not found for this month " + date);
         }
         return ResponseEntity.ok(clinicListResponses);
@@ -222,7 +222,7 @@ public class ClinicService {
         List<ClinicResponse> clinicListResponses = clinicRepository.findUpcomingClinicsForDoctor(currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
-            log.error("No any upcoming clinics");
+            log.warn("No any upcoming clinics");
             throw new NotFoundException("No any upcoming clinics");
         }
         return ResponseEntity.ok(clinicListResponses);

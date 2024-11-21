@@ -43,6 +43,8 @@ public class MedicalHistory extends Auditable implements BaseEntity {
     private boolean womanLongTermMedication;
     @NotNull
     private boolean womanSurgery;
+    private boolean womanBloodRelatedDiseases;
+    private boolean other;
 
     @NotNull
     private boolean manAnemia;
@@ -85,6 +87,7 @@ public class MedicalHistory extends Auditable implements BaseEntity {
     private String foodPoisoningDetails;
     private String longTermMedicationDetails;
     private String surgeryDetails;
+    private String womanBloodRelatedDiseasesDetails;
     private String otherDetails;
 
     @OneToOne

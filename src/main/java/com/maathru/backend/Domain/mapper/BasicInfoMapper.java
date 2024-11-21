@@ -7,6 +7,7 @@ import com.maathru.backend.Application.dto.eligible.BasicInfoDto;
 import com.maathru.backend.enumeration.Role;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +89,8 @@ public class BasicInfoMapper implements Mapper<BasicInfo, BasicInfoDto> {
         basicInfo.setWomanOccupation(dto.getWomanOccupation());
         basicInfo.setManOccupation(dto.getManOccupation());
         basicInfo.setChildren(dto.getChildren());
+        basicInfo.setWomanAge(calculateAge(dto.getWomanDob()));
+        basicInfo.setManAge(calculateAge(dto.getManDob()));
 
         return basicInfo;
     }
@@ -120,5 +123,9 @@ public class BasicInfoMapper implements Mapper<BasicInfo, BasicInfoDto> {
         }
 
         return eligibleCoupleResponseList;
+    }
+
+    private static int calculateAge(LocalDate dob) {
+        return Period.between(dob, LocalDate.now()).getYears();
     }
 }
