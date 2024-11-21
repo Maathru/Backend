@@ -9,12 +9,10 @@ import com.maathru.backend.Domain.exception.*;
 import com.maathru.backend.External.repository.ClinicRepository;
 import com.maathru.backend.External.repository.EmployeeRepository;
 import com.maathru.backend.External.repository.RegionRepository;
-import com.maathru.backend.External.repository.eligible.BasicInfoRepository;
 import com.maathru.backend.External.utils.TimeUtils;
 import com.maathru.backend.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,8 +32,6 @@ public class ClinicService {
     private final RegionRepository regionRepository;
     private final EmployeeRepository employeeRepository;
     private final JwtService jwtService;
-    private final ModelMapper mapper;
-    private final BasicInfoRepository basicInfoRepository;
 
     @Transactional
     public ResponseEntity<String> createOrUpdateClinic(ClinicDto clinicDto) {
@@ -139,11 +135,24 @@ public class ClinicService {
         }
     }
 
-    public ResponseEntity<List<ClinicListResponse>> getClinicsByDate(String date) {
+    public ResponseEntity<List<ClinicListResponse>> getClinicsByDateToAdmin(String date) {
         User currentUser = jwtService.getCurrentUser();
 
         LocalDate localDate = LocalDate.parse(date);
-        List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByDate(localDate, currentUser.getEmail());
+        List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByDateToAdmin(localDate, currentUser.getEmail());
+
+        if (clinicListResponses.isEmpty()) {
+            log.error("Clinics not found for date {}", date);
+            throw new NotFoundException("Clinics not found for date " + date);
+        }
+        return ResponseEntity.ok(clinicListResponses);
+    }
+
+    public ResponseEntity<List<ClinicListResponse>> getClinicsByDateToDoctor(String date) {
+        User currentUser = jwtService.getCurrentUser();
+
+        LocalDate localDate = LocalDate.parse(date);
+        List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByDateToDoctor(localDate, currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
             log.warn("Clinics not found for date {}", date);

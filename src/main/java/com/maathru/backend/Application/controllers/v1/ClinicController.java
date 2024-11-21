@@ -60,9 +60,15 @@ public class ClinicController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/by/{date}")
-    public ResponseEntity<List<ClinicListResponse>> getClinicsByDate(@PathVariable String date) {
-        return clinicService.getClinicsByDate(date);
+    @GetMapping("/admin/by/{date}")
+    public ResponseEntity<List<ClinicListResponse>> getClinicsByDateToAdmin(@PathVariable String date) {
+        return clinicService.getClinicsByDateToAdmin(date);
+    }
+
+    @PreAuthorize("hasRole('DOCTOR')")
+    @GetMapping("/doctor/by/{date}")
+    public ResponseEntity<List<ClinicListResponse>> getClinicsByDateToDoctor(@PathVariable String date) {
+        return clinicService.getClinicsByDateToDoctor(date);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
