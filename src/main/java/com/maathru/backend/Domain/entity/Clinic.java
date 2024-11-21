@@ -17,7 +17,7 @@ public class Clinic extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
-    private Long clinicId;
+    private long clinicId;
 
     @NotNull
     private String name;
@@ -30,7 +30,7 @@ public class Clinic extends Auditable {
 
     private String other;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "clinic_doctors",
             joinColumns = @JoinColumn(name = "clinic_id"),

@@ -1,7 +1,5 @@
 package com.maathru.backend.Domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,13 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 @Entity
-@Table(name = "blog")
+@Table(name = "blogs")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -34,8 +31,6 @@ public class Blog extends Auditable {
     private String additionalNotes;
     private String image;
     private String location;
-
-    @Column
     private String approvalStatus;
     private String statusReason;
 

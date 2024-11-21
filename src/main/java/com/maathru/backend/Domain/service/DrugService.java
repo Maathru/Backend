@@ -26,9 +26,6 @@ public class DrugService {
 
     public ResponseEntity<String> addDrug(DrugDto drugDto) {
         User currentUser = jwtService.getCurrentUser();
-        if (currentUser.getUserId() == 0) {
-            throw new NotFoundException("Author not found");
-        }
 
         Drug drug = mapper.map(drugDto, Drug.class);
         drug.setCreatedBy(currentUser);

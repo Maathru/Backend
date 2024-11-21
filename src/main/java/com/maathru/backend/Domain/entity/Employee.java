@@ -2,12 +2,11 @@ package com.maathru.backend.Domain.entity;
 
 import com.maathru.backend.enumeration.Gender;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "employees")
@@ -45,6 +44,9 @@ public class Employee extends Auditable {
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
+
+    @ManyToMany(mappedBy = "doctors")
+    private List<Clinic> clinics;
 
     public Employee(Long employeeId, String phoneNumber, String nic, Gender gender, LocalDate dob, String addressLine1, String street, String city, String designation, String qualifications, User user, MOH moh) {
         this.employeeId = employeeId;

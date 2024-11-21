@@ -11,6 +11,7 @@ import com.maathru.backend.External.repository.ClinicRepository;
 import com.maathru.backend.External.repository.EmployeeRepository;
 import com.maathru.backend.External.repository.ParentRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;

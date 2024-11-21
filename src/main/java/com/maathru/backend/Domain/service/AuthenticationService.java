@@ -49,12 +49,23 @@ public class AuthenticationService {
             User currentUser = getCurrentUser();
             User user = mapper.map(signupDto, User.class);
 
+            boolean passwordStatus = user.getPassword() == null;
+
             encodePassword(user);
             initializeUserFields(user, currentUser);
             user.setRole(determineUserRole(currentUser, user));
 
-
             user = userRepository.save(user);
+
+            if (passwordStatus) {
+                // after user created successfully send password
+                try {
+                    emailService.sendNewAccountEmail(user.getFirstName(), user.getEmail(), user.getPassword());
+                } catch (Exception e) {
+                    log.error("Failed to send account creation email: {}", e.getMessage());
+                    throw new ApiException("Failed to send account creation email");
+                }
+            }
 
             if (currentUser.getUserId() != 0) {
                 log.info("User signed up successfully: {} by {}: {}", user.getUsername(), currentUser.getRole(), currentUser.getUserId());
@@ -110,7 +121,7 @@ public class AuthenticationService {
 
         User user = userRepository.findByEmail(refreshEmail).orElseThrow(() -> new NotFoundException("User not found"));
 
-        if (!jwtService.isTokenExpired(token)) {
+        if (jwtService.isTokenExpired(token)) {
             log.info("Access token is still valid for user: {}", refreshEmail);
             return new AuthenticationResponse(token, tokenRequest.getToken(), "Access Token is still valid");
         }
@@ -140,22 +151,16 @@ public class AuthenticationService {
         return new User();
     }
 
-    private void encodePassword(User user) {
-        try {
-            if (user.getPassword() != null) {
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-            } else {
-                String password = generatePassword(6);
-                user.setPassword(passwordEncoder.encode(password));
-                emailService.sendNewAccountEmail(user.getFirstName(), user.getEmail(), password);
-            }
-        } catch (Exception e) {
-            log.error("Error encoding password or sending email: {}", e.getMessage());
-            throw new ApiException("An error occurred during password encoding or email sending");
+    public void encodePassword(User user) {
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        } else {
+            String password = generatePassword(6);
+            user.setPassword(passwordEncoder.encode(password));
         }
     }
 
-    private void initializeUserFields(User user, User currentUser) {
+    public void initializeUserFields(User user, User currentUser) {
         user.setLoginAttempts(0);
         if (currentUser.getUserId() != 0) {
             user.setCreatedBy(currentUser);
@@ -166,7 +171,7 @@ public class AuthenticationService {
         user.setEnabled(true);
     }
 
-    private Role determineUserRole(User currentUser, User user) {
+    public Role determineUserRole(User currentUser, User user) {
         Role newRole = Role.USER; // Default to USER
         if (currentUser.getUserId() != 0 && user.getRole() != null) {
             switch (currentUser.getRole()) {

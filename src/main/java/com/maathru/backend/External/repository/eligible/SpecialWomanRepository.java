@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface SpecialWomanRepository extends JpaRepository<SpecialWoman, Long> {
-    Optional<SpecialWoman> findByUser(User currentUser);
+    Optional<SpecialWoman> findByUserAndDeletedAtIsNull(User currentUser);
 }

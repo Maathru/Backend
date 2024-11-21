@@ -15,6 +15,8 @@ import com.maathru.backend.External.repository.BlogRepository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.maathru.backend.constant.Constant.PENDING_BLOG;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -34,6 +36,7 @@ public class BlogService {
             blog.setAdditionalNotes(blogDto.getAdditionalNotes());
             blog.setKeywords(blogDto.getKeywords());
             blog.setAdditionalNotes("Pending");
+            blog.setApprovalStatus(PENDING_BLOG);
 
             blog.setCreatedBy(user);
             blog.setUpdatedBy(user);
@@ -46,6 +49,11 @@ public class BlogService {
             log.error("Error adding blog: {}", e.getMessage());
             return ResponseEntity.status(500).body("Error adding blog");
         }
+    }
+
+    public ResponseEntity<Iterable<ViewBlogDto>> getPendingBlogs() {
+        List<ViewBlogDto> blogs = blogRepository.findAllPendingBlogsForDemo(PENDING_BLOG);
+        return ResponseEntity.ok(blogs);
     }
 
     public ResponseEntity<Blog> getBlog(Long id) {
@@ -61,23 +69,6 @@ public class BlogService {
 
     public ResponseEntity<Iterable<ViewBlogDto>> getAllBlogs() {
         List<ViewBlogDto> blogs = blogRepository.findAllBlogsForDemo();
-
-//        if (blogs.isEmpty()) {
-//            log.error("Blogs not found");
-//            throw new NotFoundException("Blogs not found");
-//        }
-//        log.info("Getting all blogs");
-//
-//        List<ViewBlogDto> viewBlogDtos = blogs.stream().map(blog -> {
-//            ViewBlogDto viewBlogDto = new ViewBlogDto();
-//            viewBlogDto.setTitle(blog.getTitle());
-//            viewBlogDto.setCategory(blog.getCategory());
-//            viewBlogDto.setContent(blog.getContent());
-//            viewBlogDto.setKeywords(blog.getKeywords());
-//            log.info(blog.getContent());
-//            return viewBlogDto;
-//        }).toList();
-
         return ResponseEntity.ok(blogs);
     }
 

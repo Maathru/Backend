@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface FamilyNutritionRepository extends JpaRepository<FamilyNutrition, Long> {
-    Optional<FamilyNutrition> findByUser(User currentUser);
+    Optional<FamilyNutrition> findByUserAndDeletedAtIsNull(User currentUser);
 }
