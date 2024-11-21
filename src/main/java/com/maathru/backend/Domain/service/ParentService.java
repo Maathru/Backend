@@ -281,13 +281,13 @@ public class ParentService {
             ObstetricComplication obstetricComplication = obstetricComplicationRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ObstetricComplication::new);
             ChildDetail childDetail = childDetailRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ChildDetail::new);
 
-            if (childBirth.getId() == 0) {
+            if (childBirth.getId() == null) {
                 childBirth.setCreatedBy(currentUser);
             }
-            if (obstetricComplication.getId() == 0) {
+            if (obstetricComplication.getId() == null) {
                 obstetricComplication.setCreatedBy(currentUser);
             }
-            if (childDetail.getId() == 0) {
+            if (childDetail.getId() == null) {
                 childDetail.setCreatedBy(currentUser);
             }
 
