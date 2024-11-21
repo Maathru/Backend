@@ -20,7 +20,14 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "JOIN Clinic c on c.moh=e.moh " +
             "WHERE c.date = :date " +
             "AND u.email=:email ")
-    List<ClinicListResponse> findClinicsByDate(@Param("date") LocalDate date, @Param("email") String email);
+    List<ClinicListResponse> findClinicsByDateToAdmin(@Param("date") LocalDate date, @Param("email") String email);
+
+    @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicListResponse(c.clinicId,c.name,c.date,c.startTime,c.endTime,c.region.regionName) " +
+            "FROM Clinic c " +
+            "JOIN c.doctors d " +
+            "WHERE d.user.email = :email " +
+            "AND c.date = :date ")
+    List<ClinicListResponse> findClinicsByDateToDoctor(@Param("date") LocalDate date, @Param("email") String email);
 
 
     @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicListResponse(c.clinicId, c.name, c.date, c.startTime, c.endTime,c.region.regionName) " +
