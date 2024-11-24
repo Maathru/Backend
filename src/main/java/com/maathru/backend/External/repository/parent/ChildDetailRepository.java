@@ -1,6 +1,7 @@
-package com.maathru.backend.Domain.entity.parent;
+package com.maathru.backend.External.repository.parent;
 
 import com.maathru.backend.Domain.entity.User;
+import com.maathru.backend.Domain.entity.parent.ChildDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
