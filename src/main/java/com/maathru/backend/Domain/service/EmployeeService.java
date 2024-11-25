@@ -166,6 +166,23 @@ public class EmployeeService {
         return ResponseEntity.ok(midwifeDashboard);
     }
 
+    public ResponseEntity<HomeVisitsResponse> getMidwifeHomeVisitsData(long id) {
+        try {
+            User user = jwtService.getCurrentUser();
+            HomeVisitsResponse homeVisits = basicInfoRepository.findByParent(user.getEmail(), id);
+            if (homeVisits == null) {
+                throw new NotFoundException("No parent data found for id " + id);
+            }
+            return ResponseEntity.ok(homeVisits);
+        } catch (Exception e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            log.error("Error retrieving parent details {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     static class MonthData {
         int month;
         int days;

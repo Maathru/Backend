@@ -1,5 +1,6 @@
 package com.maathru.backend.External.repository.eligible;
 
+import com.maathru.backend.Application.dto.response.HomeVisitsResponse;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.entity.eligible.BasicInfo;
 import com.maathru.backend.enumeration.Role;
@@ -37,4 +38,12 @@ public interface BasicInfoRepository extends JpaRepository<BasicInfo, Long> {
             "JOIN b.region r2 ON r2 = e.region " +
             "WHERE b.deletedAt IS NULL")
     List<BasicInfo> findAllByRegion(@Param("email") String email);
+
+    @Query("SELECT new com.maathru.backend.Application.dto.response.HomeVisitsResponse(b.womanName, b.manName, b.address, b.womanPhone, b.manPhone, b.location) " +
+            "FROM BasicInfo b " +
+            "JOIN Employee e ON e.user.email = :email " +
+            "JOIN b.region r ON r = e.region " +
+            "WHERE b.user.userId = :id " +
+            "AND b.user.role = 'PARENT'")
+    HomeVisitsResponse findByParent(@Param("email") String email, @Param("id") long id);
 }
