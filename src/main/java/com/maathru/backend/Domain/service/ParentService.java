@@ -363,12 +363,11 @@ public class ParentService {
 
             log.info("Child memory added successfully by user: {}", currentUser.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body("Child memory added successfully");
+        } catch (NotFoundException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof NotFoundException) {
-                throw e;
-            }
             log.error("Error saving child memory for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving child memory");
         }
     }
 }
