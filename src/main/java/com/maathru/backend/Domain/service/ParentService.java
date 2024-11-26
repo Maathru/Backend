@@ -1,10 +1,12 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.parent.*;
+import com.maathru.backend.Application.dto.request.ChildMemoryDto;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.entity.eligible.BasicInfo;
 import com.maathru.backend.Domain.entity.eligible.MedicalHistory;
 import com.maathru.backend.Domain.entity.parent.*;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.Domain.mapper.ChildBirthMapper;
 import com.maathru.backend.Domain.mapper.CurrentPregnancyMapper;
 import com.maathru.backend.Domain.mapper.FamilyHistoryMapper;
@@ -12,11 +14,14 @@ import com.maathru.backend.Domain.mapper.ParentDetailsMapper;
 import com.maathru.backend.External.repository.*;
 import com.maathru.backend.External.repository.eligible.BasicInfoRepository;
 import com.maathru.backend.External.repository.eligible.MedicalHistoryRepository;
+import com.maathru.backend.External.repository.parent.ChildDetailRepository;
+import com.maathru.backend.External.repository.parent.ChildMemoryRepository;
 import com.maathru.backend.External.repository.parent.PreExistingMedicalConditionRepository;
 import com.maathru.backend.External.repository.parent.PregnancyHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -40,6 +45,8 @@ public class ParentService {
     private final MedicalHistoryRepository medicalHistoryRepository;
     private final PregnancyHistoryRepository pregnancyHistoryRepository;
     private final ModelMapper mapper;
+
+    private final ChildMemoryRepository childMemoryRepository;
 
     @Transactional
     public ResponseEntity<String> createOrUpdateParentDetails(ParentDetailsDto parentDetailsDto) {
@@ -281,15 +288,16 @@ public class ParentService {
             ObstetricComplication obstetricComplication = obstetricComplicationRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ObstetricComplication::new);
             ChildDetail childDetail = childDetailRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ChildDetail::new);
 
-            if (childBirth.getId() == null) {
+            if (childBirth.getId() == 0) {
                 childBirth.setCreatedBy(currentUser);
             }
-            if (obstetricComplication.getId() == null) {
+            if (obstetricComplication.getId() == 0) {
                 obstetricComplication.setCreatedBy(currentUser);
             }
-            if (childDetail.getId() == null) {
+            if (childDetail.getId() == 0) {
                 childDetail.setCreatedBy(currentUser);
             }
+
 
             ChildBirthMapper childBirthMapper = new ChildBirthMapper();
 
@@ -334,6 +342,32 @@ public class ParentService {
         } catch (Exception e) {
             log.error("Error retrieving Child Birth data for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    public ResponseEntity<String> addMemoryChild(ChildMemoryDto childMemoryDto) {
+        try {
+            User currentUser = jwtService.getCurrentUser();
+
+            ChildDetail childDetail = childDetailRepository.findById(childMemoryDto.getChildId()).orElseThrow(() -> new NotFoundException("Child not found"));
+
+            ChildMemory childMemory = new ChildMemory();
+            childMemory.setChild(childDetail);
+            childMemory.setCreatedBy(currentUser);
+            childMemory.setUpdatedBy(currentUser);
+            childMemory.setTitle(childMemoryDto.getTitle());
+            childMemory.setDescription(childMemoryDto.getDescription());
+
+            // Save to repository
+            childMemoryRepository.save(childMemory);
+
+            log.info("Child memory added successfully by user: {}", currentUser.getEmail());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Child memory added successfully");
+        } catch (NotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error saving child memory for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving child memory");
         }
     }
 }

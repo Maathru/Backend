@@ -28,24 +28,24 @@ public class ClinicalConservation extends Auditable {
     private boolean swelling;
     private int bloodPressure;
     private float fetalHeight;
-    private String fetalLocation;
-    private String fetalMovements;
-    private String heartSound;
-    private String ironFolate;
-    private String vitaminC;
-    private String calciumMalaria;
-    private String thriposha;
-    private String bloodSample;
-    private String bloodSugarLevel;
-    private String hemoglobinLevel;
-    private String malaria;
-    private String vdrlResult;
-    private String lungs;
-    private String dentalTests;
-    private String dentalDrying;
-    private String galagandaya;
-    private String checkedBy;
-    private String referral;
+    private boolean fetalLocation;
+    private boolean fetalMovements;
+    private boolean heartSound;
+    private boolean ironFolate;
+    private boolean vitaminC;
+    private boolean calciumMalaria;
+    private boolean thriposha;
+    private boolean bloodSample;
+    private boolean bloodSugarLevel;
+    private boolean hemoglobinLevel;
+    private boolean malaria;
+    private boolean vdrlResult;
+    private boolean lungs;
+    private boolean dentalTests;
+    private boolean dentalDrying;
+    private boolean galagandaya;
+    private boolean checkedBy;
+    private boolean referral;
 
     @ManyToOne
     @JoinColumn(name = "user_user_id", updatable = false, nullable = false)
