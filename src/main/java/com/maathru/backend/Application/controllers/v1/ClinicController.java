@@ -71,6 +71,12 @@ public class ClinicController {
         return clinicService.getClinicsByDateToDoctor(date);
     }
 
+    @PreAuthorize("hasRole('MIDWIFE')")
+    @GetMapping("/midwife/by/{date}")
+    public ResponseEntity<List<ClinicListResponse>> getClinicsByDateToMidwife(@PathVariable String date) {
+        return clinicService.getClinicsByDateToDoctor(date);
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/month/{date}")
     public ResponseEntity<List<ClinicListResponse>> getClinicsGivenMonth(@PathVariable String date) {
