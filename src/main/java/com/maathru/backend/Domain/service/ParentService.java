@@ -46,8 +46,7 @@ public class ParentService {
     private final PregnancyHistoryRepository pregnancyHistoryRepository;
     private final ModelMapper mapper;
 
-    @Autowired
-    private ChildMemoryRepository childMemoryRepository;
+    private final ChildMemoryRepository childMemoryRepository;
 
     @Transactional
     public ResponseEntity<String> createOrUpdateParentDetails(ParentDetailsDto parentDetailsDto) {
