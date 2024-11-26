@@ -1,6 +1,7 @@
 package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.parent.*;
+import com.maathru.backend.Application.dto.request.ChildMemoryDto;
 import com.maathru.backend.Domain.service.ParentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -88,5 +89,11 @@ public class ParentController {
     @GetMapping("/pregnancy/child")
     public ResponseEntity<ChildBirthDto> getChildBirth() {
         return parentService.getChildBirth();
+    }
+
+    @PreAuthorize("hasRole('PARENT')")
+    @PostMapping("/memory/child/{userId}")
+    public ResponseEntity<ChildMemoryDto> addMemoryChild(@PathVariable Long userId, @RequestBody  ChildMemoryDto childMemoryDto) {
+        return parentService.addMemoryChild(userId,childMemoryDto);
     }
 }
