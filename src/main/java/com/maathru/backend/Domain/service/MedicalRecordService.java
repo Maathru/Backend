@@ -33,6 +33,8 @@ public class MedicalRecordService {
         medicalRecord.setMedicationGiven(medicalRecordDto.getMedicationGiven());
         medicalRecord.setCreatedBy(currentUser);
         medicalRecord.setUpdatedBy(currentUser);
+        medicalRecord.setRemarks(medicalRecordDto.getRemarks());
+        medicalRecord.setReferredTo(medicalRecordDto.getReferredTo());
 
         medicalRecord = medicalRecordRepository.save(medicalRecord);
         log.info("Medical Record:{} added successfully by {}", medicalRecord.getRecordId(), currentUser.getEmail());
