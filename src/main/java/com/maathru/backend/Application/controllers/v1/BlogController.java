@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1/blogs")
 @Slf4j
@@ -33,9 +35,7 @@ public class BlogController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Blog> getBlog(@PathVariable long id) {
-        return blogService.getBlog(id);
-    }
+    public ResponseEntity<Optional<ViewBlogDto>> findArticle(@PathVariable Long id) { return blogService.findArticle(id); }
 
 //    @PutMapping("/{id}")
 //    public ResponseEntity<Blog> updateBlog(@PathVariable long id, @RequestBody BlogDto blogDto) {
