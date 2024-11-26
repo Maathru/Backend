@@ -1,6 +1,7 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.parent.*;
+import com.maathru.backend.Application.dto.request.ChildMemoryDto;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.entity.eligible.BasicInfo;
 import com.maathru.backend.Domain.entity.eligible.MedicalHistory;
@@ -17,12 +18,14 @@ import com.maathru.backend.External.repository.parent.PregnancyHistoryRepository
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +43,9 @@ public class ParentService {
     private final MedicalHistoryRepository medicalHistoryRepository;
     private final PregnancyHistoryRepository pregnancyHistoryRepository;
     private final ModelMapper mapper;
+
+    @Autowired
+    private PChildMemoryRepository pChildMemoryRepository;
 
     @Transactional
     public ResponseEntity<String> createOrUpdateParentDetails(ParentDetailsDto parentDetailsDto) {
@@ -281,15 +287,15 @@ public class ParentService {
             ObstetricComplication obstetricComplication = obstetricComplicationRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ObstetricComplication::new);
             ChildDetail childDetail = childDetailRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ChildDetail::new);
 
-            if (childBirth.getId() == null) {
-                childBirth.setCreatedBy(currentUser);
-            }
-            if (obstetricComplication.getId() == null) {
-                obstetricComplication.setCreatedBy(currentUser);
-            }
-            if (childDetail.getId() == null) {
-                childDetail.setCreatedBy(currentUser);
-            }
+//            if (childBirth.getId() == null) {
+//                childBirth.setCreatedBy(currentUser);
+//            }
+//            if (obstetricComplication.getId() ==null) {
+//                obstetricComplication.setCreatedBy(currentUser);
+//            }
+//            if (childDetail.getId() == null) {
+//                childDetail.setCreatedBy(currentUser);
+//            }
 
             ChildBirthMapper childBirthMapper = new ChildBirthMapper();
 
@@ -333,6 +339,36 @@ public class ParentService {
             return ResponseEntity.status(HttpStatus.OK).body(childBirthDto);
         } catch (Exception e) {
             log.error("Error retrieving Child Birth data for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    public ResponseEntity<ChildMemoryDto> addMemoryChild(Long motherId, ChildMemoryDto childMemoryDto) {
+        try {
+            // Fetch the current authenticated user
+            User currentUser = jwtService.getCurrentUser();
+
+            // Ensure the provided userId matches the current user's ID
+            if (!Objects.equals(currentUser.getUserId(), motherId)) {
+                log.warn("Unauthorized access attempt by user: {}", currentUser.getEmail());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            }
+
+            // Map DTO to entity
+            PChildMemory pChildMemory = mapper.map(childMemoryDto, PChildMemory.class);
+
+
+
+            // Save to repository
+            pChildMemoryRepository.save(pChildMemory);
+
+            // Log success
+            log.info("Child memory added successfully by user: {}", currentUser.getEmail());
+
+            // Return saved DTO
+            return ResponseEntity.status(HttpStatus.CREATED).body(childMemoryDto);
+        } catch (Exception e) {
+            log.error("Error saving child memory for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
