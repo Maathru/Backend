@@ -13,6 +13,7 @@ import com.maathru.backend.Domain.mapper.ParentDetailsMapper;
 import com.maathru.backend.External.repository.*;
 import com.maathru.backend.External.repository.eligible.BasicInfoRepository;
 import com.maathru.backend.External.repository.eligible.MedicalHistoryRepository;
+import com.maathru.backend.External.repository.parent.ChildDetailRepository;
 import com.maathru.backend.External.repository.parent.PreExistingMedicalConditionRepository;
 import com.maathru.backend.External.repository.parent.PregnancyHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -287,15 +288,16 @@ public class ParentService {
             ObstetricComplication obstetricComplication = obstetricComplicationRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ObstetricComplication::new);
             ChildDetail childDetail = childDetailRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ChildDetail::new);
 
-//            if (childBirth.getId() == null) {
-//                childBirth.setCreatedBy(currentUser);
-//            }
-//            if (obstetricComplication.getId() ==null) {
-//                obstetricComplication.setCreatedBy(currentUser);
-//            }
-//            if (childDetail.getId() == null) {
-//                childDetail.setCreatedBy(currentUser);
-//            }
+            if (childBirth.getId() == 0) {
+                childBirth.setCreatedBy(currentUser);
+            }
+            if (obstetricComplication.getId() == 0) {
+                obstetricComplication.setCreatedBy(currentUser);
+            }
+            if (childDetail.getId() == 0) {
+                childDetail.setCreatedBy(currentUser);
+            }
+
 
             ChildBirthMapper childBirthMapper = new ChildBirthMapper();
 

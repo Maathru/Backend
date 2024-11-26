@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface BlogRepository extends JpaRepository<Blog, Long> {
@@ -23,6 +24,20 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
             "b.keywords ) " +
             "FROM Blog b")
     List<ViewBlogDto> findAllBlogsForDemo();
+
+    @Query("SELECT new com.maathru.backend.Application.dto.response.ViewBlogDto(b.title, " +
+            "b.blogId, " +
+            "b.content, " +
+            "b.createdBy.userId, " +
+            "b.category, " +
+            "b.image, " +
+            "b.location, " +
+            "b.approvalStatus, " +
+            "b.statusReason, " +
+            "b.keywords ) " +
+            "FROM Blog b " +
+            "WHERE b.blogId=:articleId")
+    Optional<ViewBlogDto> findArticle(@Param("articleId") Long articleId);
 
     @Query("SELECT new com.maathru.backend.Application.dto.response.ViewBlogDto( b.title, " +
             "b.blogId, " +
