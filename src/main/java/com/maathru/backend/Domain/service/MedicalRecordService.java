@@ -41,5 +41,12 @@ public class MedicalRecordService {
 
     }
 
+    public ResponseEntity<Iterable<MedicalRecord>> getAllMedicalRecords() {
+        return ResponseEntity.ok(medicalRecordRepository.findAll());
+    }
+
+    public ResponseEntity<MedicalRecord> getMedicalRecord(long id) {
+        return ResponseEntity.ok(medicalRecordRepository.findById(id).get());
+    }
 
 }
