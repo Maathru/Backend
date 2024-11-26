@@ -6,6 +6,7 @@ import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.entity.eligible.BasicInfo;
 import com.maathru.backend.Domain.entity.eligible.MedicalHistory;
 import com.maathru.backend.Domain.entity.parent.*;
+import com.maathru.backend.Domain.exception.NotFoundException;
 import com.maathru.backend.Domain.mapper.ChildBirthMapper;
 import com.maathru.backend.Domain.mapper.CurrentPregnancyMapper;
 import com.maathru.backend.Domain.mapper.FamilyHistoryMapper;
@@ -14,6 +15,7 @@ import com.maathru.backend.External.repository.*;
 import com.maathru.backend.External.repository.eligible.BasicInfoRepository;
 import com.maathru.backend.External.repository.eligible.MedicalHistoryRepository;
 import com.maathru.backend.External.repository.parent.ChildDetailRepository;
+import com.maathru.backend.External.repository.parent.ChildMemoryRepository;
 import com.maathru.backend.External.repository.parent.PreExistingMedicalConditionRepository;
 import com.maathru.backend.External.repository.parent.PregnancyHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class ParentService {
     private final ModelMapper mapper;
 
     @Autowired
-    private PChildMemoryRepository pChildMemoryRepository;
+    private ChildMemoryRepository childMemoryRepository;
 
     @Transactional
     public ResponseEntity<String> createOrUpdateParentDetails(ParentDetailsDto parentDetailsDto) {
@@ -345,31 +346,28 @@ public class ParentService {
         }
     }
 
-    public ResponseEntity<ChildMemoryDto> addMemoryChild(Long motherId, ChildMemoryDto childMemoryDto) {
+    public ResponseEntity<String> addMemoryChild(ChildMemoryDto childMemoryDto) {
         try {
-            // Fetch the current authenticated user
             User currentUser = jwtService.getCurrentUser();
 
-            // Ensure the provided userId matches the current user's ID
-            if (!Objects.equals(currentUser.getUserId(), motherId)) {
-                log.warn("Unauthorized access attempt by user: {}", currentUser.getEmail());
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-            }
+            ChildDetail childDetail = childDetailRepository.findById(childMemoryDto.getChildId()).orElseThrow(() -> new NotFoundException("Child not found"));
 
-            // Map DTO to entity
-            PChildMemory pChildMemory = mapper.map(childMemoryDto, PChildMemory.class);
-
-
+            ChildMemory childMemory = new ChildMemory();
+            childMemory.setChild(childDetail);
+            childMemory.setCreatedBy(currentUser);
+            childMemory.setUpdatedBy(currentUser);
+            childMemory.setTitle(childMemoryDto.getTitle());
+            childMemory.setDescription(childMemoryDto.getDescription());
 
             // Save to repository
-            pChildMemoryRepository.save(pChildMemory);
+            childMemoryRepository.save(childMemory);
 
-            // Log success
             log.info("Child memory added successfully by user: {}", currentUser.getEmail());
-
-            // Return saved DTO
-            return ResponseEntity.status(HttpStatus.CREATED).body(childMemoryDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Child memory added successfully");
         } catch (Exception e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
             log.error("Error saving child memory for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

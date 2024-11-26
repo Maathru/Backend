@@ -92,8 +92,8 @@ public class ParentController {
     }
 
     @PreAuthorize("hasRole('PARENT')")
-    @PostMapping("/memory/child/{userId}")
-    public ResponseEntity<ChildMemoryDto> addMemoryChild(@PathVariable Long userId, @RequestBody  ChildMemoryDto childMemoryDto) {
-        return parentService.addMemoryChild(userId,childMemoryDto);
+    @PostMapping("/memory/child/")
+    public ResponseEntity<String> addMemoryChild(@RequestBody ChildMemoryDto childMemoryDto) {
+        return parentService.addMemoryChild(childMemoryDto);
     }
 }

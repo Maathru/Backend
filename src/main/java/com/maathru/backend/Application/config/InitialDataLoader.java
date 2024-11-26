@@ -121,32 +121,32 @@ public class InitialDataLoader {
             }
 
             // get region
-//            Region region = regionRepository.findByRegionNumber("R/W/1").orElseThrow(() -> new RuntimeException("Region not found"));
-//
-//            // get doctor and midwife
-//            User doctor = userRepository.findByEmail("doctor@maathru.com").orElseThrow(() -> new RuntimeException("Doctor not found"));
-//            User midwife = userRepository.findByEmail("midwife@maathru.com").orElseThrow(() -> new RuntimeException("Midwife not found"));
-//
-//            // Create and save Employees
-//            List<Employee> employees = List.of(
-//                    new Employee(1L, "071234567", "200121503122", Gender.MALE, LocalDate.parse("2001-08-02", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/16", "Wijerama Road", "Udahamulla", "System Admin", "Bsc in CS", adminUser,moh),
-//                    new Employee(2L, "072234567", "200121503123", Gender.MALE, LocalDate.parse("2001-08-03", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/17", "Wijerama Road", "Udahamulla", "MOH Doctor", "MBbs", doctor,moh),
-//                    new Employee(3L, "074234567", "200121503124", Gender.FEMALE, LocalDate.parse("2001-08-04", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/18", "Wijerama Road", "Udahamulla", "Midwife", "Dip in Zoology", midwife,moh)
-//            );
-//
-//            for (Employee employee : employees) {
-//                if (employeeRepository.findByUserEmail(employee.getUser().getEmail()).isEmpty()) {
-//                    employee.setRegion(region);
-//                    employee.setCreatedBy(adminUser);
-//                    employee.setUpdatedBy(adminUser);
-//                    employee.setCreatedAt(LocalDateTime.now());
-//                    employee.setUpdatedAt(LocalDateTime.now());
-//                    employeeRepository.save(employee);
-//                    log.info("Employee {} created successfully", employee.getUser().getRole());
-//                } else {
-//                    log.warn("Employee {} already exists.", employee.getUser().getRole());
-//                }
-//            }
+            Region region = regionRepository.findByRegionNumber("R/W/1").orElseThrow(() -> new RuntimeException("Region not found"));
+
+            // get doctor and midwife
+            User doctor = userRepository.findByEmail("doctor@maathru.com").orElseThrow(() -> new RuntimeException("Doctor not found"));
+            User midwife = userRepository.findByEmail("midwife@maathru.com").orElseThrow(() -> new RuntimeException("Midwife not found"));
+
+            // Create and save Employees
+            List<Employee> employees = List.of(
+                    new Employee(1L, "071234567", "200121503122", Gender.MALE, LocalDate.parse("2001-08-02", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/16", "Wijerama Road", "Udahamulla", "System Admin", "Bsc in CS", adminUser,moh),
+                    new Employee(2L, "072234567", "200121503123", Gender.MALE, LocalDate.parse("2001-08-03", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/17", "Wijerama Road", "Udahamulla", "MOH Doctor", "MBbs", doctor,moh),
+                    new Employee(3L, "074234567", "200121503124", Gender.FEMALE, LocalDate.parse("2001-08-04", DateTimeFormatter.ISO_LOCAL_DATE), "No 48/18", "Wijerama Road", "Udahamulla", "Midwife", "Dip in Zoology", midwife,moh)
+            );
+
+            for (Employee employee : employees) {
+                if (employeeRepository.findByUserEmail(employee.getUser().getEmail()).isEmpty()) {
+                    employee.setRegion(region);
+                    employee.setCreatedBy(adminUser);
+                    employee.setUpdatedBy(adminUser);
+                    employee.setCreatedAt(LocalDateTime.now());
+                    employee.setUpdatedAt(LocalDateTime.now());
+                    employeeRepository.save(employee);
+                    log.info("Employee {} created successfully", employee.getUser().getRole());
+                } else {
+                    log.warn("Employee {} already exists.", employee.getUser().getRole());
+                }
+            }
         };
     }
 }

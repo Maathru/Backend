@@ -1,27 +1,25 @@
 package com.maathru.backend.Domain.entity.parent;
 
+import com.maathru.backend.Domain.entity.Auditable;
 import com.maathru.backend.Domain.entity.User;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
-@Data
-public class PChildMemory {
-
+@Table(name = "child_memories")
+@Getter
+@Setter
+public class ChildMemory extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
-    private int memoryId;
+    private Long id;
 
     private String title;
     private String description;
-    private Date createDate;
-
-    @OneToOne
-    @JoinColumn(name = "mother_id", updatable = false, nullable = false, unique = true)
-    private User user;
 
     @ManyToOne
     @JoinColumn(name = "child_id", nullable = false)

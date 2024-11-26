@@ -3,6 +3,7 @@ package com.maathru.backend.Domain.entity;
 import com.maathru.backend.enumeration.Gender;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name = "employees")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Employee extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,8 +63,5 @@ public class Employee extends Auditable {
         this.qualifications = qualifications;
         this.user = user;
         this.moh = moh;
-    }
-
-    public Employee() {
     }
 }
