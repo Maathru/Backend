@@ -49,4 +49,7 @@ public class MedicalRecordService {
         return ResponseEntity.ok(medicalRecordRepository.findById(id).get());
     }
 
+    public ResponseEntity<Iterable<MedicalRecord>> getMedicalRecordByPatient(long patientId) {
+        return ResponseEntity.ok(medicalRecordRepository.findByPatientUserId(patientId));
+    }
 }
