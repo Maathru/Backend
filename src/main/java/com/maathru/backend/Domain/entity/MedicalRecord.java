@@ -27,4 +27,7 @@ public class MedicalRecord extends Auditable {
   @Column(name = "remarks")
   private String remarks;
 
+  @Column(name = "referred_to")
+  private String referredTo;
+
 }
