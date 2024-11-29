@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/blog/**", "/api/v1/answer/**", "/api/v1/question/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
                         .anyRequest().authenticated()
                 ).userDetailsService(userService)
                 .exceptionHandling(e -> e.accessDeniedHandler(customAccessDeniedHandler)
