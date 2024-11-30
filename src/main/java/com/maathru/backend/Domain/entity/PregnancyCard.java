@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,6 +37,7 @@ public class PregnancyCard {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "last_updated_by")
     private Employee lastUpdatedBy;
+    private LocalDate dateOfPregnancy;
     private Double bmi;
     private Double weight;
     private Double height;
