@@ -40,17 +40,33 @@ public class GrowthService {
         }
     }
 
-    public ResponseEntity<LocalDate> getDop() {
+//    public ResponseEntity<LocalDate> getDop() {
+//        try {
+//            User currentUser = jwtService.getCurrentUser();
+//            Parent parent = parentRepository.findByUser(currentUser);
+//            LocalDate dop = pregnancyCardRepository.findByParent(parent).get().getDateOfPregnancy();
+//            return ResponseEntity.status(HttpStatus.OK).body(dop);
+//        } catch (Exception e){
+//            log.error("Error retrieving pregnancy date for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
+    public ResponseEntity<List<PregnancyCardForGrowthResponse>> getPregnancyCards() {
         try {
             User currentUser = jwtService.getCurrentUser();
             Parent parent = parentRepository.findByUser(currentUser);
-            LocalDate dop = pregnancyCardRepository.findByParent(parent).get().getDateOfPregnancy();
-            return ResponseEntity.status(HttpStatus.OK).body(dop);
+            List<PregnancyCard> pregnancyCards = pregnancyCardRepository.findByParent(parent);
+            List<PregnancyCardForGrowthResponse> pregnancyCardForGrowthResponses = pregnancyCards.stream().map(pregnancyCard -> {
+                PregnancyCardForGrowthResponse pregnancyCardForGrowthResponse = new PregnancyCardForGrowthResponse();
+                pregnancyCardForGrowthResponse.setPregnancyCardId(pregnancyCard.getPregnancyCardId());
+                pregnancyCardForGrowthResponse.setDateOfPregnancy(pregnancyCard.getDateOfPregnancy().toString());
+                return pregnancyCardForGrowthResponse;
+            }).toList();
+            return ResponseEntity.status(HttpStatus.OK).body(pregnancyCardForGrowthResponses);
         } catch (Exception e){
-            log.error("Error retrieving pregnancy date for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
+            log.error("Error retrieving pregnancy cards for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-
 }

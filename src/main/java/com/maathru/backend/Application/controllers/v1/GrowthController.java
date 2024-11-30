@@ -28,11 +28,16 @@ public class GrowthController {
         return growthService.getDob();
     }
 
-    @PreAuthorize("hasRole('PARENT')")
-    @GetMapping("/dop")
-    public ResponseEntity<LocalDate> getDop() {
-        return growthService.getDop();
-    }
+//    @PreAuthorize("hasRole('PARENT')")
+//    @GetMapping("/dop")
+//    public ResponseEntity<LocalDate> getDop() {
+//        return growthService.getDop();
+//    }
 
+    @PreAuthorize("hasRole('PARENT')")
+    @GetMapping("/pregnancy-cards")
+    public ResponseEntity<List<PregnancyCardForGrowthResponse>> getPregnancyCards() {
+        return growthService.getPregnancyCards();
+    }
 
 }
