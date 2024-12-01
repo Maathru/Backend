@@ -10,4 +10,8 @@ import java.util.Optional;
 @Repository
 public interface OtherSituationRepository extends JpaRepository<OtherSituation, Long> {
   Optional<OtherSituation> findByUserAndDeletedAtIsNull(User currentUser);
+  long countByDiabetesTrue();
+  long countByMalariaTrue();
+  long countByHeartDiseasesTrue();
+  long countByKidneyDiseasesTrue();
 }

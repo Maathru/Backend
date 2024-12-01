@@ -1,6 +1,7 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Domain.entity.PregnancyCard;
+import com.maathru.backend.External.repository.OtherSituationRepository;
 import com.maathru.backend.External.repository.PregnancyCardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,25 @@ import java.util.Map;
 @Service
 public class AnalyticsService {
     private final PregnancyCardRepository pregnancyCardRepository;
+    private final OtherSituationRepository otherSituationRepository;
 
     public List<Map<String, Object>> getPregnancyCountByRegion() {
         return pregnancyCardRepository.getPregnancyCountByRegion();
+    }
+
+//    public List<Map<String, Object>> getPregnancyCountByAgeGroup() {
+//        return pregnancyCardRepository.getPregnancyCountByAgeGroup();
+//    }
+
+    public Map<String, Long> getHealthConditionsStats() {
+        Map<String, Long> healthStats = new HashMap<>();
+
+        healthStats.put("diabetes", otherSituationRepository.countByDiabetesTrue());
+        healthStats.put("malaria", otherSituationRepository.countByMalariaTrue());
+        healthStats.put("heartDiseases", otherSituationRepository.countByHeartDiseasesTrue());
+        healthStats.put("kidneyDiseases", otherSituationRepository.countByKidneyDiseasesTrue());
+
+        return healthStats;
     }
 
 

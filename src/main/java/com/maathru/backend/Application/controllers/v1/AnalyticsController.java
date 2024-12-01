@@ -23,6 +23,11 @@ public class AnalyticsController {
         return analyticsService.getPregnancyCountByRegion();
     }
 
+    @GetMapping("/health-conditions-stats")
+    public ResponseEntity<Map<String, Long>> getHealthConditionsStats() {
+        return ResponseEntity.ok(analyticsService.getHealthConditionsStats());
+    }
+
     @GetMapping("/bmi")
     public ResponseEntity<Map<String, Long>> analyzeBMIByCategory() {
         return ResponseEntity.ok(analyticsService.analyzeBMIByCategory());
