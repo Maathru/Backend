@@ -141,7 +141,7 @@ public class InitialDataLoader {
                     employee.setUpdatedBy(adminUser);
                     employee.setCreatedAt(LocalDateTime.now());
                     employee.setUpdatedAt(LocalDateTime.now());
-//                    employeeRepository.save(employee);
+                    employeeRepository.save(employee);
                     log.info("Employee {} created successfully", employee.getUser().getRole());
                 } else {
                     log.warn("Employee {} already exists.", employee.getUser().getRole());
