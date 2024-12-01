@@ -19,76 +19,76 @@ import java.util.List;
 public class ParentController {
     private final ParentService parentService;
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @PostMapping("/pregnancy/main/parent")
-    public ResponseEntity<String> createOrUpdateParentDetails(@RequestBody @Valid ParentDetailsDto parentDetailsDto) {
-        return parentService.createOrUpdateParentDetails(parentDetailsDto);
+    public ResponseEntity<String> createOrUpdateParentDetails(@RequestParam(value = "user", required = false) Long userId, @RequestBody @Valid ParentDetailsDto parentDetailsDto) {
+        return parentService.createOrUpdateParentDetails(userId, parentDetailsDto);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @GetMapping("/pregnancy/main/parent")
-    public ResponseEntity<ParentDetailsDto> getParentDetails() {
-        return parentService.getParentDetails();
+    public ResponseEntity<ParentDetailsDto> getParentDetails(@RequestParam(value = "user", required = false) Long userId) {
+        return parentService.getParentDetails(userId);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @PostMapping("/pregnancy/main/family")
-    public ResponseEntity<String> createOrUpdateFamilyHistory(@RequestBody @Valid FamilyHistoryDto familyHistoryDto) {
-        return parentService.createOrUpdateFamilyHistory(familyHistoryDto);
+    public ResponseEntity<String> createOrUpdateFamilyHistory(@RequestParam(value = "user", required = false) Long userId, @RequestBody @Valid FamilyHistoryDto familyHistoryDto) {
+        return parentService.createOrUpdateFamilyHistory(userId, familyHistoryDto);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @GetMapping("/pregnancy/main/family")
-    public ResponseEntity<FamilyHistoryDto> getFamilyHistory() {
-        return parentService.getFamilyHistory();
+    public ResponseEntity<FamilyHistoryDto> getFamilyHistory(@RequestParam(value = "user", required = false) Long userId) {
+        return parentService.getFamilyHistory(userId);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @PostMapping("/pregnancy/main/pregnancy")
-    public ResponseEntity<String> createOrUpdatePregnancyHistory(@RequestBody @Valid PregnancyHistoryDto pregnancyHistoryDto) {
-        return parentService.createOrUpdatePregnancyHistory(pregnancyHistoryDto);
+    public ResponseEntity<String> createOrUpdatePregnancyHistory(@RequestParam(value = "user", required = false) Long userId, @RequestBody @Valid PregnancyHistoryDto pregnancyHistoryDto) {
+        return parentService.createOrUpdatePregnancyHistory(userId, pregnancyHistoryDto);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @GetMapping("/pregnancy/main/pregnancy")
-    public ResponseEntity<PregnancyHistoryDto> getPregnancyHistory() {
-        return parentService.getPregnancyHistory();
+    public ResponseEntity<PregnancyHistoryDto> getPregnancyHistory(@RequestParam(value = "user", required = false) Long userId) {
+        return parentService.getPregnancyHistory(userId);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @PostMapping("/pregnancy/main/current")
-    public ResponseEntity<String> createOrUpdateCurrentPregnancy(@RequestBody @Valid CurrentPregnancyDto currentPregnancyDto) {
-        return parentService.createOrUpdateCurrentPregnancy(currentPregnancyDto);
+    public ResponseEntity<String> createOrUpdateCurrentPregnancy(@RequestParam(value = "user", required = false) Long userId, @RequestBody @Valid CurrentPregnancyDto currentPregnancyDto) {
+        return parentService.createOrUpdateCurrentPregnancy(userId, currentPregnancyDto);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @GetMapping("/pregnancy/main/current")
-    public ResponseEntity<CurrentPregnancyDto> getCurrentPregnancy() {
-        return parentService.getCurrentPregnancy();
+    public ResponseEntity<CurrentPregnancyDto> getCurrentPregnancy(@RequestParam(value = "user", required = false) Long userId) {
+        return parentService.getCurrentPregnancy(userId);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @PostMapping("/pregnancy/clinical")
-    public ResponseEntity<String> createClinicalConservation(@RequestBody @Valid ClinicalConservationDto clinicalConservationDto) {
-        return parentService.createClinicalConservation(clinicalConservationDto);
+    public ResponseEntity<String> createClinicalConservation(@RequestParam(value = "user", required = false) Long userId, @RequestBody @Valid ClinicalConservationDto clinicalConservationDto) {
+        return parentService.createClinicalConservation(userId, clinicalConservationDto);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @GetMapping("/pregnancy/clinical")
-    public ResponseEntity<List<ClinicalConservationDto>> getClinicalConservations() {
-        return parentService.getClinicalConservations();
+    public ResponseEntity<List<ClinicalConservationDto>> getClinicalConservations(@RequestParam(value = "user", required = false) Long userId) {
+        return parentService.getClinicalConservations(userId);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @PostMapping("/pregnancy/child")
-    public ResponseEntity<String> createOrUpdateChildBirth(@RequestBody @Valid ChildBirthDto childBirthDto) {
-        return parentService.createOrUpdateChildBirth(childBirthDto);
+    public ResponseEntity<String> createOrUpdateChildBirth(@RequestParam(value = "user", required = false) Long userId, @RequestBody @Valid ChildBirthDto childBirthDto) {
+        return parentService.createOrUpdateChildBirth(userId, childBirthDto);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT')")
     @GetMapping("/pregnancy/child")
-    public ResponseEntity<ChildBirthDto> getChildBirth() {
-        return parentService.getChildBirth();
+    public ResponseEntity<ChildBirthDto> getChildBirth(@RequestParam(value = "user", required = false) Long userId) {
+        return parentService.getChildBirth(userId);
     }
 
     @PreAuthorize("hasRole('PARENT')")

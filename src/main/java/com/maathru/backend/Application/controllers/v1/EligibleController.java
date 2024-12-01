@@ -6,6 +6,7 @@ import com.maathru.backend.Application.dto.response.EligibleCoupleResponse;
 import com.maathru.backend.Domain.service.EligibleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/eligible")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class EligibleController {
     private final EligibleService eligibleService;
 
@@ -26,10 +28,10 @@ public class EligibleController {
         return eligibleService.createOrUpdateEligibleCouple(eligibleCoupleDTO);
     }
 
-    @PreAuthorize("hasAnyRole('PARENT','ELIGIBLE')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT','ELIGIBLE')")
     @PostMapping
-    public ResponseEntity<String> saveEligible(@Valid @RequestBody EligibleDto eligibleDto) {
-        return eligibleService.saveOrUpdateEligible(eligibleDto);
+    public ResponseEntity<String> saveEligible(@RequestParam(value = "user", required = false) Long userId,@Valid @RequestBody EligibleDto eligibleDto) {
+        return eligibleService.saveOrUpdateEligible(userId,eligibleDto);
     }
 
     @PreAuthorize("hasRole('MIDWIFE')")
@@ -62,9 +64,9 @@ public class EligibleController {
         return eligibleService.updateEligibleToParent(userId, eligibleId);
     }
 
-    @PreAuthorize("hasAnyRole('PARENT','ELIGIBLE')")
+    @PreAuthorize("hasAnyRole('MIDWIFE','PARENT','ELIGIBLE')")
     @GetMapping
-    public ResponseEntity<EligibleDto> getEligibleData() {
-        return eligibleService.getEligibleData();
+    public ResponseEntity<EligibleDto> getEligibleData(@RequestParam(value = "user", required = false) Long userId) {
+        return eligibleService.getEligibleData(userId);
     }
 }
