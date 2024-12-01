@@ -28,6 +28,12 @@ public class AnalyticsController {
         return analyticsService.getPregnancyCountByAge();
     }
 
+    @GetMapping("/api/analytics/births-by-month")
+    public Map<Integer, Long> getBirthsCountByMonth() {
+        return analyticsService.getBirthsCountByMonth();
+    }
+
+
     @GetMapping("/health-conditions-stats")
     public ResponseEntity<Map<String, Long>> getHealthConditionsStats() {
         return ResponseEntity.ok(analyticsService.getHealthConditionsStats());

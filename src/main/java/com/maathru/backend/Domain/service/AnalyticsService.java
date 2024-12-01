@@ -1,6 +1,7 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Domain.entity.PregnancyCard;
+import com.maathru.backend.External.repository.ChildBirthRepository;
 import com.maathru.backend.External.repository.OtherSituationRepository;
 import com.maathru.backend.External.repository.PregnancyCardRepository;
 import com.maathru.backend.External.repository.eligible.BasicInfoRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +19,7 @@ public class AnalyticsService {
     private final PregnancyCardRepository pregnancyCardRepository;
     private final OtherSituationRepository otherSituationRepository;
     private final BasicInfoRepository basicInfoRepository;
+    private final ChildBirthRepository childBirthRepository;
 
     public List<Map<String, Object>> getPregnancyCountByRegion() {
         return pregnancyCardRepository.getPregnancyCountByRegion();
@@ -24,6 +27,18 @@ public class AnalyticsService {
 
     public List<Map<String, Object>> getPregnancyCountByAge() {
         return basicInfoRepository.getPregnancyCountByAge();
+    }
+
+    public Map<Integer, Long> getBirthsCountByMonth() {
+        // Fetch data from the repository
+        List<Object[]> results = childBirthRepository.getBirthsCountByMonth();
+
+        // Convert the List<Object[]> to a Map<Integer, Long>
+        return results.stream()
+                .collect(Collectors.toMap(
+                        result -> (Integer) result[0], // The month (e.g., 1 for January)
+                        result -> (Long) result[1]      // The count of births for that month
+                ));
     }
 
 
