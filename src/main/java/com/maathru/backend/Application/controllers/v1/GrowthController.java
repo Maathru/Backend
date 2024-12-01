@@ -1,6 +1,8 @@
 package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.parent.ParentDetailsDto;
+import com.maathru.backend.Application.dto.response.PregnancyCardForGrowthResponse;
+import com.maathru.backend.Domain.entity.PregnancyCard;
 import com.maathru.backend.Domain.service.GrowthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/growth")
@@ -23,6 +26,18 @@ public class GrowthController {
     @GetMapping("/dob")
     public ResponseEntity<LocalDate> getDob() {
         return growthService.getDob();
+    }
+
+//    @PreAuthorize("hasRole('PARENT')")
+//    @GetMapping("/dop")
+//    public ResponseEntity<LocalDate> getDop() {
+//        return growthService.getDop();
+//    }
+
+    @PreAuthorize("hasRole('PARENT')")
+    @GetMapping("/pregnancy-cards")
+    public ResponseEntity<List<PregnancyCardForGrowthResponse>> getPregnancyCards() {
+        return growthService.getPregnancyCards();
     }
 
 }
