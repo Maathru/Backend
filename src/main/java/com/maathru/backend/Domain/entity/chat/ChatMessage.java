@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "cha_messages")
+@Table(name = "chat_messages")
 @Getter
 @Setter
 public class ChatMessage {
