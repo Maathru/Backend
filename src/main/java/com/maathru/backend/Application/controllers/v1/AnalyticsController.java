@@ -2,7 +2,9 @@ package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Domain.service.AnalyticsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,9 +18,14 @@ import java.util.Map;
 public class AnalyticsController {
     private final AnalyticsService analyticsService;
 
-    @RequestMapping("/pregnancy-count-by-region")
+    @GetMapping("/pregnancy-count-by-region")
     public List<Map<String, Object>> getPregnancyCountByRegion() {
         return analyticsService.getPregnancyCountByRegion();
+    }
+
+    @GetMapping("/bmi")
+    public ResponseEntity<Map<String, Long>> analyzeBMIByCategory() {
+        return ResponseEntity.ok(analyticsService.analyzeBMIByCategory());
     }
 
 }
