@@ -23,6 +23,11 @@ public class AnalyticsController {
         return analyticsService.getPregnancyCountByRegion();
     }
 
+    @GetMapping("/pregnancy-count-by-age")
+    public List<Map<String, Object>> getPregnancyCountByAge() {
+        return analyticsService.getPregnancyCountByAge();
+    }
+
     @GetMapping("/health-conditions-stats")
     public ResponseEntity<Map<String, Long>> getHealthConditionsStats() {
         return ResponseEntity.ok(analyticsService.getHealthConditionsStats());
