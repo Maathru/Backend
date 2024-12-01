@@ -1,10 +1,7 @@
 package com.maathru.backend.Domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,4 +48,5 @@ public class PregnancyCard {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "vaccine_card_id")
     private VaccineCard vaccineCard;
+
 }
