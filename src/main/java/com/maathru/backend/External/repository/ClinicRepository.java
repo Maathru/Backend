@@ -22,13 +22,20 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "AND u.email=:email ")
     List<ClinicListResponse> findClinicsByDateToAdmin(@Param("date") LocalDate date, @Param("email") String email);
 
+    @Query("SELECT c " +
+            "FROM Clinic c " +
+            "JOIN FETCH c.doctors d " +
+            "JOIN Employee e on c.region=e.region " +
+            "WHERE c.date = :date " +
+            "AND e.user.email=:email ")
+    List<Clinic> findClinicsByDateToMidwife(@Param("date") LocalDate date, @Param("email") String email);
+
     @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicListResponse(c.clinicId,c.name,c.date,c.startTime,c.endTime,c.region.regionName) " +
             "FROM Clinic c " +
             "JOIN c.doctors d " +
             "WHERE d.user.email = :email " +
             "AND c.date = :date ")
     List<ClinicListResponse> findClinicsByDateToDoctor(@Param("date") LocalDate date, @Param("email") String email);
-
 
     @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicListResponse(c.clinicId, c.name, c.date, c.startTime, c.endTime,c.region.regionName) " +
             "FROM User u " +
@@ -37,26 +44,16 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
             "WHERE u.email = :email " +
             "AND EXTRACT(MONTH FROM c.date) = EXTRACT(MONTH FROM CAST(:date AS DATE)) " +
             "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:date AS DATE))")
-    List<ClinicListResponse> findClinicsByMonth(@Param("date") LocalDate date, @Param("email") String email);
+    List<ClinicListResponse> findClinicsByMonthForAdmin(@Param("date") LocalDate date, @Param("email") String email);
 
-    @Query("SELECT new com.maathru.backend.Application.dto.response.ClinicListResponse(c.clinicId, c.name, c.date, c.startTime, c.endTime) " +
-            "FROM BasicInfo b " +
-            "JOIN Region r on r.regionId = b.region.regionId " +
-            "JOIN Clinic c on c.moh = r.moh " +
-            "AND b.user.email = :email " +
+    @Query("SELECT c " +
+            "FROM Clinic c " +
+            "JOIN FETCH c.doctors d " +
+            "JOIN Employee e on e.region = c.region " +
+            "WHERE e.user.email = :email " +
             "AND EXTRACT(MONTH FROM c.date) = EXTRACT(MONTH FROM CAST(:date AS DATE)) " +
             "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:date AS DATE))")
-    List<ClinicListResponse> findClinicsByMonthForParent(@Param("date") LocalDate date, @Param("email") String email);
-
-
-    @Query("SELECT DISTINCT c.date " +
-            "FROM Clinic c " +
-            "JOIN Employee e ON c.moh = e.moh " +
-            "JOIN User u ON e.user = u " +
-            "WHERE u.email = :email " +
-            "AND EXTRACT(MONTH FROM c.date) = EXTRACT(MONTH FROM CAST(:currentDate AS DATE)) " +
-            "AND EXTRACT(YEAR FROM c.date) = EXTRACT(YEAR FROM CAST(:currentDate AS DATE))")
-    List<LocalDate> findAllClinicDatesForCurrentMonthByAdmin(@Param("currentDate") LocalDate currentDate, @Param("email") String email);
+    List<Clinic> findClinicsByMonthForMidwife(@Param("date") LocalDate date, @Param("email") String email);
 
     @Query("SELECT DISTINCT c.date " +
             "FROM Clinic c " +
