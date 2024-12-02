@@ -112,34 +112,35 @@ public class ClinicService {
         return ResponseEntity.ok(clinicResponse);
     }
 
-    public ResponseEntity<Iterable<Clinic>> getAllClinics() {
-        List<Clinic> clinics = clinicRepository.findAll();
-
-        if (clinics.isEmpty()) {
-            log.warn("Clinics not found");
-            throw new NotFoundException("Clinics not found");
-        }
-        return ResponseEntity.ok(clinics);
-    }
-
-
-    public ResponseEntity<Clinic> deleteClinic(Long clinicId) {
-        Optional<Clinic> optionalClinic = clinicRepository.findById(clinicId);
-
-        if (optionalClinic.isPresent()) {
-            clinicRepository.delete(optionalClinic.get());
-            return ResponseEntity.ok().body(optionalClinic.get());
-        } else {
-            log.error("Clinic not found");
-            throw new NotFoundException("Clinic not found");
-        }
-    }
-
     public ResponseEntity<List<ClinicListResponse>> getClinicsByDateToAdmin(String date) {
         User currentUser = jwtService.getCurrentUser();
 
         LocalDate localDate = LocalDate.parse(date);
         List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByDateToAdmin(localDate, currentUser.getEmail());
+
+        if (clinicListResponses.isEmpty()) {
+            log.error("Clinics not found for date {}", date);
+            throw new NotFoundException("Clinics not found for date " + date);
+        }
+        return ResponseEntity.ok(clinicListResponses);
+    }
+
+    public ResponseEntity<List<ClinicListResponse>> getClinicsByDateToMidwife(String date) {
+        User currentUser = jwtService.getCurrentUser();
+
+        LocalDate localDate = LocalDate.parse(date);
+        List<Clinic> clinics = clinicRepository.findClinicsByDateToMidwife(localDate, currentUser.getEmail());
+        List<ClinicListResponse> clinicListResponses = clinics.stream()
+                .map(clinic -> new ClinicListResponse(
+                        clinic.getClinicId(),
+                        clinic.getName(),
+                        clinic.getStartTime(),
+                        clinic.getEndTime(),
+                        clinic.getDoctors().stream()
+                                .map(doctor -> doctor.getUser().getFirstName() + " " + doctor.getUser().getLastName())
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
 
         if (clinicListResponses.isEmpty()) {
             log.error("Clinics not found for date {}", date);
@@ -161,11 +162,11 @@ public class ClinicService {
         return ResponseEntity.ok(clinicListResponses);
     }
 
-    public ResponseEntity<List<ClinicListResponse>> getClinicsGivenMonth(String date) {
+    public ResponseEntity<List<ClinicListResponse>> getClinicsGivenMonthForAdmin(String date) {
         User currentUser = jwtService.getCurrentUser();
 
         LocalDate localDate = LocalDate.parse(date);
-        List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByMonth(localDate, currentUser.getEmail());
+        List<ClinicListResponse> clinicListResponses = clinicRepository.findClinicsByMonthForAdmin(localDate, currentUser.getEmail());
 
         if (clinicListResponses.isEmpty()) {
             log.warn("Clinics not found for this month {}", date);
@@ -174,7 +175,32 @@ public class ClinicService {
         return ResponseEntity.ok(clinicListResponses);
     }
 
-    public ResponseEntity<List<LocalDate>> getClinicsGivenMonthForParent(String date) {
+    public ResponseEntity<List<ClinicListResponse>> getClinicsGivenMonthForMidwife(String date) {
+        User currentUser = jwtService.getCurrentUser();
+
+        LocalDate localDate = LocalDate.parse(date);
+        List<Clinic> clinics = clinicRepository.findClinicsByMonthForMidwife(localDate, currentUser.getEmail());
+        List<ClinicListResponse> clinicListResponses = clinics.stream()
+                .map(clinic -> new ClinicListResponse(
+                        clinic.getClinicId(),
+                        clinic.getName(),
+                        clinic.getDate(),
+                        clinic.getStartTime(),
+                        clinic.getEndTime(),
+                        clinic.getDoctors().stream()
+                                .map(doctor -> doctor.getUser().getFirstName() + " " + doctor.getUser().getLastName())
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
+
+        if (clinicListResponses.isEmpty()) {
+            log.warn("Clinics not found for this month {}", date);
+            throw new NotFoundException("Clinics not found for this month " + date);
+        }
+        return ResponseEntity.ok(clinicListResponses);
+    }
+
+    public ResponseEntity<List<LocalDate>> getClinicsDatesGivenMonthForParent(String date) {
         User currentUser = jwtService.getCurrentUser();
 
         LocalDate localDate = LocalDate.parse(date);
@@ -187,7 +213,7 @@ public class ClinicService {
         return ResponseEntity.ok(clinicListResponses);
     }
 
-    public ResponseEntity<List<LocalDate>> getClinicsGivenMonthForMidwife(String date) {
+    public ResponseEntity<List<LocalDate>> getClinicsDatesGivenMonthForMidwife(String date) {
         User currentUser = jwtService.getCurrentUser();
 
         LocalDate localDate = LocalDate.parse(date);
@@ -212,7 +238,7 @@ public class ClinicService {
         return ResponseEntity.ok(clinicListResponses);
     }
 
-    public ResponseEntity<List<LocalDate>> getClinicsGivenMonthForDoctor(String date) {
+    public ResponseEntity<List<LocalDate>> getClinicsDatesGivenMonthForDoctor(String date) {
         User currentUser = jwtService.getCurrentUser();
 
         LocalDate localDate = LocalDate.parse(date);
