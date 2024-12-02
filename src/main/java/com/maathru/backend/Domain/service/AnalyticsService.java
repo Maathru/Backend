@@ -72,6 +72,9 @@ public class AnalyticsService {
 
     // Method to categorize BMI values
     private String categorizeBMI(Double bmi) {
+        if (bmi == null || bmi <= 0) {
+            return "Invalid BMI";
+        }
         if (bmi < 18.5) {
             return "Underweight";
         } else if (bmi >= 18.5 && bmi < 24.9) {
