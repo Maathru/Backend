@@ -35,19 +35,19 @@ public class Employee extends Auditable {
     private String designation;
     private String qualifications;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_user_id", updatable = false, nullable = false, unique = true)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moh_moh_id")
     private MOH moh;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
     private Region region;
 
-    @ManyToMany(mappedBy = "doctors")
+    @ManyToMany(mappedBy = "doctors", fetch = FetchType.LAZY)
     private List<Clinic> clinics;
 
     public Employee(Long employeeId, String phoneNumber, String nic, Gender gender, LocalDate dob, String addressLine1, String street, String city, String designation, String qualifications, User user, MOH moh) {
