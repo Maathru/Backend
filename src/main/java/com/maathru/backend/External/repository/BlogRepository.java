@@ -54,4 +54,6 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
     List<ViewBlogDto> findBlogsByApprovalStatus(@Param("approvalStatus") String approvalStatus);
 
     long countByApprovalStatus(String approvalStatus);
+
+    Optional<Blog> findByTitle(String title);
 }
