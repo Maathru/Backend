@@ -1,10 +1,12 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Domain.entity.PregnancyCard;
+import com.maathru.backend.Domain.entity.parent.ChildDetail;
 import com.maathru.backend.External.repository.ChildBirthRepository;
 import com.maathru.backend.External.repository.OtherSituationRepository;
 import com.maathru.backend.External.repository.PregnancyCardRepository;
 import com.maathru.backend.External.repository.eligible.BasicInfoRepository;
+import com.maathru.backend.External.repository.parent.ChildDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ public class AnalyticsService {
     private final OtherSituationRepository otherSituationRepository;
     private final BasicInfoRepository basicInfoRepository;
     private final ChildBirthRepository childBirthRepository;
+    private final ChildDetailRepository childDetailRepository;
 
     public List<Map<String, Object>> getPregnancyCountByRegion() {
         return pregnancyCardRepository.getPregnancyCountByRegion();
@@ -78,5 +81,12 @@ public class AnalyticsService {
         } else {
             return "Obese";
         }
+    }
+
+    public List<Float> getBirthWeights() {
+        return childDetailRepository.findAll()
+                .stream()
+                .map(ChildDetail::getBirthWeight)
+                .collect(Collectors.toList());
     }
 }

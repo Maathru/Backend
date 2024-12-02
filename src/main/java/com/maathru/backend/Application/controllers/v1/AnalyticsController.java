@@ -28,9 +28,14 @@ public class AnalyticsController {
         return analyticsService.getPregnancyCountByAge();
     }
 
-    @GetMapping("/api/analytics/births-by-month")
+    @GetMapping("/births-by-month")
     public Map<Integer, Long> getBirthsCountByMonth() {
         return analyticsService.getBirthsCountByMonth();
+    }
+
+    @GetMapping("/birth-weights")
+    public List<Float> getBirthWeights() {
+        return analyticsService.getBirthWeights();
     }
 
 
