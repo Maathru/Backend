@@ -15,6 +15,7 @@ import com.maathru.backend.External.repository.BlogRepository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.maathru.backend.constant.Constant.APPROVED_BLOG;
 import static com.maathru.backend.constant.Constant.PENDING_BLOG;
 
 @Service
@@ -44,7 +45,7 @@ public class BlogService {
             blog = blogRepository.save(blog);
 
             log.info("Blog added successfully By: {}", user.getEmail());
-            return ResponseEntity.status(201).body("Blog added successfully");
+            return ResponseEntity.status(201).body("Blog added Successfully. Pending review.");
         } catch (Exception e) {
             log.error("Error adding blog: {}", e.getMessage());
             return ResponseEntity.status(500).body("Error adding blog");
@@ -52,7 +53,12 @@ public class BlogService {
     }
 
     public ResponseEntity<Iterable<ViewBlogDto>> getPendingBlogs() {
-        List<ViewBlogDto> blogs = blogRepository.findAllPendingBlogsForDemo(PENDING_BLOG);
+        List<ViewBlogDto> blogs = blogRepository.findBlogsByApprovalStatus(PENDING_BLOG);
+        return ResponseEntity.ok(blogs);
+    }
+
+    public ResponseEntity<Iterable<ViewBlogDto>> getApprovedBlogs() {
+        List<ViewBlogDto> blogs = blogRepository.findBlogsByApprovalStatus(APPROVED_BLOG);
         return ResponseEntity.ok(blogs);
     }
 
@@ -82,6 +88,20 @@ public class BlogService {
     public ResponseEntity<Iterable<ViewBlogDto>> getAllBlogs() {
         List<ViewBlogDto> blogs = blogRepository.findAllBlogsForDemo();
         return ResponseEntity.ok(blogs);
+    }
+
+    public ResponseEntity<String> approveArticle(Long id) {
+       Optional <Blog> blog = blogRepository.findById(id);
+       if (blog.isPresent()) {
+           Blog article = blog.get();
+           article.setApprovalStatus(APPROVED_BLOG);
+           blogRepository.save(article);
+
+           return ResponseEntity.ok("Article approved successfully");
+       } else {
+           log.error("Article with id {} not found", id);
+           throw new NotFoundException("Article with id " + id + " not found");
+       }
     }
 
 //    public ResponseEntity<Blog> updateBlog(long id, BlogDto blogDto) {

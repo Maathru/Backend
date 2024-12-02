@@ -51,7 +51,7 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
             "b.keywords ) " +
             "FROM Blog b " +
             "WHERE b.approvalStatus=:approvalStatus")
-    List<ViewBlogDto> findAllPendingBlogsForDemo(@Param("approvalStatus") String approvalStatus);
+    List<ViewBlogDto> findBlogsByApprovalStatus(@Param("approvalStatus") String approvalStatus);
 
     long countByApprovalStatus(String approvalStatus);
 }
