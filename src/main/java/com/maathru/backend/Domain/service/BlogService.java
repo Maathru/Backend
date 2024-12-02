@@ -35,7 +35,7 @@ public class BlogService {
             blog.setContent(blogDto.getContent());
             blog.setAdditionalNotes(blogDto.getAdditionalNotes());
             blog.setKeywords(blogDto.getKeywords());
-            blog.setAdditionalNotes("Pending");
+            blog.setImage(blogDto.getImage());
             blog.setApprovalStatus(PENDING_BLOG);
 
             blog.setCreatedBy(user);

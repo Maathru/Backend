@@ -21,8 +21,8 @@ public class ImageController {
     public ResponseEntity<String> uploadImage(@RequestParam("imageFile") MultipartFile file) {
         try {
             String fileName = UploadImage.upload(file);
-            // Access url -> http://localhost:5173/images/<image-name>
-            return ResponseEntity.ok("Image " + fileName + " uploaded successfully");
+            // Access url -> http://localhost:8081/images/<image-name>
+            return ResponseEntity.ok("http://localhost:8081/images/" + fileName);
         } catch (IOException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Image upload failed");
         }catch (IllegalArgumentException e){
