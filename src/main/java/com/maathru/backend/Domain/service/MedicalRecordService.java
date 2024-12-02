@@ -1,6 +1,7 @@
 package com.maathru.backend.Domain.service;
 
 import com.maathru.backend.Application.dto.request.MedicalRecordDto;
+import com.maathru.backend.Application.dto.response.MedicalRecordResponse;
 import com.maathru.backend.Domain.entity.MedicalRecord;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.Domain.exception.NotFoundException;
@@ -10,6 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -43,15 +47,59 @@ public class MedicalRecordService {
 
     }
 
-    public ResponseEntity<Iterable<MedicalRecord>> getAllMedicalRecords() {
-        return ResponseEntity.ok(medicalRecordRepository.findAll());
+    public ResponseEntity<Iterable<MedicalRecordResponse>> getAllMedicalRecords() {
+        List<MedicalRecord> medicalRecords = medicalRecordRepository.findAll();
+        List<MedicalRecordResponse> medicalRecordResponses = new ArrayList<>();
+
+        for (MedicalRecord medicalRecord : medicalRecords) {
+            MedicalRecordResponse medicalRecordResponse = new MedicalRecordResponse();
+            medicalRecordResponse.setRecordId(medicalRecord.getRecordId());
+            medicalRecordResponse.setPatientId(medicalRecord.getPatient().getUserId());
+            medicalRecordResponse.setPatientName(medicalRecord.getPatient().getFirstName() + " " + medicalRecord.getPatient().getLastName());
+            medicalRecordResponse.setDisease(medicalRecord.getDisease());
+            medicalRecordResponse.setMedicationGiven(medicalRecord.getMedicationGiven());
+            medicalRecordResponse.setRemarks(medicalRecord.getRemarks());
+            medicalRecordResponse.setReferredTo(medicalRecord.getReferredTo());
+
+            medicalRecordResponses.add(medicalRecordResponse);
+        }
+
+        return ResponseEntity.ok(medicalRecordResponses);
     }
 
-    public ResponseEntity<MedicalRecord> getMedicalRecord(long id) {
-        return ResponseEntity.ok(medicalRecordRepository.findById(id).get());
+    public ResponseEntity<MedicalRecordResponse> getMedicalRecord(long id) {
+        MedicalRecord medicalRecord = medicalRecordRepository.findById(id).get();
+        MedicalRecordResponse medicalRecordResponse = new MedicalRecordResponse();
+        medicalRecordResponse.setRecordId(medicalRecord.getRecordId());
+        medicalRecordResponse.setPatientId(medicalRecord.getPatient().getUserId());
+        medicalRecordResponse.setPatientName(medicalRecord.getPatient().getFirstName() + " " + medicalRecord.getPatient().getLastName());
+        medicalRecordResponse.setDisease(medicalRecord.getDisease());
+        medicalRecordResponse.setMedicationGiven(medicalRecord.getMedicationGiven());
+        medicalRecordResponse.setRemarks(medicalRecord.getRemarks());
+        medicalRecordResponse.setReferredTo(medicalRecord.getReferredTo());
+        return ResponseEntity.ok(medicalRecordResponse);
     }
 
-    public ResponseEntity<Iterable<MedicalRecord>> getMedicalRecordByPatient(long patientId) {
-        return ResponseEntity.ok(medicalRecordRepository.findByPatientUserId(patientId));
+    public ResponseEntity<Iterable<MedicalRecordResponse>> getMedicalRecordByPatient(long patientId) {
+        User patient = userRepository.findById(patientId).
+                orElseThrow(() -> new NotFoundException("Patient not found"));
+        List<MedicalRecord> medicalRecords = medicalRecordRepository.findByPatient(patient);
+        List<MedicalRecordResponse> medicalRecordResponses = new ArrayList<>();
+
+        for (MedicalRecord medicalRecord : medicalRecords) {
+            MedicalRecordResponse medicalRecordResponse = new MedicalRecordResponse();
+            medicalRecordResponse.setRecordId(medicalRecord.getRecordId());
+            medicalRecordResponse.setPatientId(medicalRecord.getPatient().getUserId());
+            medicalRecordResponse.setPatientName(medicalRecord.getPatient().getFirstName() + " " + medicalRecord.getPatient().getLastName());
+            medicalRecordResponse.setDisease(medicalRecord.getDisease());
+            medicalRecordResponse.setMedicationGiven(medicalRecord.getMedicationGiven());
+            medicalRecordResponse.setRemarks(medicalRecord.getRemarks());
+            medicalRecordResponse.setReferredTo(medicalRecord.getReferredTo());
+
+            medicalRecordResponses.add(medicalRecordResponse);
+        }
+
+        return ResponseEntity.ok(medicalRecordResponses);
+
     }
 }
