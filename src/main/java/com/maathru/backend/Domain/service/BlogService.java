@@ -36,7 +36,15 @@ public class BlogService {
             blog.setContent(blogDto.getContent());
             blog.setAdditionalNotes(blogDto.getAdditionalNotes());
             blog.setKeywords(blogDto.getKeywords());
-            blog.setImage(blogDto.getImage());
+//            blog.setImage(blogDto.getImage());
+
+            // Check if the image is empty or null and set a default value
+            String image = blogDto.getImage();
+            if (image == null || image.trim().isEmpty()) {
+                image = "http://localhost:8081/images/defaultBlog.jpg"; // Replace with your actual default value
+            }
+            blog.setImage(image);
+
             blog.setApprovalStatus(PENDING_BLOG);
 
             blog.setCreatedBy(user);
