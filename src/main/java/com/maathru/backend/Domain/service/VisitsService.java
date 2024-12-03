@@ -141,4 +141,23 @@ public class VisitsService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    public ResponseEntity<List<LocalDate>> getHomeVisitDatesGivenDateForParent(String date) {
+        try {
+            User currentUser = jwtService.getCurrentUser();
+
+            LocalDate localDate = LocalDate.parse(date);
+            List<LocalDate> dates = homeVisitRepository.findHomeVisitDatesByDateForParent(localDate, currentUser.getEmail());
+
+            if (dates.isEmpty()) {
+                log.warn("Home visits not found for month {}", localDate.getMonth());
+                throw new NotFoundException("Home visits not found for month " + localDate.getMonth());
+            }
+            return ResponseEntity.ok(dates);
+        } catch (Exception e) {
+            if (e instanceof NotFoundException) throw e;
+            log.error("Unexpected error fetching home visits");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }
