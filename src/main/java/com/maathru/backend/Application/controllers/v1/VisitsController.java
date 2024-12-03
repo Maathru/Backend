@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -39,5 +40,11 @@ public class VisitsController {
     @GetMapping("/date/midwife/{date}")
     public ResponseEntity<List<HomeVisitsListResponse>> getHomeVisitsGivenDateForMidwife(@PathVariable String date) {
         return visitsService.getHomeVisitsGivenDateForMidwife(date);
+    }
+
+    @PreAuthorize("hasRole('PARENT')")
+    @GetMapping("/list/parent/{date}")
+    public ResponseEntity<List<LocalDate>> getHomeVisitDatesGivenDateForParent(@PathVariable String date) {
+        return visitsService.getHomeVisitDatesGivenDateForParent(date);
     }
 }

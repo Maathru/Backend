@@ -35,4 +35,13 @@ public interface HomeVisitRepository extends JpaRepository<HomeVisit, Long> {
             "WHERE e.user.email = :email " +
             "AND v.date = :date")
     List<HomeVisitsListResponse> findHomeVisitsByDateForMidwife(@Param("date") LocalDate date, @Param("email") String email);
+
+    @Query("SELECT DISTINCT v.date " +
+            "FROM HomeVisit hv " +
+            "JOIN hv.visits v " +
+            "JOIN BasicInfo b on b.user = hv.user " +
+            "WHERE b.user.email = :email " +
+            "AND EXTRACT(MONTH FROM v.date) = EXTRACT(MONTH FROM CAST(:date AS DATE)) " +
+            "AND EXTRACT(YEAR FROM v.date) = EXTRACT(YEAR FROM CAST(:date AS DATE))")
+    List<LocalDate> findHomeVisitDatesByDateForParent(@Param("date") LocalDate date, @Param("email") String email);
 }
