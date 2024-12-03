@@ -8,17 +8,39 @@ import com.maathru.backend.Domain.entity.Region;
 import com.maathru.backend.Domain.entity.User;
 import com.maathru.backend.enumeration.Area;
 import com.maathru.backend.enumeration.District;
+import com.maathru.backend.enumeration.Gender;
 import com.maathru.backend.enumeration.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    @Modifying
+    @Query(value = "INSERT INTO employees (employee_id,phone_number, nic, gender, dob, address_line1, street, city, designation, qualifications, user_user_id, moh_moh_id, region_id) " +
+            "VALUES (:employeeId,:phoneNumber, :nic, :gender, :dob, :addressLine1, :street, :city, :designation, :qualifications, :userId, :mohId, :regionId)",
+            nativeQuery = true)
+    int saveEmployee(@Param("employeeId") Long employeeId,
+                     @Param("phoneNumber") String phoneNumber,
+                     @Param("nic") String nic,
+                     @Param("gender") Gender gender,
+                     @Param("dob") LocalDate dob,
+                     @Param("addressLine1") String addressLine1,
+                     @Param("street") String street,
+                     @Param("city") String city,
+                     @Param("designation") String designation,
+                     @Param("qualifications") String qualifications,
+                     @Param("userId") Long userId,
+                     @Param("mohId") Long mohId,
+                     @Param("regionId") Long regionId);
+
+
     Optional<Employee> findByUserEmail(String userEmail);
 
     @Query("SELECT e FROM Employee e WHERE e.user.role = :role AND e.region.regionId = :regionId")
@@ -57,4 +79,23 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "JOIN e2.user u " +
             "WHERE e.user = :user AND u.role = :role")
     List<DoctorsResponse> findMidwifesByUserAndRoleForRegions(@Param("user") User user, @Param("role") Role role);
+
+    @Modifying
+    @Query(value = "INSERT INTO employees (employee_id,phone_number, nic, gender, dob, address_line1, street, city, designation, qualifications, user_user_id, moh_moh_id, region_id) " +
+            "VALUES (:employeeId,:phoneNumber, :nic, :gender, :dob, :addressLine1, :street, :city, :designation, :qualifications, :userId, :mohId, :regionId)",
+            nativeQuery = true)
+    int saveEmployee(@Param("employeeId") Long employeeId,
+                     @Param("phoneNumber") String phoneNumber,
+                     @Param("nic") String nic,
+                     @Param("gender") Gender gender,
+                     @Param("dob") LocalDate dob,
+                     @Param("addressLine1") String addressLine1,
+                     @Param("street") String street,
+                     @Param("city") String city,
+                     @Param("designation") String designation,
+                     @Param("qualifications") String qualifications,
+                     @Param("userId") Long userId,
+                     @Param("mohId") Long mohId,
+                     @Param("regionId") Long regionId);
+
 }

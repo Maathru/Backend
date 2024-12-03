@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -46,4 +47,15 @@ public interface BasicInfoRepository extends JpaRepository<BasicInfo, Long> {
             "WHERE b.user.userId = :id " +
             "AND b.user.role = 'PARENT'")
     HomeVisitsResponse findByParent(@Param("email") String email, @Param("id") long id);
+
+
+    @Query(value = "SELECT b.woman_age AS age, COUNT(b.id) AS eligibleCount " +
+            "FROM user_basic_info b " +
+            "GROUP BY b.woman_age " +
+            "ORDER BY b.woman_age ASC",
+            nativeQuery = true)
+    List<Map<String, Object>> getPregnancyCountByAge();
+
+
+
 }

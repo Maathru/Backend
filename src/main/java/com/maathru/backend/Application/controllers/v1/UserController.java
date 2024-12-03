@@ -1,6 +1,7 @@
 package com.maathru.backend.Application.controllers.v1;
 
-import com.maathru.backend.Application.dto.response.AdminDashboard;
+import com.maathru.backend.Application.dto.request.UpdateEmployeeProfileDto;
+import com.maathru.backend.Application.dto.request.UpdateUserProfileDto;
 import com.maathru.backend.Application.dto.response.MidwifeResponse;
 import com.maathru.backend.Application.dto.response.RegionResponse;
 import com.maathru.backend.Application.dto.response.UserProfileDto;
@@ -8,6 +9,7 @@ import com.maathru.backend.Domain.service.EmployeeService;
 import com.maathru.backend.Domain.service.RegionService;
 import com.maathru.backend.Domain.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,22 @@ public class UserController {
     public ResponseEntity<List<UserProfileDto>> getAllUsers() {
         return userService.getAllUsers();
     }
+
+    @GetMapping()
+    public ResponseEntity<UserProfileDto> getUser() {
+        return userService.getUser();
+    }
+
+    @PutMapping()
+    public ResponseEntity<String> updateUser(@Valid @RequestBody UpdateUserProfileDto updateUserProfileDto) {
+        return userService.updateUserProfile(updateUserProfileDto);
+    }
+
+    @PutMapping("/employee")
+    public ResponseEntity<String> updateEmployee(@Valid @RequestBody UpdateEmployeeProfileDto updateEmployeeProfileDto) {
+        return userService.updateEmployeeProfile(updateEmployeeProfileDto);
+    }
+
 
     @PreAuthorize("hasRole('MIDWIFE')")
     @GetMapping("/midwife/get/{email}")

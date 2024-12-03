@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,13 +20,32 @@ public class ClinicListResponse {
     private LocalTime startTime;
     private LocalTime endTime;
     private String region;
+    private List<String> doctors;
 
-    public ClinicListResponse(long id, String name, LocalDate date, LocalTime startTime, LocalTime endTime) {
+    public ClinicListResponse(long id, String name, LocalTime startTime, LocalTime endTime, List<String> doctors) {
+        this.id = id;
+        this.name = name;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.doctors = doctors;
+    }
+
+    public ClinicListResponse(long id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, List<String> doctors) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.doctors = doctors;
+    }
+
+    public ClinicListResponse(long id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String region) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.region = region;
     }
 
     public ClinicListResponse(long clinicId, String name, String region) {
