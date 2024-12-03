@@ -21,4 +21,5 @@ public class BlogDto {
     private String content;
     private String additionalNotes;
     private List<String> keywords;
+    private String image;
 }

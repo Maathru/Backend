@@ -22,6 +22,25 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    @Modifying
+    @Query(value = "INSERT INTO employees (employee_id,phone_number, nic, gender, dob, address_line1, street, city, designation, qualifications, user_user_id, moh_moh_id, region_id) " +
+            "VALUES (:employeeId,:phoneNumber, :nic, :gender, :dob, :addressLine1, :street, :city, :designation, :qualifications, :userId, :mohId, :regionId)",
+            nativeQuery = true)
+    int saveEmployee(@Param("employeeId") Long employeeId,
+                     @Param("phoneNumber") String phoneNumber,
+                     @Param("nic") String nic,
+                     @Param("gender") Gender gender,
+                     @Param("dob") LocalDate dob,
+                     @Param("addressLine1") String addressLine1,
+                     @Param("street") String street,
+                     @Param("city") String city,
+                     @Param("designation") String designation,
+                     @Param("qualifications") String qualifications,
+                     @Param("userId") Long userId,
+                     @Param("mohId") Long mohId,
+                     @Param("regionId") Long regionId);
+
+
     Optional<Employee> findByUserEmail(String userEmail);
 
     @Query("SELECT e FROM Employee e WHERE e.user.role = :role AND e.region.regionId = :regionId")

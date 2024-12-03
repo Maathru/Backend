@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/blog/**", "/api/v1/answer/**", "/api/v1/question/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/blogs/approved", "/api/v1/blogs/article/*","/api/v1/blog/**", "/api/v1/answer/**", "/api/v1/question/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
                         .anyRequest().authenticated()
                 ).userDetailsService(userService)
