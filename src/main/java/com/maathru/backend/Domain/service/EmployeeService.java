@@ -39,6 +39,7 @@ public class EmployeeService {
     private final ModelMapper mapper;
     private final AuthenticationService authenticationService;
     private final EmailService emailService;
+    private final HomeVisitRepository homeVisitRepository;
 
     @Transactional
     public ResponseEntity<String> createEmployee(EmployeeDto employeeDto) {
@@ -170,6 +171,9 @@ public class EmployeeService {
         try {
             User user = jwtService.getCurrentUser();
             HomeVisitsResponse homeVisits = basicInfoRepository.findByParent(user.getEmail(), id);
+            List<HomeVisitsListResponse> visits = homeVisitRepository.findAllHomeVisitForSelectedUser(id);
+            homeVisits.setVisits(visits);
+
             if (homeVisits == null) {
                 throw new NotFoundException("No parent data found for id " + id);
             }

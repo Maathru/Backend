@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface HomeVisitRepository extends JpaRepository<HomeVisit, Long> {
     Optional<HomeVisit> findByUser(User user);
 
-    @Query("SELECT DISTINCT new com.maathru.backend.Application.dto.response.HomeVisitsListResponse(v.id,v.date,v.time,b.womanName,b.address,v.status) " +
+    @Query("SELECT DISTINCT new com.maathru.backend.Application.dto.response.HomeVisitsListResponse(v.id,b.user.userId,v.date,v.time,b.womanName,b.address,v.status) " +
             "FROM HomeVisit hv " +
             "JOIN hv.visits v " +
             "JOIN Employee e on e.user = hv.createdBy " +
@@ -27,7 +27,7 @@ public interface HomeVisitRepository extends JpaRepository<HomeVisit, Long> {
             "AND EXTRACT(YEAR FROM v.date) = EXTRACT(YEAR FROM CAST(:date AS DATE))")
     List<HomeVisitsListResponse> findHomeVisitsByMonthForMidwife(@Param("date") LocalDate date, @Param("email") String email);
 
-    @Query("SELECT DISTINCT new com.maathru.backend.Application.dto.response.HomeVisitsListResponse(v.id,v.time,b.womanName,b.address,v.status) " +
+    @Query("SELECT DISTINCT new com.maathru.backend.Application.dto.response.HomeVisitsListResponse(v.id,b.user.userId,v.time,b.womanName,b.address,v.status) " +
             "FROM HomeVisit hv " +
             "JOIN hv.visits v " +
             "JOIN Employee e on e.user = hv.createdBy " +
@@ -44,4 +44,11 @@ public interface HomeVisitRepository extends JpaRepository<HomeVisit, Long> {
             "AND EXTRACT(MONTH FROM v.date) = EXTRACT(MONTH FROM CAST(:date AS DATE)) " +
             "AND EXTRACT(YEAR FROM v.date) = EXTRACT(YEAR FROM CAST(:date AS DATE))")
     List<LocalDate> findHomeVisitDatesByDateForParent(@Param("date") LocalDate date, @Param("email") String email);
+
+    @Query("SELECT DISTINCT new com.maathru.backend.Application.dto.response.HomeVisitsListResponse(v.id,v.date,v.time,v.status) " +
+            "FROM HomeVisit hv " +
+            "JOIN hv.visits v " +
+            "JOIN BasicInfo b on b.user = hv.user " +
+            "WHERE b.user.userId = :userId")
+    List<HomeVisitsListResponse> findAllHomeVisitForSelectedUser(@Param("userId") long userId);
 }
