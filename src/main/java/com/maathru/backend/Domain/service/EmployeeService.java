@@ -53,7 +53,7 @@ public class EmployeeService {
             authenticationService.encodePassword(user);
             authenticationService.initializeUserFields(user, currentUser);
 
-            user.setRole(Role.valueOf(employeeDto.getDesignation().toUpperCase()));
+            user.setRole(Role.valueOf(employeeDto.getRole().toUpperCase()));
             user.setRole(authenticationService.determineUserRole(currentUser, user));
             user = userRepository.save(user);
             log.info("User signed up successfully: {} by {}: {}", user.getUsername(), currentUser.getRole(), currentUser.getUserId());
