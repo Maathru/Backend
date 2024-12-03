@@ -79,4 +79,23 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "JOIN e2.user u " +
             "WHERE e.user = :user AND u.role = :role")
     List<DoctorsResponse> findMidwifesByUserAndRoleForRegions(@Param("user") User user, @Param("role") Role role);
+
+    @Modifying
+    @Query(value = "INSERT INTO employees (employee_id,phone_number, nic, gender, dob, address_line1, street, city, designation, qualifications, user_user_id, moh_moh_id, region_id) " +
+            "VALUES (:employeeId,:phoneNumber, :nic, :gender, :dob, :addressLine1, :street, :city, :designation, :qualifications, :userId, :mohId, :regionId)",
+            nativeQuery = true)
+    int saveEmployee(@Param("employeeId") Long employeeId,
+                     @Param("phoneNumber") String phoneNumber,
+                     @Param("nic") String nic,
+                     @Param("gender") Gender gender,
+                     @Param("dob") LocalDate dob,
+                     @Param("addressLine1") String addressLine1,
+                     @Param("street") String street,
+                     @Param("city") String city,
+                     @Param("designation") String designation,
+                     @Param("qualifications") String qualifications,
+                     @Param("userId") Long userId,
+                     @Param("mohId") Long mohId,
+                     @Param("regionId") Long regionId);
+
 }
