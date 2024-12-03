@@ -23,11 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -50,62 +47,80 @@ public class EligibleService {
     private final HomeEnvironmentRepository homeEnvironmentRepository;
 
     @Transactional
-    public ResponseEntity<String> saveOrUpdateEligible(EligibleDto eligibleDto) {
+    public ResponseEntity<String> saveOrUpdateEligible(Long userId, EligibleDto eligibleDto) {
         try {
             User currentUser = jwtService.getCurrentUser();
+            User user;
+
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+            } else {
+                user = currentUser;
+            }
 
             BasicInfo basicInfo = setDataForEntity(
-                    basicInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(BasicInfo::new),
+                    basicInfoRepository.findByUserAndDeletedAtIsNull(user).orElseGet(BasicInfo::new),
                     currentUser,
+                    user,
                     new BasicInfoMapper(),
                     eligibleDto.getBasicInfoDto()
             );
 
             MedicalHistory medicalHistory = setDataForEntity(
-                    medicalHistoryRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(MedicalHistory::new),
+                    medicalHistoryRepository.findByUserAndDeletedAtIsNull(user).orElseGet(MedicalHistory::new),
                     currentUser,
+                    user,
                     new MedicalHistoryMapper(),
                     eligibleDto.getMedicalHistoryDto()
             );
 
             SpecialWoman specialWoman = setDataForEntity(
-                    specialWomanRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(SpecialWoman::new),
+                    specialWomanRepository.findByUserAndDeletedAtIsNull(user).orElseGet(SpecialWoman::new),
                     currentUser,
+                    user,
                     new SpecialWomanMapper(),
                     eligibleDto.getSpecialWomanDto()
             );
 
             SpecialBoth specialBoth = setDataForEntity(
-                    specialBothRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(SpecialBoth::new),
+                    specialBothRepository.findByUserAndDeletedAtIsNull(user).orElseGet(SpecialBoth::new),
                     currentUser,
+                    user,
                     new SpecialBothMapper(),
                     eligibleDto.getSpecialBothDto()
             );
 
             FamilyHealthInfo familyHealthInfo = setDataForEntity(
-                    familyHealthInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(FamilyHealthInfo::new),
+                    familyHealthInfoRepository.findByUserAndDeletedAtIsNull(user).orElseGet(FamilyHealthInfo::new),
                     currentUser,
+                    user,
                     new FamilyHealthInfoMapper(),
                     eligibleDto.getFamilyHealthInfoDto()
             );
 
             FamilyNutrition familyNutrition = setDataForEntity(
-                    familyNutritionRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(FamilyNutrition::new),
+                    familyNutritionRepository.findByUserAndDeletedAtIsNull(user).orElseGet(FamilyNutrition::new),
                     currentUser,
+                    user,
                     new FamilyNutritionMapper(),
                     eligibleDto.getFamilyNutritionDto()
             );
 
             ParentHabit parentHabit = setDataForEntity(
-                    parentHabitRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ParentHabit::new),
+                    parentHabitRepository.findByUserAndDeletedAtIsNull(user).orElseGet(ParentHabit::new),
                     currentUser,
+                    user,
                     new ParentHabitMapper(),
                     eligibleDto.getParentHabitDto()
             );
 
             HomeEnvironment homeEnvironment = setDataForEntity(
-                    homeEnvironmentRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(HomeEnvironment::new),
+                    homeEnvironmentRepository.findByUserAndDeletedAtIsNull(user).orElseGet(HomeEnvironment::new),
                     currentUser,
+                    user,
                     new HomeEnvironmentMapper(),
                     eligibleDto.getHomeEnvironmentDto()
             );
@@ -120,7 +135,7 @@ public class EligibleService {
             parentHabitRepository.save(parentHabit);
             homeEnvironmentRepository.save(homeEnvironment);
 
-            log.info("Eligible data added or updated successfully by {}", currentUser.getEmail());
+            log.info("Eligible data for {} added or updated successfully by {}", user.getEmail(), currentUser.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body("Eligible data added or updated successfully");
         } catch (Exception e) {
             log.error("Error saving eligible data for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
@@ -129,9 +144,16 @@ public class EligibleService {
     }
 
     @Transactional(readOnly = true)
-        public ResponseEntity<EligibleDto> getEligibleData() {
+    public ResponseEntity<EligibleDto> getEligibleData(Long userId) {
         try {
             User currentUser = jwtService.getCurrentUser();
+
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found "));
+            }
 
             BasicInfo basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(BasicInfo::new);
             MedicalHistory medicalHistory = medicalHistoryRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(MedicalHistory::new);
@@ -252,12 +274,12 @@ public class EligibleService {
         return ResponseEntity.ok(eligibleCoupleResponseList);
     }
 
-    private <T extends BaseEntity, D> T setDataForEntity(T entity, User currentUser, Mapper<T, D> mapper, D dto) {
+    private <T extends BaseEntity, D> T setDataForEntity(T entity, User currentUser, User user, Mapper<T, D> mapper, D dto) {
         if (entity.getId() == 0) {
             entity.setCreatedBy(currentUser);
         }
         mapper.toEntity(entity, dto);
-        entity.setUser(currentUser);
+        entity.setUser(user);
         entity.setUpdatedBy(currentUser);
         return entity;
     }

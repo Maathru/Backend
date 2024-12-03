@@ -1,6 +1,7 @@
 package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.MedicalRecordDto;
+import com.maathru.backend.Application.dto.response.MedicalRecordResponse;
 import com.maathru.backend.Domain.entity.MedicalRecord;
 import com.maathru.backend.Domain.service.MedicalRecordService;
 import lombok.AllArgsConstructor;
@@ -22,17 +23,17 @@ public class MedicalRecordController {
     }
 
     @GetMapping("/getall")
-    public ResponseEntity<Iterable<MedicalRecord>> getAllMedicalRecords() {
+    public ResponseEntity<Iterable<MedicalRecordResponse>> getAllMedicalRecords() {
         return medicalRecordService.getAllMedicalRecords();
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<MedicalRecord> getMedicalRecord(long id) {
+    public ResponseEntity<MedicalRecordResponse> getMedicalRecord(long id) {
         return medicalRecordService.getMedicalRecord(id);
     }
 
     @GetMapping("/getbypatient/{patientId}")
-    public ResponseEntity<Iterable<MedicalRecord>> getMedicalRecordByPatient(long patientId) {
+    public ResponseEntity<Iterable<MedicalRecordResponse>> getMedicalRecordByPatient(long patientId) {
         return medicalRecordService.getMedicalRecordByPatient(patientId);
     }
 

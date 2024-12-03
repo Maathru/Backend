@@ -18,10 +18,10 @@ import com.maathru.backend.External.repository.parent.ChildDetailRepository;
 import com.maathru.backend.External.repository.parent.ChildMemoryRepository;
 import com.maathru.backend.External.repository.parent.PreExistingMedicalConditionRepository;
 import com.maathru.backend.External.repository.parent.PregnancyHistoryRepository;
+import com.maathru.backend.enumeration.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ParentService {
+    private final UserRepository userRepository;
     private final ChildDetailRepository childDetailRepository;
     private final ObstetricComplicationRepository obstetricComplicationRepository;
     private final ChildBirthRepository childBirthRepository;
@@ -45,15 +46,24 @@ public class ParentService {
     private final MedicalHistoryRepository medicalHistoryRepository;
     private final PregnancyHistoryRepository pregnancyHistoryRepository;
     private final ModelMapper mapper;
-
     private final ChildMemoryRepository childMemoryRepository;
 
     @Transactional
-    public ResponseEntity<String> createOrUpdateParentDetails(ParentDetailsDto parentDetailsDto) {
+    public ResponseEntity<String> createOrUpdateParentDetails(Long userId, ParentDetailsDto parentDetailsDto) {
         try {
             User currentUser = jwtService.getCurrentUser();
+            User user;
 
-            BasicInfo basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(BasicInfo::new);
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+            } else {
+                user = currentUser;
+            }
+
+            BasicInfo basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(user).orElseGet(BasicInfo::new);
             PreExistingMedicalCondition preExistingMedicalCondition = preExistingMedicalConditionRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(PreExistingMedicalCondition::new);
 
             if (basicInfo.getId() == 0) {
@@ -68,16 +78,16 @@ public class ParentService {
             parentDetailsMapper.toBasicInfo(basicInfo, parentDetailsDto);
             parentDetailsMapper.toPreExistingMedicalCondition(preExistingMedicalCondition, parentDetailsDto);
 
-            basicInfo.setUser(currentUser);
+            basicInfo.setUser(user);
             basicInfo.setUpdatedBy(currentUser);
 
-            preExistingMedicalCondition.setUser(currentUser);
+            preExistingMedicalCondition.setUser(user);
             preExistingMedicalCondition.setUpdatedBy(currentUser);
 
             basicInfoRepository.save(basicInfo);
             preExistingMedicalConditionRepository.save(preExistingMedicalCondition);
 
-            log.info("Parent Details data added or updated successfully by {}", currentUser.getEmail());
+            log.info("Parent Details data for {} added or updated successfully by {}", user.getEmail(), currentUser.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body("Parent Details data added or updated successfully");
         } catch (Exception e) {
             log.error("Error saving Parent Details data for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
@@ -86,9 +96,16 @@ public class ParentService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<ParentDetailsDto> getParentDetails() {
+    public ResponseEntity<ParentDetailsDto> getParentDetails(Long userId) {
         try {
             User currentUser = jwtService.getCurrentUser();
+
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found "));
+            }
 
             BasicInfo basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(BasicInfo::new);
             PreExistingMedicalCondition preExistingMedicalCondition = preExistingMedicalConditionRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(PreExistingMedicalCondition::new);
@@ -103,11 +120,21 @@ public class ParentService {
         }
     }
 
-    public ResponseEntity<String> createOrUpdateFamilyHistory(FamilyHistoryDto familyHistoryDto) {
+    public ResponseEntity<String> createOrUpdateFamilyHistory(Long userId, FamilyHistoryDto familyHistoryDto) {
         try {
             User currentUser = jwtService.getCurrentUser();
+            User user;
 
-            MedicalHistory medicalHistory = medicalHistoryRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(MedicalHistory::new);
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+            } else {
+                user = currentUser;
+            }
+
+            MedicalHistory medicalHistory = medicalHistoryRepository.findByUserAndDeletedAtIsNull(user).orElseGet(MedicalHistory::new);
 
             if (medicalHistory.getId() == 0) {
                 medicalHistory.setCreatedBy(currentUser);
@@ -116,12 +143,12 @@ public class ParentService {
             FamilyHistoryMapper familyHistoryMapper = new FamilyHistoryMapper();
             familyHistoryMapper.toMedicalHistory(medicalHistory, familyHistoryDto);
 
-            medicalHistory.setUser(currentUser);
+            medicalHistory.setUser(user);
             medicalHistory.setUpdatedBy(currentUser);
 
             medicalHistoryRepository.save(medicalHistory);
 
-            log.info("Medical History data added or updated successfully by {}", currentUser.getEmail());
+            log.info("Medical History data for {} added or updated successfully by {}", user.getEmail(), currentUser.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body("Medical History data added or updated successfully");
         } catch (Exception e) {
             log.error("Error saving Medical History data for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
@@ -129,9 +156,16 @@ public class ParentService {
         }
     }
 
-    public ResponseEntity<FamilyHistoryDto> getFamilyHistory() {
+    public ResponseEntity<FamilyHistoryDto> getFamilyHistory(Long userId) {
         try {
             User currentUser = jwtService.getCurrentUser();
+
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found "));
+            }
 
             MedicalHistory medicalHistory = medicalHistoryRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(MedicalHistory::new);
 
@@ -146,12 +180,22 @@ public class ParentService {
     }
 
     @Transactional
-    public ResponseEntity<String> createOrUpdatePregnancyHistory(PregnancyHistoryDto pregnancyHistoryDto) {
+    public ResponseEntity<String> createOrUpdatePregnancyHistory(Long userId, PregnancyHistoryDto pregnancyHistoryDto) {
         try {
             User currentUser = jwtService.getCurrentUser();
+            User user;
 
-            BasicInfo basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(BasicInfo::new);
-            PregnancyHistory pregnancyHistory = pregnancyHistoryRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(PregnancyHistory::new);
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+            } else {
+                user = currentUser;
+            }
+
+            BasicInfo basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(user).orElseGet(BasicInfo::new);
+            PregnancyHistory pregnancyHistory = pregnancyHistoryRepository.findByUserAndDeletedAtIsNull(user).orElseGet(PregnancyHistory::new);
 
             basicInfo.setChildren(pregnancyHistoryDto.getChildren());
             basicInfo.setUpdatedBy(currentUser);
@@ -161,13 +205,13 @@ public class ParentService {
                 pregnancyHistory.setCreatedBy(currentUser);
             }
             mapper.map(pregnancyHistoryDto, pregnancyHistory);
-            pregnancyHistory.setUser(currentUser);
+            pregnancyHistory.setUser(user);
             pregnancyHistory.setCreatedBy(currentUser);
             pregnancyHistory.setUpdatedBy(currentUser);
 
             pregnancyHistoryRepository.save(pregnancyHistory);
 
-            log.info("Pregnancy History data added or updated successfully by {}", currentUser.getEmail());
+            log.info("Pregnancy History data for {} added or updated successfully by {}", user.getEmail(), currentUser.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body("Pregnancy History data added or updated successfully");
         } catch (Exception e) {
             log.error("Error saving Pregnancy History data for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
@@ -176,9 +220,16 @@ public class ParentService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<PregnancyHistoryDto> getPregnancyHistory() {
+    public ResponseEntity<PregnancyHistoryDto> getPregnancyHistory(Long userId) {
         try {
             User currentUser = jwtService.getCurrentUser();
+
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found "));
+            }
 
             BasicInfo basicInfo = basicInfoRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(BasicInfo::new);
             PregnancyHistory pregnancyHistory = pregnancyHistoryRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(PregnancyHistory::new);
@@ -194,12 +245,22 @@ public class ParentService {
     }
 
     @Transactional
-    public ResponseEntity<String> createOrUpdateCurrentPregnancy(CurrentPregnancyDto currentPregnancyDto) {
+    public ResponseEntity<String> createOrUpdateCurrentPregnancy(Long userId, CurrentPregnancyDto currentPregnancyDto) {
         try {
             User currentUser = jwtService.getCurrentUser();
+            User user;
 
-            CurrentPregnancy currentPregnancy = currentPregnancyRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(CurrentPregnancy::new);
-            OtherSituation otherSituation = otherSituationRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(OtherSituation::new);
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+            } else {
+                user = currentUser;
+            }
+
+            CurrentPregnancy currentPregnancy = currentPregnancyRepository.findByUserAndDeletedAtIsNull(user).orElseGet(CurrentPregnancy::new);
+            OtherSituation otherSituation = otherSituationRepository.findByUserAndDeletedAtIsNull(user).orElseGet(OtherSituation::new);
 
             if (currentPregnancy.getId() == 0) {
                 currentPregnancy.setCreatedBy(currentUser);
@@ -213,16 +274,16 @@ public class ParentService {
             currentPregnancyMapper.toCurrentPregnancy(currentPregnancy, currentPregnancyDto);
             currentPregnancyMapper.toOtherSituation(otherSituation, currentPregnancyDto);
 
-            currentPregnancy.setUser(currentUser);
+            currentPregnancy.setUser(user);
             currentPregnancy.setUpdatedBy(currentUser);
 
-            otherSituation.setUser(currentUser);
+            otherSituation.setUser(user);
             otherSituation.setUpdatedBy(currentUser);
 
             currentPregnancyRepository.save(currentPregnancy);
             otherSituationRepository.save(otherSituation);
 
-            log.info("Current Pregnancy data added or updated successfully by {}", currentUser.getEmail());
+            log.info("Current Pregnancy data for {} added or updated successfully by {}", user.getEmail(), currentUser.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body("Current Pregnancy data added or updated successfully");
         } catch (Exception e) {
             log.error("Error saving Current Pregnancy data for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
@@ -231,9 +292,16 @@ public class ParentService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<CurrentPregnancyDto> getCurrentPregnancy() {
+    public ResponseEntity<CurrentPregnancyDto> getCurrentPregnancy(Long userId) {
         try {
             User currentUser = jwtService.getCurrentUser();
+
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found "));
+            }
 
             CurrentPregnancy currentPregnancy = currentPregnancyRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(CurrentPregnancy::new);
             OtherSituation otherSituation = otherSituationRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(OtherSituation::new);
@@ -248,18 +316,28 @@ public class ParentService {
         }
     }
 
-    public ResponseEntity<String> createClinicalConservation(ClinicalConservationDto clinicalConservationDto) {
+    public ResponseEntity<String> createClinicalConservation(Long userId, ClinicalConservationDto clinicalConservationDto) {
         try {
             User currentUser = jwtService.getCurrentUser();
+            User user;
+
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+            } else {
+                user = currentUser;
+            }
 
             ClinicalConservation clinicalConservation = mapper.map(clinicalConservationDto, ClinicalConservation.class);
-            clinicalConservation.setUser(currentUser);
+            clinicalConservation.setUser(user);
             clinicalConservation.setCreatedBy(currentUser);
             clinicalConservation.setUpdatedBy(currentUser);
 
             clinicalConservationRepository.save(clinicalConservation);
 
-            log.info("Clinical Conservation added successfully by {}", currentUser.getEmail());
+            log.info("Clinical Conservation added for {} successfully by {}", user.getEmail(), currentUser.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body("Clinical Conservation added successfully");
         } catch (Exception e) {
             log.error("Error saving Clinical Conservation for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
@@ -267,9 +345,16 @@ public class ParentService {
         }
     }
 
-    public ResponseEntity<List<ClinicalConservationDto>> getClinicalConservations() {
+    public ResponseEntity<List<ClinicalConservationDto>> getClinicalConservations(Long userId) {
         try {
             User currentUser = jwtService.getCurrentUser();
+
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found "));
+            }
 
             List<ClinicalConservationDto> clinicalConservationDtos = clinicalConservationRepository.findByUser(currentUser).stream().map((clinic) -> mapper.map(clinic, ClinicalConservationDto.class)).toList();
             return ResponseEntity.status(HttpStatus.OK).body(clinicalConservationDtos);
@@ -280,13 +365,23 @@ public class ParentService {
     }
 
     @Transactional
-    public ResponseEntity<String> createOrUpdateChildBirth(ChildBirthDto childBirthDto) {
+    public ResponseEntity<String> createOrUpdateChildBirth(Long userId, ChildBirthDto childBirthDto) {
         try {
             User currentUser = jwtService.getCurrentUser();
+            User user;
 
-            ChildBirth childBirth = childBirthRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ChildBirth::new);
-            ObstetricComplication obstetricComplication = obstetricComplicationRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ObstetricComplication::new);
-            ChildDetail childDetail = childDetailRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ChildDetail::new);
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+            } else {
+                user = currentUser;
+            }
+
+            ChildBirth childBirth = childBirthRepository.findByUserAndDeletedAtIsNull(user).orElseGet(ChildBirth::new);
+            ObstetricComplication obstetricComplication = obstetricComplicationRepository.findByUserAndDeletedAtIsNull(user).orElseGet(ObstetricComplication::new);
+            ChildDetail childDetail = childDetailRepository.findByUserAndDeletedAtIsNull(user).orElseGet(ChildDetail::new);
 
             if (childBirth.getId() == 0) {
                 childBirth.setCreatedBy(currentUser);
@@ -305,20 +400,20 @@ public class ParentService {
             childBirthMapper.toObstetricComplication(obstetricComplication, childBirthDto);
             childBirthMapper.toChildDetail(childDetail, childBirthDto);
 
-            childBirth.setUser(currentUser);
+            childBirth.setUser(user);
             childBirth.setUpdatedBy(currentUser);
 
-            obstetricComplication.setUser(currentUser);
+            obstetricComplication.setUser(user);
             obstetricComplication.setUpdatedBy(currentUser);
 
-            childDetail.setUser(currentUser);
+            childDetail.setUser(user);
             childDetail.setUpdatedBy(currentUser);
 
             childBirthRepository.save(childBirth);
             obstetricComplicationRepository.save(obstetricComplication);
             childDetailRepository.save(childDetail);
 
-            log.info("Child Birth data added or updated successfully by {}", currentUser.getEmail());
+            log.info("Child Birth data for {} added or updated successfully by {}", user.getEmail(), currentUser.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body("Child Birth data added or updated successfully");
         } catch (Exception e) {
             log.error("Error saving Child Birth data for user: {} {}", jwtService.getCurrentUser().getEmail(), e.getMessage());
@@ -327,9 +422,16 @@ public class ParentService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<ChildBirthDto> getChildBirth() {
+    public ResponseEntity<ChildBirthDto> getChildBirth(Long userId) {
         try {
             User currentUser = jwtService.getCurrentUser();
+
+            if (currentUser.getRole() == Role.MIDWIFE) {
+                if (userId == null || userId == 0) {
+                    throw new Exception("User id cannot be empty");
+                }
+                currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found "));
+            }
 
             ChildBirth childBirth = childBirthRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ChildBirth::new);
             ObstetricComplication obstetricComplication = obstetricComplicationRepository.findByUserAndDeletedAtIsNull(currentUser).orElseGet(ObstetricComplication::new);
