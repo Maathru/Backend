@@ -1,14 +1,15 @@
 package com.maathru.backend.Domain.service;
 
+import com.maathru.backend.Application.dto.eligible.PastPregnancyDTO;
 import com.maathru.backend.Application.dto.request.ClinicDto;
+import com.maathru.backend.Application.dto.request.HomeVisitRequest;
+import com.maathru.backend.Application.dto.request.VisitDto;
 import com.maathru.backend.Application.dto.response.ClinicListResponse;
 import com.maathru.backend.Application.dto.response.ClinicResponse;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Domain.entity.*;
 import com.maathru.backend.Domain.exception.*;
-import com.maathru.backend.External.repository.ClinicRepository;
-import com.maathru.backend.External.repository.EmployeeRepository;
-import com.maathru.backend.External.repository.RegionRepository;
+import com.maathru.backend.External.repository.*;
 import com.maathru.backend.External.utils.TimeUtils;
 import com.maathru.backend.enumeration.Role;
 import lombok.AllArgsConstructor;
@@ -28,10 +29,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Slf4j
 public class ClinicService {
+    private final HomeVisitRepository homeVisitRepository;
     private final ClinicRepository clinicRepository;
     private final RegionRepository regionRepository;
     private final EmployeeRepository employeeRepository;
     private final JwtService jwtService;
+    private final UserRepository userRepository;
 
     @Transactional
     public ResponseEntity<String> createOrUpdateClinic(ClinicDto clinicDto) {
@@ -262,4 +265,86 @@ public class ClinicService {
         }
         return ResponseEntity.ok(clinicListResponses);
     }
+
+    @Transactional
+    public ResponseEntity<String> saveOrUpdateHomeVisits(HomeVisitRequest homeVisitRequest) {
+        try {
+            User currentUser = jwtService.getCurrentUser();
+            User user = userRepository.findById(homeVisitRequest.getId())
+                    .orElseThrow(() -> new NotFoundException("User not found"));
+
+            HomeVisit homeVisit = homeVisitRepository.findByUser(user).orElseGet(HomeVisit::new);
+            homeVisit.setUser(user);
+
+            if (homeVisit.getId() == 0) {
+                homeVisit.setCreatedBy(currentUser);
+            }
+            homeVisit.setUpdatedBy(currentUser);
+
+            // Clear existing visits and add new ones
+            homeVisit.getVisits().clear();
+            List<Visit> visits = homeVisitRequest.getVisits().stream()
+                    .map(visitDto -> {
+                        Visit visit = new Visit();
+                        visit.setDate(visitDto.getDate());
+                        visit.setTime(visitDto.getTime());
+                        visit.setStatus(visitDto.getStatus());
+                        visit.setHomeVisit(homeVisit);
+                        return visit;
+                    })
+                    .toList();
+            homeVisit.getVisits().addAll(visits);
+
+            homeVisitRepository.save(homeVisit);
+            log.info("Home visits saved successfully for user: {}", user.getEmail());
+            return ResponseEntity.ok("Home visits saved successfully!");
+        } catch (NotFoundException e) {
+            log.error("User not found: {}", homeVisitRequest.getId());
+            throw e;
+        } catch (Exception e) {
+            log.error("Error saving home visits for user: {} - {}", jwtService.getCurrentUser().getEmail(), e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving home visits");
+        }
+    }
+
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<HomeVisitRequest> getHomeVisits(long userId) {
+        try {
+            // Fetch the user or throw exception if not found
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
+
+            // Fetch the home visits for the user or throw exception if not found
+            HomeVisit homeVisit = homeVisitRepository.findByUser(user)
+                    .orElseThrow(() -> new NotFoundException("Home visits not found for user id: " + userId));
+
+            // Map visits to VisitDto
+            List<VisitDto> visits = homeVisit.getVisits().stream()
+                    .map(visit -> {
+                        VisitDto visitDto = new VisitDto();
+                        visitDto.setDate(visit.getDate());
+                        visitDto.setTime(visit.getTime());
+                        visitDto.setStatus(visit.getStatus());
+                        return visitDto;
+                    })
+                    .collect(Collectors.toList());
+
+            // Create and populate the response DTO
+            HomeVisitRequest homeVisitRequest = new HomeVisitRequest();
+            homeVisitRequest.setVisits(visits);
+            homeVisitRequest.setId(userId);
+
+            return ResponseEntity.ok(homeVisitRequest);
+        } catch (NotFoundException e) {
+            log.error("Error fetching home visits: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error fetching home visits for user id {}: {}", userId, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
+        }
+    }
+
+
 }
