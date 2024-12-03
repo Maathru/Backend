@@ -34,8 +34,14 @@ public class BlogController {
         return blogService.getPendingBlogs();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/approved")
+    public ResponseEntity<Iterable<ViewBlogDto>> getApprovedBlogs() {return blogService.getApprovedBlogs();}
+
+    @GetMapping("/article/{id}")
     public ResponseEntity<Optional<ViewBlogDto>> findArticle(@PathVariable Long id) { return blogService.findArticle(id); }
+
+    @PutMapping("/approve/{id}")
+    public ResponseEntity<String> approveArticle(@PathVariable long id) { return blogService.approveArticle(id); }
 
 //    @PutMapping("/{id}")
 //    public ResponseEntity<Blog> updateBlog(@PathVariable long id, @RequestBody BlogDto blogDto) {
