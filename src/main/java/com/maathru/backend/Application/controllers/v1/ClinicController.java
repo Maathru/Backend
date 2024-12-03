@@ -1,6 +1,7 @@
 package com.maathru.backend.Application.controllers.v1;
 
 import com.maathru.backend.Application.dto.request.ClinicDto;
+import com.maathru.backend.Application.dto.request.HomeVisitRequest;
 import com.maathru.backend.Application.dto.response.*;
 import com.maathru.backend.Domain.service.ClinicService;
 import com.maathru.backend.Domain.service.EmployeeService;
@@ -105,5 +106,15 @@ public class ClinicController {
     @GetMapping("/upcoming/doctor")
     public ResponseEntity<List<ClinicResponse>> getUpcomingClinicsForDoctor() {
         return clinicService.getUpcomingClinicsForDoctor();
+    }
+
+    @PostMapping("/home-visits")
+    public ResponseEntity<String> saveOrUpdateHomeVisits(@RequestBody HomeVisitRequest homeVisitRequest) {
+        return clinicService.saveOrUpdateHomeVisits(homeVisitRequest);
+    }
+
+    @GetMapping("/home-visits/{userId}")
+    public ResponseEntity<HomeVisitRequest> getHomeVisits(@PathVariable long userId) {
+        return clinicService.getHomeVisits(userId);
     }
 }
