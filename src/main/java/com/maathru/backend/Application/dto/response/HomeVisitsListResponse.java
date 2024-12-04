@@ -18,6 +18,7 @@ public class HomeVisitsListResponse {
     private LocalTime time;
     private String motherName;
     private String address;
+    private String location;
     private VisitStatus visitStatus;
 
     public HomeVisitsListResponse(long id, LocalDate date, LocalTime time, VisitStatus visitStatus) {
@@ -27,12 +28,13 @@ public class HomeVisitsListResponse {
         this.visitStatus = visitStatus;
     }
 
-    public HomeVisitsListResponse(long id, long userId, LocalTime time, String motherName, String address, VisitStatus visitStatus) {
+    public HomeVisitsListResponse(long id, long userId, LocalTime time, String motherName, String address, String location, VisitStatus visitStatus) {
         this.id = id;
         this.userId = userId;
         this.time = time;
         this.motherName = motherName;
         this.address = address;
+        this.location = location;
         this.visitStatus = visitStatus;
     }
 }
