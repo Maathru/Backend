@@ -33,14 +33,12 @@ public class AnalyticsService {
     }
 
     public Map<Integer, Long> getBirthsCountByMonth() {
-        // Fetch data from the repository
         List<Object[]> results = childBirthRepository.getBirthsCountByMonth();
 
-        // Convert the List<Object[]> to a Map<Integer, Long>
         return results.stream()
                 .collect(Collectors.toMap(
-                        result -> (Integer) result[0], // The month (e.g., 1 for January)
-                        result -> (Long) result[1]      // The count of births for that month
+                        result -> (Integer) result[0],
+                        result -> (Long) result[1]
                 ));
     }
 
