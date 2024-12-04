@@ -60,7 +60,7 @@ public class AuthenticationService {
             if (passwordStatus) {
                 // after user created successfully send password
                 try {
-                    emailService.sendNewAccountEmail(user.getFirstName(), user.getEmail(), user.getPassword());
+//                    emailService.sendNewAccountEmail(user.getFirstName(), user.getEmail(), user.getPassword());
                 } catch (Exception e) {
                     log.error("Failed to send account creation email: {}", e.getMessage());
                     throw new ApiException("Failed to send account creation email");

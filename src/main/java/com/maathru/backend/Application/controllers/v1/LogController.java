@@ -22,6 +22,7 @@ public class LogController {
     public ResponseEntity<List<String>> getLogs() {
         try {
             List<String> logs = Files.readAllLines(Paths.get(LOG_FILE_PATH));
+//            List<String> logs = Files.readAllLines(Paths.get("logs/demo-logs.log"));
 
             // Filter logs by maximum line length
             List<String> filteredLogs = logs.stream()
