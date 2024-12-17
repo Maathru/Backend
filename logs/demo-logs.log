@@ -1,0 +1,26 @@
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Admin user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Doctor user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Midwife user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Parent user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Eligible user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Pending user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] User user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/1 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/2 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/3 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/4 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/1 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/2 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/3 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/4 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/5 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 1 already exists
+2024-12-03 20:08:32 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 2 already exists
+2024-12-03 20:08:32 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 3 already exists
+2024-12-03 20:08:32 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 4 already exists
+2024-12-03 20:08:32 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 5 already exists
+2024-12-03 20:08:32 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 6 already exists
+2024-12-03 20:10:28 INFO  [http-nio-8081-exec-5] c.m.b.D.s.AuthenticationService [AuthenticationService.java:106] ADMIN:admin@maathru.com signed in Successfully
+2024-12-04 10:08:20 INFO 14132 --- [backend] [nio-8081-exec-4] c.m.b.Domain.service.AnswerService       : Answer:6 added successfully for question:4 by admin@maathru.com
+2024-12-04 10:15:18 INFO 14132 --- [backend] [nio-8081-exec-5] c.m.b.Domain.service.AnswerService       : Answer:7 added successfully for question:4 by admin@maathru.com
+2024-12-04T10:16:53 INFO 14132 --- [backend] [nio-8081-exec-6] c.m.b.Domain.service.QuestionService     : Question:5 added successfully by admin@maathru.com

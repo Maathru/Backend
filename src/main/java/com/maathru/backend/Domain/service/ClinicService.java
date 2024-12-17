@@ -6,9 +6,7 @@ import com.maathru.backend.Application.dto.response.ClinicResponse;
 import com.maathru.backend.Application.dto.response.DoctorsResponse;
 import com.maathru.backend.Domain.entity.*;
 import com.maathru.backend.Domain.exception.*;
-import com.maathru.backend.External.repository.ClinicRepository;
-import com.maathru.backend.External.repository.EmployeeRepository;
-import com.maathru.backend.External.repository.RegionRepository;
+import com.maathru.backend.External.repository.*;
 import com.maathru.backend.External.utils.TimeUtils;
 import com.maathru.backend.enumeration.Role;
 import lombok.AllArgsConstructor;
@@ -21,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

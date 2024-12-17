@@ -1,0 +1,478 @@
+2024-12-03 18:28:13 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:50] Starting BackendApplication using Java 17.0.13 with PID 7528 (D:\Backend\target\classes started by chamikam in D:\Backend)
+2024-12-03 18:28:13 INFO  [main] c.m.b.BackendApplication [SpringApplication.java:660] The following 1 profile is active: "dev"
+2024-12-03 18:28:14 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:143] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-03 18:28:14 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:211] Finished Spring Data repository scanning in 180 ms. Found 37 JPA repository interfaces.
+2024-12-03 18:28:15 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:111] Tomcat initialized with port 8081 (http)
+2024-12-03 18:28:15 INFO  [main] o.a.c.c.StandardService [DirectJDKLog.java:173] Starting service [Tomcat]
+2024-12-03 18:28:15 INFO  [main] o.a.c.c.StandardEngine [DirectJDKLog.java:173] Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-12-03 18:28:15 INFO  [main] o.a.c.c.C.[.[.[/] [DirectJDKLog.java:173] Initializing Spring embedded WebApplicationContext
+2024-12-03 18:28:15 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext [ServletWebServerApplicationContext.java:296] Root WebApplicationContext: initialization completed in 2737 ms
+2024-12-03 18:28:16 INFO  [main] o.h.j.i.u.LogHelper [LogHelper.java:31] HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-03 18:28:16 INFO  [main] o.h.Version [Version.java:44] HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-12-03 18:28:16 INFO  [main] o.h.c.i.RegionFactoryInitiator [RegionFactoryInitiator.java:50] HHH000026: Second-level cache disabled
+2024-12-03 18:28:16 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo [SpringPersistenceUnitInfo.java:87] No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-03 18:28:16 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:109] HikariPool-1 - Starting...
+2024-12-03 18:28:17 INFO  [main] c.z.h.p.HikariPool [HikariPool.java:554] HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6106dfb6
+2024-12-03 18:28:17 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:122] HikariPool-1 - Start completed.
+2024-12-03 18:28:17 WARN  [main] o.h.o.deprecation [DialectFactoryImpl.java:153] HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-12-03 18:28:20 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator [JtaPlatformInitiator.java:59] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-03 18:28:20 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:437] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 18:28:21 INFO  [main] o.s.d.j.r.q.QueryEnhancerFactory [QueryEnhancerFactory.java:49] Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-03 18:28:22 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [InitializeUserDetailsBeanManagerConfigurer.java:113] Global AuthenticationManager configured with UserDetailsService bean with name userService
+2024-12-03 18:28:24 INFO  [main] o.s.s.w.DefaultSecurityFilterChain [DefaultSecurityFilterChain.java:54] Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@38085597, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7418508a, org.springframework.security.web.context.SecurityContextHolderFilter@36ed075b, org.springframework.security.web.header.HeaderWriterFilter@472f2a80, org.springframework.web.filter.CorsFilter@59f32d74, org.springframework.security.web.authentication.logout.LogoutFilter@1176abeb, com.maathru.backend.Application.filter.JwtAuthenticationFilter@ba59da9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@216634f7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@12643e97, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5a771dc6, org.springframework.security.web.session.SessionManagementFilter@67cd916, org.springframework.security.web.access.ExceptionTranslationFilter@1d7b62cd, org.springframework.security.web.access.intercept.AuthorizationFilter@3aaede52]
+2024-12-03 18:28:24 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:243] Tomcat started on port 8081 (http) with context path '/'
+2024-12-03 18:28:24 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Starting...
+2024-12-03 18:28:24 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e9771a5]]
+2024-12-03 18:28:24 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Started.
+2024-12-03 18:28:24 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:56] Started BackendApplication in 12.462 seconds (process running for 13.076)
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Admin user already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Doctor user already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Midwife user already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Parent user already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Eligible user already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Pending user already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] User user already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/1 already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/2 already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/3 already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/4 already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/1 already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/2 already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/3 already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/4 already exists.
+2024-12-03 18:28:25 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/5 already exists.
+2024-12-03 18:28:26 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 1 already exists
+2024-12-03 18:28:26 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 2 already exists
+2024-12-03 18:28:26 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 3 already exists
+2024-12-03 18:28:26 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 4 already exists
+2024-12-03 18:28:26 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 5 already exists
+2024-12-03 18:28:26 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 6 already exists
+2024-12-03 18:28:42 INFO  [http-nio-8081-exec-1] o.a.c.c.C.[.[.[/] [DirectJDKLog.java:173] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-03 18:28:42 INFO  [http-nio-8081-exec-1] o.s.w.s.DispatcherServlet [FrameworkServlet.java:532] Initializing Servlet 'dispatcherServlet'
+2024-12-03 18:28:42 INFO  [http-nio-8081-exec-1] o.s.w.s.DispatcherServlet [FrameworkServlet.java:554] Completed initialization in 0 ms
+2024-12-03 18:28:43 INFO  [http-nio-8081-exec-2] c.m.b.D.s.QuestionService [QuestionService.java:43] Question:4 added successfully by midwife@maathru.com
+2024-12-03 18:28:43 WARN  [http-nio-8081-exec-5] o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$PlainPageSerializationWarning [SpringDataJacksonConfiguration.java:151] Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2024-12-03 18:29:24 INFO  [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats [WebSocketMessageBrokerStats.java:154] WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-12-03 18:37:01 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Stopping...
+2024-12-03 18:37:01 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e9771a5]]
+2024-12-03 18:37:01 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Stopped.
+2024-12-03 18:37:01 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:650] Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 18:37:01 INFO  [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:349] HikariPool-1 - Shutdown initiated...
+2024-12-03 18:37:01 INFO  [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:351] HikariPool-1 - Shutdown completed.
+2024-12-03 18:38:33 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:50] Starting BackendApplication using Java 17.0.13 with PID 3164 (D:\Backend\target\classes started by chamikam in D:\Backend)
+2024-12-03 18:38:33 INFO  [main] c.m.b.BackendApplication [SpringApplication.java:660] The following 1 profile is active: "dev"
+2024-12-03 18:38:35 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:143] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-03 18:38:35 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:211] Finished Spring Data repository scanning in 152 ms. Found 37 JPA repository interfaces.
+2024-12-03 18:38:36 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:111] Tomcat initialized with port 8081 (http)
+2024-12-03 18:38:36 INFO  [main] o.a.c.c.StandardService [DirectJDKLog.java:173] Starting service [Tomcat]
+2024-12-03 18:38:36 INFO  [main] o.a.c.c.StandardEngine [DirectJDKLog.java:173] Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-12-03 18:38:36 INFO  [main] o.a.c.c.C.[.[.[/] [DirectJDKLog.java:173] Initializing Spring embedded WebApplicationContext
+2024-12-03 18:38:36 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext [ServletWebServerApplicationContext.java:296] Root WebApplicationContext: initialization completed in 2695 ms
+2024-12-03 18:38:36 INFO  [main] o.h.j.i.u.LogHelper [LogHelper.java:31] HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-03 18:38:36 INFO  [main] o.h.Version [Version.java:44] HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-12-03 18:38:37 INFO  [main] o.h.c.i.RegionFactoryInitiator [RegionFactoryInitiator.java:50] HHH000026: Second-level cache disabled
+2024-12-03 18:38:37 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo [SpringPersistenceUnitInfo.java:87] No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-03 18:38:37 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:109] HikariPool-1 - Starting...
+2024-12-03 18:38:37 INFO  [main] c.z.h.p.HikariPool [HikariPool.java:554] HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1115be8c
+2024-12-03 18:38:37 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:122] HikariPool-1 - Start completed.
+2024-12-03 18:38:37 WARN  [main] o.h.o.deprecation [DialectFactoryImpl.java:153] HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-12-03 18:38:40 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator [JtaPlatformInitiator.java:59] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-03 18:38:41 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:437] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 18:38:41 INFO  [main] o.s.d.j.r.q.QueryEnhancerFactory [QueryEnhancerFactory.java:49] Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-03 18:38:43 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [InitializeUserDetailsBeanManagerConfigurer.java:113] Global AuthenticationManager configured with UserDetailsService bean with name userService
+2024-12-03 18:38:44 INFO  [main] o.s.s.w.DefaultSecurityFilterChain [DefaultSecurityFilterChain.java:54] Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@673f8424, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@580936b0, org.springframework.security.web.context.SecurityContextHolderFilter@1d7b62cd, org.springframework.security.web.header.HeaderWriterFilter@4260f222, org.springframework.web.filter.CorsFilter@1176abeb, org.springframework.security.web.authentication.logout.LogoutFilter@365abbd, com.maathru.backend.Application.filter.JwtAuthenticationFilter@283730de, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@472f2a80, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6f928b22, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4ef5f92d, org.springframework.security.web.session.SessionManagementFilter@380f934e, org.springframework.security.web.access.ExceptionTranslationFilter@582e40f8, org.springframework.security.web.access.intercept.AuthorizationFilter@73707d4]
+2024-12-03 18:38:45 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:243] Tomcat started on port 8081 (http) with context path '/'
+2024-12-03 18:38:45 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Starting...
+2024-12-03 18:38:45 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@73831f3b]]
+2024-12-03 18:38:45 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Started.
+2024-12-03 18:38:45 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:56] Started BackendApplication in 12.262 seconds (process running for 12.916)
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Admin user already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Doctor user already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Midwife user already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Parent user already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Eligible user already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Pending user already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] User user already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/1 already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/2 already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/3 already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/4 already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/1 already exists.
+2024-12-03 18:38:45 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/2 already exists.
+2024-12-03 18:38:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/3 already exists.
+2024-12-03 18:38:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/4 already exists.
+2024-12-03 18:38:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/5 already exists.
+2024-12-03 18:38:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 1 already exists
+2024-12-03 18:38:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 2 already exists
+2024-12-03 18:38:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 3 already exists
+2024-12-03 18:38:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 4 already exists
+2024-12-03 18:38:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 5 already exists
+2024-12-03 18:38:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 6 already exists
+2024-12-03 18:39:45 INFO  [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats [WebSocketMessageBrokerStats.java:154] WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-12-03 18:40:29 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Stopping...
+2024-12-03 18:40:29 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@73831f3b]]
+2024-12-03 18:40:29 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Stopped.
+2024-12-03 18:40:29 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:650] Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 18:40:29 INFO  [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:349] HikariPool-1 - Shutdown initiated...
+2024-12-03 18:40:29 INFO  [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:351] HikariPool-1 - Shutdown completed.
+2024-12-03 18:40:33 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:50] Starting BackendApplication using Java 17.0.13 with PID 11492 (D:\Backend\target\classes started by chamikam in D:\Backend)
+2024-12-03 18:40:33 INFO  [main] c.m.b.BackendApplication [SpringApplication.java:660] The following 1 profile is active: "dev"
+2024-12-03 18:40:35 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:143] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-03 18:40:35 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:211] Finished Spring Data repository scanning in 157 ms. Found 37 JPA repository interfaces.
+2024-12-03 18:40:36 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:111] Tomcat initialized with port 8081 (http)
+2024-12-03 18:40:36 INFO  [main] o.a.c.c.StandardService [DirectJDKLog.java:173] Starting service [Tomcat]
+2024-12-03 18:40:36 INFO  [main] o.a.c.c.StandardEngine [DirectJDKLog.java:173] Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-12-03 18:40:36 INFO  [main] o.a.c.c.C.[.[.[/] [DirectJDKLog.java:173] Initializing Spring embedded WebApplicationContext
+2024-12-03 18:40:36 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext [ServletWebServerApplicationContext.java:296] Root WebApplicationContext: initialization completed in 2862 ms
+2024-12-03 18:40:37 INFO  [main] o.h.j.i.u.LogHelper [LogHelper.java:31] HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-03 18:40:37 INFO  [main] o.h.Version [Version.java:44] HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-12-03 18:40:37 INFO  [main] o.h.c.i.RegionFactoryInitiator [RegionFactoryInitiator.java:50] HHH000026: Second-level cache disabled
+2024-12-03 18:40:37 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo [SpringPersistenceUnitInfo.java:87] No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-03 18:40:37 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:109] HikariPool-1 - Starting...
+2024-12-03 18:40:38 INFO  [main] c.z.h.p.HikariPool [HikariPool.java:554] HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@248b2b61
+2024-12-03 18:40:38 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:122] HikariPool-1 - Start completed.
+2024-12-03 18:40:38 WARN  [main] o.h.o.deprecation [DialectFactoryImpl.java:153] HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-12-03 18:40:40 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator [JtaPlatformInitiator.java:59] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-03 18:40:41 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:437] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 18:40:41 INFO  [main] o.s.d.j.r.q.QueryEnhancerFactory [QueryEnhancerFactory.java:49] Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-03 18:40:43 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [InitializeUserDetailsBeanManagerConfigurer.java:113] Global AuthenticationManager configured with UserDetailsService bean with name userService
+2024-12-03 18:40:45 INFO  [main] o.s.s.w.DefaultSecurityFilterChain [DefaultSecurityFilterChain.java:54] Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@55f05a73, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@44dd4acb, org.springframework.security.web.context.SecurityContextHolderFilter@51d14a8a, org.springframework.security.web.header.HeaderWriterFilter@40e0d56c, org.springframework.web.filter.CorsFilter@60509848, org.springframework.security.web.authentication.logout.LogoutFilter@366e76c9, com.maathru.backend.Application.filter.JwtAuthenticationFilter@7a0eca26, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6689e1b3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@67cd916, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@10d29fe, org.springframework.security.web.session.SessionManagementFilter@59aa07cf, org.springframework.security.web.access.ExceptionTranslationFilter@74409dc9, org.springframework.security.web.access.intercept.AuthorizationFilter@580936b0]
+2024-12-03 18:40:46 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:243] Tomcat started on port 8081 (http) with context path '/'
+2024-12-03 18:40:46 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Starting...
+2024-12-03 18:40:46 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@18adeae]]
+2024-12-03 18:40:46 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Started.
+2024-12-03 18:40:46 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:56] Started BackendApplication in 12.862 seconds (process running for 13.441)
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Admin user already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Doctor user already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Midwife user already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Parent user already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Eligible user already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Pending user already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] User user already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/1 already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/2 already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/3 already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/4 already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/1 already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/2 already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/3 already exists.
+2024-12-03 18:40:46 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/4 already exists.
+2024-12-03 18:40:47 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/5 already exists.
+2024-12-03 18:40:47 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 1 already exists
+2024-12-03 18:40:47 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 2 already exists
+2024-12-03 18:40:47 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 3 already exists
+2024-12-03 18:40:47 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 4 already exists
+2024-12-03 18:40:47 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 5 already exists
+2024-12-03 18:40:47 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 6 already exists
+2024-12-03 18:41:02 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Stopping...
+2024-12-03 18:41:02 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@18adeae]]
+2024-12-03 18:41:02 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Stopped.
+2024-12-03 18:41:02 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:650] Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 18:41:02 INFO  [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:349] HikariPool-1 - Shutdown initiated...
+2024-12-03 18:41:02 INFO  [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:351] HikariPool-1 - Shutdown completed.
+2024-12-03 18:41:07 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:50] Starting BackendApplication using Java 17.0.13 with PID 7320 (D:\Backend\target\classes started by chamikam in D:\Backend)
+2024-12-03 18:41:07 INFO  [main] c.m.b.BackendApplication [SpringApplication.java:660] The following 1 profile is active: "dev"
+2024-12-03 18:41:09 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:143] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-03 18:41:09 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:211] Finished Spring Data repository scanning in 189 ms. Found 37 JPA repository interfaces.
+2024-12-03 18:41:10 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:111] Tomcat initialized with port 8081 (http)
+2024-12-03 18:41:10 INFO  [main] o.a.c.c.StandardService [DirectJDKLog.java:173] Starting service [Tomcat]
+2024-12-03 18:41:10 INFO  [main] o.a.c.c.StandardEngine [DirectJDKLog.java:173] Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-12-03 18:41:10 INFO  [main] o.a.c.c.C.[.[.[/] [DirectJDKLog.java:173] Initializing Spring embedded WebApplicationContext
+2024-12-03 18:41:10 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext [ServletWebServerApplicationContext.java:296] Root WebApplicationContext: initialization completed in 2954 ms
+2024-12-03 18:41:10 INFO  [main] o.h.j.i.u.LogHelper [LogHelper.java:31] HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-03 18:41:10 INFO  [main] o.h.Version [Version.java:44] HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-12-03 18:41:10 INFO  [main] o.h.c.i.RegionFactoryInitiator [RegionFactoryInitiator.java:50] HHH000026: Second-level cache disabled
+2024-12-03 18:41:11 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo [SpringPersistenceUnitInfo.java:87] No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-03 18:41:11 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:109] HikariPool-1 - Starting...
+2024-12-03 18:41:11 INFO  [main] c.z.h.p.HikariPool [HikariPool.java:554] HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@34eaf9c1
+2024-12-03 18:41:11 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:122] HikariPool-1 - Start completed.
+2024-12-03 18:41:11 WARN  [main] o.h.o.deprecation [DialectFactoryImpl.java:153] HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-12-03 18:41:14 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator [JtaPlatformInitiator.java:59] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-03 18:41:15 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:437] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 18:41:16 INFO  [main] o.s.d.j.r.q.QueryEnhancerFactory [QueryEnhancerFactory.java:49] Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-03 18:41:17 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [InitializeUserDetailsBeanManagerConfigurer.java:113] Global AuthenticationManager configured with UserDetailsService bean with name userService
+2024-12-03 18:41:19 INFO  [main] o.s.s.w.DefaultSecurityFilterChain [DefaultSecurityFilterChain.java:54] Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@366e76c9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@25d42dee, org.springframework.security.web.context.SecurityContextHolderFilter@40e0d56c, org.springframework.security.web.header.HeaderWriterFilter@6ba06b63, org.springframework.web.filter.CorsFilter@5616950b, org.springframework.security.web.authentication.logout.LogoutFilter@36ed075b, com.maathru.backend.Application.filter.JwtAuthenticationFilter@5640a424, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@77416991, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4b0360cf, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@e4748af, org.springframework.security.web.session.SessionManagementFilter@5ec32f69, org.springframework.security.web.access.ExceptionTranslationFilter@30e1f008, org.springframework.security.web.access.intercept.AuthorizationFilter@5f09940e]
+2024-12-03 18:41:20 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:243] Tomcat started on port 8081 (http) with context path '/'
+2024-12-03 18:41:20 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Starting...
+2024-12-03 18:41:20 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@94fab8f]]
+2024-12-03 18:41:20 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Started.
+2024-12-03 18:41:20 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:56] Started BackendApplication in 13.478 seconds (process running for 14.127)
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Admin user already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Doctor user already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Midwife user already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Parent user already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Eligible user already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Pending user already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] User user already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/1 already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/2 already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/3 already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/4 already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/1 already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/2 already exists.
+2024-12-03 18:41:20 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/3 already exists.
+2024-12-03 18:41:21 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/4 already exists.
+2024-12-03 18:41:21 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/5 already exists.
+2024-12-03 18:41:21 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 1 already exists
+2024-12-03 18:41:21 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 2 already exists
+2024-12-03 18:41:21 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 3 already exists
+2024-12-03 18:41:21 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 4 already exists
+2024-12-03 18:41:21 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 5 already exists
+2024-12-03 18:41:21 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 6 already exists
+2024-12-03 18:41:39 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Stopping...
+2024-12-03 18:41:39 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@94fab8f]]
+2024-12-03 18:41:39 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Stopped.
+2024-12-03 18:41:39 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:650] Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 18:41:39 INFO  [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:349] HikariPool-1 - Shutdown initiated...
+2024-12-03 18:41:39 INFO  [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:351] HikariPool-1 - Shutdown completed.
+2024-12-03 18:41:43 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:50] Starting BackendApplication using Java 17.0.13 with PID 10260 (D:\Backend\target\classes started by chamikam in D:\Backend)
+2024-12-03 18:41:43 INFO  [main] c.m.b.BackendApplication [SpringApplication.java:660] The following 1 profile is active: "dev"
+2024-12-03 18:41:45 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:143] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-03 18:41:45 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:211] Finished Spring Data repository scanning in 179 ms. Found 37 JPA repository interfaces.
+2024-12-03 18:41:46 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:111] Tomcat initialized with port 8081 (http)
+2024-12-03 18:41:46 INFO  [main] o.a.c.c.StandardService [DirectJDKLog.java:173] Starting service [Tomcat]
+2024-12-03 18:41:46 INFO  [main] o.a.c.c.StandardEngine [DirectJDKLog.java:173] Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-12-03 18:41:46 INFO  [main] o.a.c.c.C.[.[.[/] [DirectJDKLog.java:173] Initializing Spring embedded WebApplicationContext
+2024-12-03 18:41:46 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext [ServletWebServerApplicationContext.java:296] Root WebApplicationContext: initialization completed in 2802 ms
+2024-12-03 18:41:46 INFO  [main] o.h.j.i.u.LogHelper [LogHelper.java:31] HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-03 18:41:47 INFO  [main] o.h.Version [Version.java:44] HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-12-03 18:41:47 INFO  [main] o.h.c.i.RegionFactoryInitiator [RegionFactoryInitiator.java:50] HHH000026: Second-level cache disabled
+2024-12-03 18:41:47 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo [SpringPersistenceUnitInfo.java:87] No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-03 18:41:47 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:109] HikariPool-1 - Starting...
+2024-12-03 18:41:47 INFO  [main] c.z.h.p.HikariPool [HikariPool.java:554] HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@31082efa
+2024-12-03 18:41:47 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:122] HikariPool-1 - Start completed.
+2024-12-03 18:41:47 WARN  [main] o.h.o.deprecation [DialectFactoryImpl.java:153] HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-12-03 18:41:50 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator [JtaPlatformInitiator.java:59] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-03 18:41:51 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:437] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 18:41:51 INFO  [main] o.s.d.j.r.q.QueryEnhancerFactory [QueryEnhancerFactory.java:49] Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-03 18:41:53 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [InitializeUserDetailsBeanManagerConfigurer.java:113] Global AuthenticationManager configured with UserDetailsService bean with name userService
+2024-12-03 18:41:55 INFO  [main] o.s.s.w.DefaultSecurityFilterChain [DefaultSecurityFilterChain.java:54] Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4b5aaf90, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4fe55048, org.springframework.security.web.context.SecurityContextHolderFilter@128b1140, org.springframework.security.web.header.HeaderWriterFilter@45cd5616, org.springframework.web.filter.CorsFilter@2d393a72, org.springframework.security.web.authentication.logout.LogoutFilter@164ee145, com.maathru.backend.Application.filter.JwtAuthenticationFilter@dc1fbbc, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@11090c52, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@17fa3fb2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@190f1d4a, org.springframework.security.web.session.SessionManagementFilter@79f127e, org.springframework.security.web.access.ExceptionTranslationFilter@4e01cf43, org.springframework.security.web.access.intercept.AuthorizationFilter@25d42dee]
+2024-12-03 18:41:55 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:243] Tomcat started on port 8081 (http) with context path '/'
+2024-12-03 18:41:55 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Starting...
+2024-12-03 18:41:55 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@72fc0b37]]
+2024-12-03 18:41:55 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Started.
+2024-12-03 18:41:55 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:56] Started BackendApplication in 12.757 seconds (process running for 13.37)
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Admin user already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Doctor user already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Midwife user already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Parent user already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Eligible user already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Pending user already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] User user already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/1 already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/2 already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/3 already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/4 already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/1 already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/2 already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/3 already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/4 already exists.
+2024-12-03 18:41:56 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/5 already exists.
+2024-12-03 18:41:57 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 1 already exists
+2024-12-03 18:41:57 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 2 already exists
+2024-12-03 18:41:57 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 3 already exists
+2024-12-03 18:41:57 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 4 already exists
+2024-12-03 18:41:57 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 5 already exists
+2024-12-03 18:41:57 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 6 already exists
+2024-12-03 18:42:09 INFO  [http-nio-8081-exec-1] o.a.c.c.C.[.[.[/] [DirectJDKLog.java:173] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-03 18:42:09 INFO  [http-nio-8081-exec-1] o.s.w.s.DispatcherServlet [FrameworkServlet.java:532] Initializing Servlet 'dispatcherServlet'
+2024-12-03 18:42:09 INFO  [http-nio-8081-exec-1] o.s.w.s.DispatcherServlet [FrameworkServlet.java:554] Completed initialization in 3 ms
+2024-12-03 18:42:15 INFO  [http-nio-8081-exec-8] o.s.a.AbstractOpenApiResource [AbstractOpenApiResource.java:390] Init duration for springdoc-openapi is: 5468 ms
+2024-12-03 18:42:55 INFO  [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats [WebSocketMessageBrokerStats.java:154] WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-12-03 18:43:06 INFO  [http-nio-8081-exec-10] c.m.b.D.s.AuthenticationService [AuthenticationService.java:232] User doctor@maathru.com: login attempts reset
+2024-12-03 18:43:07 INFO  [http-nio-8081-exec-10] c.m.b.D.s.AuthenticationService [AuthenticationService.java:240] Revoked all tokens for user doctor@maathru.com
+2024-12-03 18:43:07 INFO  [http-nio-8081-exec-10] c.m.b.D.s.AuthenticationService [AuthenticationService.java:251] Saved new tokens for user doctor@maathru.com
+2024-12-03 18:43:07 INFO  [http-nio-8081-exec-10] c.m.b.D.s.AuthenticationService [AuthenticationService.java:106] DOCTOR:doctor@maathru.com signed in Successfully
+2024-12-03 19:07:31 WARN  [HikariPool-1 housekeeper] c.z.h.p.HikariPool [HikariPool.java:797] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=23m43s353ms767µs200ns).
+2024-12-03 19:08:16 WARN  [http-nio-8081-exec-9] o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$PlainPageSerializationWarning [SpringDataJacksonConfiguration.java:151] Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2024-12-03 19:30:50 WARN  [HikariPool-1 housekeeper] c.z.h.p.HikariPool [HikariPool.java:797] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7m18s391ms140µs).
+2024-12-03 19:30:53 INFO  [http-nio-8081-exec-6] c.m.b.A.c.CustomLogoutHandler [CustomLogoutHandler.java:42] User midwife@maathru.com signed out successfully
+2024-12-03 19:31:05 INFO  [http-nio-8081-exec-7] c.m.b.D.s.AuthenticationService [AuthenticationService.java:232] User doctor@maathru.com: login attempts reset
+2024-12-03 19:31:05 INFO  [http-nio-8081-exec-7] c.m.b.D.s.AuthenticationService [AuthenticationService.java:240] Revoked all tokens for user doctor@maathru.com
+2024-12-03 19:31:05 INFO  [http-nio-8081-exec-7] c.m.b.D.s.AuthenticationService [AuthenticationService.java:251] Saved new tokens for user doctor@maathru.com
+2024-12-03 19:31:05 INFO  [http-nio-8081-exec-7] c.m.b.D.s.AuthenticationService [AuthenticationService.java:106] DOCTOR:doctor@maathru.com signed in Successfully
+2024-12-03 19:31:05 WARN  [http-nio-8081-exec-8] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:31:05 ERROR [http-nio-8081-exec-8] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:31:05 WARN  [http-nio-8081-exec-6] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:31:05 ERROR [http-nio-8081-exec-6] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:31:05 WARN  [http-nio-8081-exec-2] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:31:05 ERROR [http-nio-8081-exec-2] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:31:05 WARN  [http-nio-8081-exec-3] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:31:05 ERROR [http-nio-8081-exec-3] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:16 WARN  [http-nio-8081-exec-1] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:16 ERROR [http-nio-8081-exec-1] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:16 WARN  [http-nio-8081-exec-10] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:16 ERROR [http-nio-8081-exec-10] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:16 WARN  [http-nio-8081-exec-5] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:16 WARN  [http-nio-8081-exec-8] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:16 ERROR [http-nio-8081-exec-5] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:16 ERROR [http-nio-8081-exec-8] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:21 ERROR [http-nio-8081-exec-2] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Drugs not found
+2024-12-03 19:32:22 ERROR [http-nio-8081-exec-3] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Drugs not found
+2024-12-03 19:32:24 WARN  [http-nio-8081-exec-1] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:24 WARN  [http-nio-8081-exec-10] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:24 ERROR [http-nio-8081-exec-10] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:24 ERROR [http-nio-8081-exec-1] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:24 WARN  [http-nio-8081-exec-8] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:24 ERROR [http-nio-8081-exec-8] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:24 WARN  [http-nio-8081-exec-5] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:24 ERROR [http-nio-8081-exec-5] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:26 WARN  [http-nio-8081-exec-2] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:26 ERROR [http-nio-8081-exec-2] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:26 WARN  [http-nio-8081-exec-3] c.m.b.D.s.ClinicService [ClinicService.java:159] Clinics not found for date 2024-12-03
+2024-12-03 19:32:26 ERROR [http-nio-8081-exec-3] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for date 2024-12-03
+2024-12-03 19:32:26 WARN  [http-nio-8081-exec-9] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:26 ERROR [http-nio-8081-exec-9] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:26 WARN  [http-nio-8081-exec-10] c.m.b.D.s.ClinicService [ClinicService.java:159] Clinics not found for date 2024-12-03
+2024-12-03 19:32:26 ERROR [http-nio-8081-exec-10] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for date 2024-12-03
+2024-12-03 19:32:30 WARN  [http-nio-8081-exec-8] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:30 ERROR [http-nio-8081-exec-8] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:30 WARN  [http-nio-8081-exec-4] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:30 ERROR [http-nio-8081-exec-4] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:30 WARN  [http-nio-8081-exec-6] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:30 ERROR [http-nio-8081-exec-6] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:30 WARN  [http-nio-8081-exec-7] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:30 ERROR [http-nio-8081-exec-7] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:36 WARN  [http-nio-8081-exec-3] c.m.b.D.s.ClinicService [ClinicService.java:159] Clinics not found for date 2024-12-03
+2024-12-03 19:32:36 ERROR [http-nio-8081-exec-3] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for date 2024-12-03
+2024-12-03 19:32:36 WARN  [http-nio-8081-exec-2] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:36 ERROR [http-nio-8081-exec-2] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:36 WARN  [http-nio-8081-exec-9] c.m.b.D.s.ClinicService [ClinicService.java:159] Clinics not found for date 2024-12-03
+2024-12-03 19:32:36 ERROR [http-nio-8081-exec-9] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for date 2024-12-03
+2024-12-03 19:32:36 WARN  [http-nio-8081-exec-10] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:36 ERROR [http-nio-8081-exec-10] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:38 WARN  [http-nio-8081-exec-8] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:38 WARN  [http-nio-8081-exec-4] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:38 ERROR [http-nio-8081-exec-8] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:38 ERROR [http-nio-8081-exec-4] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:38 WARN  [http-nio-8081-exec-7] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:38 ERROR [http-nio-8081-exec-7] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:38 WARN  [http-nio-8081-exec-6] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:38 ERROR [http-nio-8081-exec-6] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:39 WARN  [http-nio-8081-exec-3] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:39 WARN  [http-nio-8081-exec-2] c.m.b.D.s.ClinicService [ClinicService.java:159] Clinics not found for date 2024-12-03
+2024-12-03 19:32:39 ERROR [http-nio-8081-exec-3] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:39 ERROR [http-nio-8081-exec-2] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for date 2024-12-03
+2024-12-03 19:32:39 WARN  [http-nio-8081-exec-9] c.m.b.D.s.ClinicService [ClinicService.java:159] Clinics not found for date 2024-12-03
+2024-12-03 19:32:39 ERROR [http-nio-8081-exec-9] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for date 2024-12-03
+2024-12-03 19:32:39 WARN  [http-nio-8081-exec-10] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:39 ERROR [http-nio-8081-exec-10] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:42 WARN  [http-nio-8081-exec-8] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:42 ERROR [http-nio-8081-exec-8] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:42 WARN  [http-nio-8081-exec-4] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:42 ERROR [http-nio-8081-exec-4] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:42 WARN  [http-nio-8081-exec-7] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:42 ERROR [http-nio-8081-exec-7] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:42 WARN  [http-nio-8081-exec-6] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:42 ERROR [http-nio-8081-exec-6] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:43 WARN  [http-nio-8081-exec-3] c.m.b.D.s.ClinicService [ClinicService.java:159] Clinics not found for date 2024-12-03
+2024-12-03 19:32:43 WARN  [http-nio-8081-exec-2] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:43 ERROR [http-nio-8081-exec-3] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for date 2024-12-03
+2024-12-03 19:32:43 ERROR [http-nio-8081-exec-2] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:43 WARN  [http-nio-8081-exec-9] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:43 ERROR [http-nio-8081-exec-9] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:43 WARN  [http-nio-8081-exec-10] c.m.b.D.s.ClinicService [ClinicService.java:159] Clinics not found for date 2024-12-03
+2024-12-03 19:32:43 ERROR [http-nio-8081-exec-10] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for date 2024-12-03
+2024-12-03 19:32:51 WARN  [http-nio-8081-exec-8] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:51 WARN  [http-nio-8081-exec-4] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:51 ERROR [http-nio-8081-exec-8] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:51 ERROR [http-nio-8081-exec-4] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:51 WARN  [http-nio-8081-exec-6] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:32:51 WARN  [http-nio-8081-exec-7] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:51 ERROR [http-nio-8081-exec-6] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:32:51 ERROR [http-nio-8081-exec-7] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:58 WARN  [http-nio-8081-exec-2] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:58 WARN  [http-nio-8081-exec-3] c.m.b.D.s.ClinicService [ClinicService.java:159] Clinics not found for date 2024-12-03
+2024-12-03 19:32:58 ERROR [http-nio-8081-exec-2] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:58 ERROR [http-nio-8081-exec-3] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for date 2024-12-03
+2024-12-03 19:32:58 WARN  [http-nio-8081-exec-10] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:32:58 WARN  [http-nio-8081-exec-9] c.m.b.D.s.ClinicService [ClinicService.java:159] Clinics not found for date 2024-12-03
+2024-12-03 19:32:58 ERROR [http-nio-8081-exec-9] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for date 2024-12-03
+2024-12-03 19:32:58 ERROR [http-nio-8081-exec-10] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:33:07 ERROR [http-nio-8081-exec-4] c.m.b.D.s.EmployeeService [EmployeeService.java:113] MIDWIFE list is empty in this region
+2024-12-03 19:33:07 ERROR [http-nio-8081-exec-4] c.m.b.D.e.NotFoundException [NotFoundException.java:9] MIDWIFE list is empty in this region
+2024-12-03 19:33:08 ERROR [http-nio-8081-exec-5] c.m.b.D.s.EmployeeService [EmployeeService.java:113] MIDWIFE list is empty in this region
+2024-12-03 19:33:08 ERROR [http-nio-8081-exec-5] c.m.b.D.e.NotFoundException [NotFoundException.java:9] MIDWIFE list is empty in this region
+2024-12-03 19:33:20 ERROR [http-nio-8081-exec-1] c.m.b.D.s.EmployeeService [EmployeeService.java:113] MIDWIFE list is empty in this region
+2024-12-03 19:33:20 ERROR [http-nio-8081-exec-1] c.m.b.D.e.NotFoundException [NotFoundException.java:9] MIDWIFE list is empty in this region
+2024-12-03 19:33:20 ERROR [http-nio-8081-exec-7] c.m.b.D.s.EmployeeService [EmployeeService.java:113] MIDWIFE list is empty in this region
+2024-12-03 19:33:20 ERROR [http-nio-8081-exec-7] c.m.b.D.e.NotFoundException [NotFoundException.java:9] MIDWIFE list is empty in this region
+2024-12-03 19:34:05 INFO  [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats [WebSocketMessageBrokerStats.java:154] WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 1, completed tasks = 1]
+2024-12-03 19:35:08 WARN  [http-nio-8081-exec-3] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:35:08 ERROR [http-nio-8081-exec-3] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:35:08 WARN  [http-nio-8081-exec-7] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:35:08 ERROR [http-nio-8081-exec-7] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 19:35:08 WARN  [http-nio-8081-exec-6] c.m.b.D.s.ClinicService [ClinicService.java:260] No any upcoming clinics
+2024-12-03 19:35:08 WARN  [http-nio-8081-exec-4] c.m.b.D.s.ClinicService [ClinicService.java:248] Clinics not found for this month 2024-12-03
+2024-12-03 19:35:08 ERROR [http-nio-8081-exec-6] c.m.b.D.e.NotFoundException [NotFoundException.java:9] No any upcoming clinics
+2024-12-03 19:35:08 ERROR [http-nio-8081-exec-4] c.m.b.D.e.NotFoundException [NotFoundException.java:9] Clinics not found for this month 2024-12-03
+2024-12-03 20:08:15 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:50] Starting BackendApplication using Java 17.0.13 with PID 19080 (D:\Backend\target\classes started by chamikam in D:\Backend)
+2024-12-03 20:08:15 INFO  [main] c.m.b.BackendApplication [SpringApplication.java:660] The following 1 profile is active: "dev"
+2024-12-03 20:08:18 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:143] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-03 20:08:18 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:211] Finished Spring Data repository scanning in 184 ms. Found 37 JPA repository interfaces.
+2024-12-03 20:08:19 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:111] Tomcat initialized with port 8081 (http)
+2024-12-03 20:08:19 INFO  [main] o.a.c.c.StandardService [DirectJDKLog.java:173] Starting service [Tomcat]
+2024-12-03 20:08:19 INFO  [main] o.a.c.c.StandardEngine [DirectJDKLog.java:173] Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-12-03 20:08:20 INFO  [main] o.a.c.c.C.[.[.[/] [DirectJDKLog.java:173] Initializing Spring embedded WebApplicationContext
+2024-12-03 20:08:20 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext [ServletWebServerApplicationContext.java:296] Root WebApplicationContext: initialization completed in 4953 ms
+2024-12-03 20:08:20 INFO  [main] o.h.j.i.u.LogHelper [LogHelper.java:31] HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-03 20:08:20 INFO  [main] o.h.Version [Version.java:44] HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-12-03 20:08:20 INFO  [main] o.h.c.i.RegionFactoryInitiator [RegionFactoryInitiator.java:50] HHH000026: Second-level cache disabled
+2024-12-03 20:08:21 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo [SpringPersistenceUnitInfo.java:87] No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-03 20:08:21 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:109] HikariPool-1 - Starting...
+2024-12-03 20:08:21 INFO  [main] c.z.h.p.HikariPool [HikariPool.java:554] HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@39695803
+2024-12-03 20:08:21 INFO  [main] c.z.h.HikariDataSource [HikariDataSource.java:122] HikariPool-1 - Start completed.
+2024-12-03 20:08:21 WARN  [main] o.h.o.deprecation [DialectFactoryImpl.java:153] HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-12-03 20:08:25 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator [JtaPlatformInitiator.java:59] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-03 20:08:26 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:437] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 20:08:26 INFO  [main] o.s.d.j.r.q.QueryEnhancerFactory [QueryEnhancerFactory.java:49] Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-03 20:08:28 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [InitializeUserDetailsBeanManagerConfigurer.java:113] Global AuthenticationManager configured with UserDetailsService bean with name userService
+2024-12-03 20:08:30 INFO  [main] o.s.s.w.DefaultSecurityFilterChain [DefaultSecurityFilterChain.java:54] Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1e5975db, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@69ef1ff1, org.springframework.security.web.context.SecurityContextHolderFilter@c2622f8, org.springframework.security.web.header.HeaderWriterFilter@5f795d47, org.springframework.web.filter.CorsFilter@84a9f40, org.springframework.security.web.authentication.logout.LogoutFilter@7b16def6, com.maathru.backend.Application.filter.JwtAuthenticationFilter@712a6e68, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@782c927d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@79f127e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@47c67c19, org.springframework.security.web.session.SessionManagementFilter@2d5edbad, org.springframework.security.web.access.ExceptionTranslationFilter@2c3d6d78, org.springframework.security.web.access.intercept.AuthorizationFilter@48c7f0d9]
+2024-12-03 20:08:31 INFO  [main] o.s.b.w.e.t.TomcatWebServer [TomcatWebServer.java:243] Tomcat started on port 8081 (http) with context path '/'
+2024-12-03 20:08:31 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Starting...
+2024-12-03 20:08:31 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@59d05dcb]]
+2024-12-03 20:08:31 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Started.
+2024-12-03 20:08:31 INFO  [main] c.m.b.BackendApplication [StartupInfoLogger.java:56] Started BackendApplication in 16.975 seconds (process running for 18.077)
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Admin user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Doctor user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Midwife user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Parent user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Eligible user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] Pending user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:64] User user already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/1 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/2 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/3 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:88] MOH M/W/4 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/1 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/2 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/3 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/4 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:113] Region R/W/5 already exists.
+2024-12-03 20:08:31 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 1 already exists
+2024-12-03 20:08:32 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 2 already exists
+2024-12-03 20:08:32 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 3 already exists
+2024-12-03 20:08:32 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 4 already exists
+2024-12-03 20:08:32 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 5 already exists
+2024-12-03 20:08:32 WARN  [main] c.m.b.A.c.InitialDataLoader [InitialDataLoader.java:182] Blog 6 already exists
+2024-12-03 20:08:45 INFO  [http-nio-8081-exec-1] o.a.c.c.C.[.[.[/] [DirectJDKLog.java:173] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-03 20:08:45 INFO  [http-nio-8081-exec-1] o.s.w.s.DispatcherServlet [FrameworkServlet.java:532] Initializing Servlet 'dispatcherServlet'
+2024-12-03 20:08:45 INFO  [http-nio-8081-exec-1] o.s.w.s.DispatcherServlet [FrameworkServlet.java:554] Completed initialization in 1 ms
+2024-12-03 20:08:48 INFO  [http-nio-8081-exec-8] o.s.a.AbstractOpenApiResource [AbstractOpenApiResource.java:390] Init duration for springdoc-openapi is: 2183 ms
+2024-12-03 20:09:31 INFO  [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats [WebSocketMessageBrokerStats.java:154] WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-12-03 20:10:27 INFO  [http-nio-8081-exec-5] c.m.b.D.s.AuthenticationService [AuthenticationService.java:232] User admin@maathru.com: login attempts reset
+2024-12-03 20:10:28 INFO  [http-nio-8081-exec-5] c.m.b.D.s.AuthenticationService [AuthenticationService.java:251] Saved new tokens for user admin@maathru.com
+2024-12-03 20:10:28 INFO  [http-nio-8081-exec-5] c.m.b.D.s.AuthenticationService [AuthenticationService.java:106] ADMIN:admin@maathru.com signed in Successfully
+2024-12-03 20:32:35 WARN  [HikariPool-1 housekeeper] c.z.h.p.HikariPool [HikariPool.java:797] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m43s348ms680µs400ns).
+2024-12-03 20:33:48 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Stopping...
+2024-12-03 20:33:48 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@59d05dcb]]
+2024-12-03 20:33:48 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler [CompositeLog.java:117] Stopped.
+2024-12-03 20:33:48 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:650] Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-03 20:33:48 INFO  [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:349] HikariPool-1 - Shutdown initiated...
+2024-12-03 20:33:48 INFO  [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:351] HikariPool-1 - Shutdown completed.

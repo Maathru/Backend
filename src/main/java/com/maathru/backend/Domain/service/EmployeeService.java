@@ -39,6 +39,7 @@ public class EmployeeService {
     private final ModelMapper mapper;
     private final AuthenticationService authenticationService;
     private final EmailService emailService;
+    private final HomeVisitRepository homeVisitRepository;
 
     @Transactional
     public ResponseEntity<String> createEmployee(EmployeeDto employeeDto) {
@@ -53,7 +54,7 @@ public class EmployeeService {
             authenticationService.encodePassword(user);
             authenticationService.initializeUserFields(user, currentUser);
 
-            user.setRole(Role.valueOf(employeeDto.getDesignation().toUpperCase()));
+            user.setRole(Role.valueOf(employeeDto.getRole().toUpperCase()));
             user.setRole(authenticationService.determineUserRole(currentUser, user));
             user = userRepository.save(user);
             log.info("User signed up successfully: {} by {}: {}", user.getUsername(), currentUser.getRole(), currentUser.getUserId());
@@ -61,7 +62,7 @@ public class EmployeeService {
             if (passwordStatus) {
                 // after user created successfully send password
                 try {
-                    emailService.sendNewAccountEmail(user.getFirstName(), user.getEmail(), user.getPassword());
+//                    emailService.sendNewAccountEmail(user.getFirstName(), user.getEmail(), user.getPassword());
                 } catch (Exception e) {
                     log.error("Failed to send account creation email: {}", e.getMessage());
                     throw new ApiException("Failed to send account creation email");
@@ -170,6 +171,9 @@ public class EmployeeService {
         try {
             User user = jwtService.getCurrentUser();
             HomeVisitsResponse homeVisits = basicInfoRepository.findByParent(user.getEmail(), id);
+            List<HomeVisitsListResponse> visits = homeVisitRepository.findAllHomeVisitForSelectedUser(id);
+            homeVisits.setVisits(visits);
+
             if (homeVisits == null) {
                 throw new NotFoundException("No parent data found for id " + id);
             }
